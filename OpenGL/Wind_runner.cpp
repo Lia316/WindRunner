@@ -2,11 +2,13 @@
 #include <gl/gl.h> 
 #include <gl/glut.h>
 #include "Entity.h"
-#include "Hole.h"
 #include "Ground.h"
+#include "Hole.h"
+#include "Character.h"
 
 Ground* ground;
 Hole* hole;
+Character* character;
 
 void init();
 void draw();
@@ -33,12 +35,14 @@ void init(void) {
 
 	ground = new Ground();
 	hole = new Hole();
+	character = new Character();
 }
 
 void draw() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	ground->draw();
 	hole->draw();
+	character->draw();
 	glutSwapBuffers();
 }
 
@@ -57,4 +61,5 @@ void reshape(int w, int h) {
 	glLoadIdentity();
 	ground->reshape(w, h);
 	hole->reshape(h);
+	character->reshape(h);
 }
