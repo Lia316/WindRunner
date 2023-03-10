@@ -4,7 +4,7 @@
 #include "Star.h"
 
 Star::Star()
-	: Entity(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) / 3, 30, 30, -0.1) { }
+	: Entity(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) / 3, 30, 30, -0.2) { }
 
 void Star::draw() {
 	glColor3f(1.0, 1.0, 0.0);
