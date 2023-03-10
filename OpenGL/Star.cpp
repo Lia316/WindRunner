@@ -28,5 +28,5 @@ void Star::reshape(float h) {
 }
 
 int Star::getPoint() {
-	return 0;
+	return point;
 }

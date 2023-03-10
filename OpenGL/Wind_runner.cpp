@@ -1,6 +1,7 @@
 #include <windows.h> 
 #include <gl/gl.h> 
 #include <gl/glut.h>
+#include<string>
 #include "Entity.h"
 #include "Ground.h"
 #include "Hole.h"
@@ -13,12 +14,15 @@ Hole* hole;
 Character* character;
 Fire* fire;
 Star* star;
+bool isGameEnd = false;
+int score = 0;
 
 void init();
 void draw();
 void move(int time);
 void reshape(int w, int h);
 bool detectCollision(Entity* character, Entity* object);
+void showText(float x, float y, std::string string);
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -29,7 +33,9 @@ int main(int argc, char** argv) {
 	init();
 	glutDisplayFunc(draw);
 	glutReshapeFunc(reshape);
-	glutTimerFunc(1, move, 0);
+	if (!isGameEnd) {
+		glutTimerFunc(1, move, 0);
+	}
 	glutMainLoop();
 	return 0;
 }
@@ -56,6 +62,11 @@ void draw() {
 	if (star != nullptr) {
 		star->draw();
 	}
+	std::string scoreText = "score: " + std::to_string(score);
+	showText(0, 30, scoreText);
+	if (isGameEnd) {
+		showText(0, 60, "The Game End");
+	}
 	glutSwapBuffers();
 }
 
@@ -69,16 +80,23 @@ void move(int time) {
 	}
 	glutPostRedisplay();
 
+	if (detectCollision(character, hole)) {
+		isGameEnd = true;
+	}
 	if (detectCollision(character, fire)) {
+		isGameEnd = true;
 		delete fire;
 		fire = nullptr;
 	}
 	if (detectCollision(character, star)) {
+		score += star->getPoint();
 		delete star;
 		star = nullptr;
 	}
 
-	glutTimerFunc(1, move, 0);
+	if (!isGameEnd) {
+		glutTimerFunc(1, move, 0);
+	}
 }
 
 void reshape(int w, int h) {
@@ -105,4 +123,14 @@ bool detectCollision(Entity* character, Entity* object) {
 		return false;
 	}
 	return character->getPositionX() + character->getWidth() >= object->getPositionX();
+}
+
+void showText(float x, float y, std::string string) {
+	glColor3f(1.0, 1.0, 1.0);
+	glRasterPos2f(x, y);
+	const char* str = string.c_str();
+
+	for (const char* c = str; *c != '\0'; c++) {
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
+	}
 }
