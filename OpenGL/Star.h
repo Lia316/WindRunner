@@ -7,5 +7,7 @@ protected:
 public:
 	Star();
 	void draw();
+	void move();
+	void reshape(float);
 	int getPoint();
 };
