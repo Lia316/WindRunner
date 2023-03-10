@@ -1,10 +1,16 @@
 #include <windows.h> 
 #include <gl/gl.h> 
 #include <gl/glut.h>
+#include "Entity.h"
+#include "Hole.h"
+
+Hole* hole;
 
 void init();
 void drawGround();
 void reshape(int w, int h);
+void draw();
+void move();
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -13,8 +19,9 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Wind Runner");
 	init();
-	glutDisplayFunc(drawGround);
+	glutDisplayFunc(draw);
 	glutReshapeFunc(reshape);
+	glutIdleFunc(move);
 	glutMainLoop();
 	return 0;
 }
@@ -35,11 +42,23 @@ void init(void)
 	rectangle.y = 0;
 	rectangle.width = glutGet(GLUT_WINDOW_WIDTH);
 	rectangle.height = glutGet(GLUT_WINDOW_HEIGHT)/4;
+	hole = new Hole();
+}
+
+void draw() {
+	glClear(GL_COLOR_BUFFER_BIT);
+	drawGround();
+	hole->draw();
+	glutSwapBuffers();
+}
+
+void move() {
+	hole->move();
+	glutPostRedisplay();
 }
 
 void drawGround()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.7f, 0.5f, 0.3f);
 	glBegin(GL_POLYGON);
 	glVertex2f(rectangle.x, rectangle.y);
@@ -47,7 +66,6 @@ void drawGround()
 	glVertex2f(rectangle.x + rectangle.width, rectangle.y + rectangle.height);
 	glVertex2f(rectangle.x, rectangle.y + rectangle.height);
 	glEnd();
-	glutSwapBuffers();
 }
 
 void reshape(int w, int h)

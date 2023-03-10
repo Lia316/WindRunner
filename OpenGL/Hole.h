@@ -7,4 +7,5 @@ protected:
 public:
 	Hole();
 	void draw();
+	void move();
 };
