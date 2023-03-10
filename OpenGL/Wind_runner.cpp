@@ -22,6 +22,7 @@ void draw();
 void move(int time);
 void reshape(int w, int h);
 bool detectCollision(Entity* character, Entity* object);
+bool detectSink(Entity* character, Entity* hole);
 void showText(float x, float y, std::string string);
 
 int main(int argc, char** argv) {
@@ -80,7 +81,7 @@ void move(int time) {
 	}
 	glutPostRedisplay();
 
-	if (detectCollision(character, hole)) {
+	if (detectSink(character, hole)) {
 		isGameEnd = true;
 	}
 	if (detectCollision(character, fire)) {
@@ -123,6 +124,10 @@ bool detectCollision(Entity* character, Entity* object) {
 		return false;
 	}
 	return character->getPositionX() + character->getWidth() >= object->getPositionX();
+}
+
+bool detectSink(Entity* character, Entity* hole) {
+	return character->getPositionX() + character->getWidth() / 10 >= hole->getPositionX();
 }
 
 void showText(float x, float y, std::string string) {
