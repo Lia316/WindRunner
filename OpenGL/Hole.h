@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 
-class Hole : Entity {
+class Hole : public Entity {
 protected:
 
 public:
