@@ -10,7 +10,7 @@ Hole* hole;
 
 void init();
 void draw();
-void move();
+void move(int time);
 void reshape(int w, int h);
 
 int main(int argc, char** argv) {
@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
 	init();
 	glutDisplayFunc(draw);
 	glutReshapeFunc(reshape);
-	glutIdleFunc(move);
+	glutTimerFunc(1, move, 0);
 	glutMainLoop();
 	return 0;
 }
@@ -43,9 +43,10 @@ void draw() {
 	glutSwapBuffers();
 }
 
-void move() {
+void move(int time) {
 	hole->move();
 	glutPostRedisplay();
+	glutTimerFunc(1, move, 0);
 }
 
 void reshape(int w, int h)
