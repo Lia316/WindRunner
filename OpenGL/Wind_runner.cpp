@@ -5,10 +5,12 @@
 #include "Ground.h"
 #include "Hole.h"
 #include "Character.h"
+#include "fire.h"
 
 Ground* ground;
 Hole* hole;
 Character* character;
+Fire* fire;
 
 void init();
 void draw();
@@ -36,6 +38,7 @@ void init(void) {
 	ground = new Ground();
 	hole = new Hole();
 	character = new Character();
+	fire = new Fire();
 }
 
 void draw() {
@@ -43,11 +46,13 @@ void draw() {
 	ground->draw();
 	hole->draw();
 	character->draw();
+	fire->draw();
 	glutSwapBuffers();
 }
 
 void move(int time) {
 	hole->move();
+	fire->move();
 	glutPostRedisplay();
 	glutTimerFunc(1, move, 0);
 }
@@ -62,4 +67,5 @@ void reshape(int w, int h) {
 	ground->reshape(w, h);
 	hole->reshape(h);
 	character->reshape(h);
+	fire->reshape(h);
 }
