@@ -20,3 +20,7 @@ void Hole::draw() {
 void Hole::move() {
 	Entity::move();
 }
+
+void Hole::reshape(float h) {
+	Entity::reshape(x, y, width, h);
+}

@@ -8,4 +8,5 @@ public:
 	Hole();
 	void draw();
 	void move();
+	void reshape(float);
 };

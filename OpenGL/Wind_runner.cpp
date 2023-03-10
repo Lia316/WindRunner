@@ -4,7 +4,7 @@
 #include "Entity.h"
 #include "Hole.h"
 #include "Ground.h"
-//123
+
 Ground* ground;
 Hole* hole;
 
@@ -27,8 +27,7 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
-void init(void)
-{
+void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 
@@ -49,13 +48,13 @@ void move(int time) {
 	glutTimerFunc(1, move, 0);
 }
 
-void reshape(int w, int h)
-{
+void reshape(int w, int h) {
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, w, 0, h, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	ground->reshape();
+	ground->reshape(w, h);
+	hole->reshape(h);
 }

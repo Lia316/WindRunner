@@ -21,6 +21,6 @@ void Ground::move() {
 	Entity::move();
 }
 
-void Ground::reshape() {
-	Entity::reshape(x, y, width, height);
+void Ground::reshape(float w, float h) {
+	Entity::reshape(x, y, w, h / 4);
 }
