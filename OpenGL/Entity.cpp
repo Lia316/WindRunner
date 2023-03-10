@@ -17,3 +17,10 @@ void Entity::draw() {
 	glTranslatef(x, y, 0);
 	glPopMatrix();
 }
+
+void Entity::reshape(float _x, float _y, float _w, float _h) {
+	x = _x;
+	y = _y;
+	width = _w;
+	height = _h;
+}
