@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 
-class Star : Entity {
+class Star : public Entity {
 protected:
 	int point;
 public:

@@ -18,6 +18,7 @@ void init();
 void draw();
 void move(int time);
 void reshape(int w, int h);
+bool detectCollision(Entity* character, Entity* object);
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -49,16 +50,34 @@ void draw() {
 	ground->draw();
 	hole->draw();
 	character->draw();
-	fire->draw();
-	star->draw();
+	if (fire != nullptr) {
+		fire->draw();
+	}
+	if (star != nullptr) {
+		star->draw();
+	}
 	glutSwapBuffers();
 }
 
 void move(int time) {
 	hole->move();
-	fire->move();
-	star->move();
+	if (fire != nullptr) {
+		fire->move();
+	}
+	if (star != nullptr) {
+		star->move();
+	}
 	glutPostRedisplay();
+
+	if (detectCollision(character, fire)) {
+		delete fire;
+		fire = nullptr;
+	}
+	if (detectCollision(character, star)) {
+		delete star;
+		star = nullptr;
+	}
+
 	glutTimerFunc(1, move, 0);
 }
 
@@ -69,9 +88,21 @@ void reshape(int w, int h) {
 	glOrtho(0, w, 0, h, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
 	ground->reshape(w, h);
 	hole->reshape(h);
 	character->reshape(h);
-	fire->reshape(h);
-	star->reshape(h);
+	if (fire != nullptr) {
+		fire->reshape(h);
+	}
+	if (star != nullptr) {
+		star->reshape(h);
+	}
+}
+
+bool detectCollision(Entity* character, Entity* object) {
+	if (object == nullptr) {
+		return false;
+	}
+	return character->getPositionX() + character->getWidth() >= object->getPositionX();
 }

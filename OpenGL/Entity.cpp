@@ -24,3 +24,11 @@ void Entity::reshape(float _x, float _y, float _w, float _h) {
 	width = _w;
 	height = _h;
 }
+
+float Entity::getPositionX() {
+	return x;
+}
+
+float Entity::getWidth() {
+	return width;
+}

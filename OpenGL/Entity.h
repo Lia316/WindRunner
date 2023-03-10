@@ -9,4 +9,6 @@ public:
 	virtual void draw();
 	virtual void move();
 	virtual void reshape(float, float, float, float);
+	virtual float getPositionX();
+	virtual float getWidth();
 };
