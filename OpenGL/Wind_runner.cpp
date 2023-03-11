@@ -1,6 +1,7 @@
 #include <windows.h> 
 #include <gl/gl.h> 
 #include <gl/glut.h>
+#include<string>
 #include "Entity.h"
 #include "Ground.h"
 #include "Hole.h"
@@ -13,6 +14,8 @@ Hole* hole;
 Character* character;
 Fire* fire;
 Star* star;
+bool isGameEnd = false;
+int score = 0;
 
 void init();
 void draw();
@@ -20,6 +23,9 @@ void move(int time);
 void reshape(int w, int h);
 void holemaker(int time);
 void keyboard(unsigned char key, int x, int y);
+bool detectCollision(Entity* character, Entity* object);
+bool detectSink(Entity* character, Entity* hole);
+void showText(float x, float y, std::string string);
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -30,9 +36,11 @@ int main(int argc, char** argv) {
 	init();
 	glutDisplayFunc(draw);
 	glutReshapeFunc(reshape);
-	glutTimerFunc(10, move, 0); // 10
-	glutTimerFunc(3000, holemaker, 0);
-	glutKeyboardFunc(keyboard); // Å°º¸µå ÀÔ·Â
+	if (!isGameEnd) {
+		glutTimerFunc(10, move, 0);
+		glutTimerFunc(3000, holemaker, 0);
+	}
+	glutKeyboardFunc(keyboard); // Å°ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½
 	glutMainLoop();
 	return 0;
 }
@@ -53,8 +61,17 @@ void draw() {
 	ground->draw();
 	hole->draw();
 	character->draw();
-	fire->draw();
-	star->draw();
+	if (fire != nullptr) {
+		fire->draw();
+	}
+	if (star != nullptr) {
+		star->draw();
+	}
+	std::string scoreText = "score: " + std::to_string(score);
+	showText(0, 30, scoreText);
+	if (isGameEnd) {
+		showText(0, 60, "The Game End");
+	}
 	glutSwapBuffers();
 }
 
@@ -65,11 +82,32 @@ void holemaker(int time) {
 
 void move(int time) {
 	hole->move();
-	fire->move();
-	star->move();
 	character->jump();
+	if (fire != nullptr) {
+		fire->move();
+	}
+	if (star != nullptr) {
+		star->move();
+	}
 	glutPostRedisplay();
-	glutTimerFunc(10, move, 0);
+
+	if (detectSink(character, hole)) {
+		isGameEnd = true;
+	}
+	if (detectCollision(character, fire)) {
+		isGameEnd = true;
+		delete fire;
+		fire = nullptr;
+	}
+	if (detectCollision(character, star)) {
+		score += star->getPoint();
+		delete star;
+		star = nullptr;
+	}
+
+	if (!isGameEnd) {
+		glutTimerFunc(10, move, 0);
+	}
 }
 
 void reshape(int w, int h) {
@@ -79,11 +117,16 @@ void reshape(int w, int h) {
 	glOrtho(0, w, 0, h, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
 	ground->reshape(w, h);
 	hole->reshape(h);
 	character->reshape(h);
-	fire->reshape(h);
-	star->reshape(h);
+	if (fire != nullptr) {
+		fire->reshape(h);
+	}
+	if (star != nullptr) {
+		star->reshape(h);
+	}
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -93,4 +136,34 @@ void keyboard(unsigned char key, int x, int y)
 		character->setjump();
 	}
 	glutPostRedisplay();
+}
+
+bool detectCollision(Entity* character, Entity* object) {
+	if (object == nullptr) {
+		return false;
+	}
+	bool collisionX = character->getPositionX() + character->getWidth() >= object->getPositionX() &&
+		object->getPositionX() + object->getWidth() >= character->getPositionX();
+	bool collisionY = character->getPositionY() + character->getHeight() >= object->getPositionY() &&
+		object->getPositionY() + object->getHeight() >= character->getPositionY();
+
+	return collisionX && collisionY;
+}
+
+bool detectSink(Entity* character, Entity* hole) {
+	bool collisionX = character->getPositionX() >= hole->getPositionX() &&
+		hole->getPositionX() + hole->getWidth() >= character->getPositionX() + character->getWidth();
+	bool collisionY = hole->getPositionY() + hole->getHeight() >= character->getPositionY();
+
+	return collisionX && collisionY;
+}
+
+void showText(float x, float y, std::string string) {
+	glColor3f(1.0, 1.0, 1.0);
+	glRasterPos2f(x, y);
+	const char* str = string.c_str();
+
+	for (const char* c = str; *c != '\0'; c++) {
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
+	}
 }

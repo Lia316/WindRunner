@@ -22,5 +22,5 @@ void Hole::move() {
 }
 
 void Hole::reshape(float h) {
-	Entity::reshape(x, y, width, h);
+	Entity::reshape(x, y, width, h / 4);
 }
