@@ -37,8 +37,8 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(draw);
 	glutReshapeFunc(reshape);
 	if (!isGameEnd) {
-		glutTimerFunc(1, move, 0);
-	glutTimerFunc(3000, holemaker, 0);
+		glutTimerFunc(10, move, 0);
+		glutTimerFunc(3000, holemaker, 0);
 	}
 	glutKeyboardFunc(keyboard); // Ű���� �Է�
 	glutMainLoop();
@@ -106,7 +106,7 @@ void move(int time) {
 	}
 
 	if (!isGameEnd) {
-		glutTimerFunc(1, move, 0);
+		glutTimerFunc(10, move, 0);
 	}
 }
 
