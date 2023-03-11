@@ -8,7 +8,6 @@
 #include "Character.h"
 #include "Fire.h"
 #include "Star.h"
-#include <iostream>
 
 Ground* ground;
 Hole* hole;

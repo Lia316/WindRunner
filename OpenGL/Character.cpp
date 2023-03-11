@@ -2,6 +2,7 @@
 #include <gl/gl.h> 
 #include <gl/glut.h>
 #include "Character.h"
+
 Character::Character()
 	: Entity(glutGet(GLUT_WINDOW_WIDTH) / 10, glutGet(GLUT_WINDOW_HEIGHT) / 4, 50, 50, 0) {
 	jumpSpeed = 12;
