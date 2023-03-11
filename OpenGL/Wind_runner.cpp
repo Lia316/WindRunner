@@ -21,6 +21,8 @@ void init();
 void draw();
 void move(int time);
 void reshape(int w, int h);
+void holemaker(int time);
+void keyboard(unsigned char key, int x, int y);
 bool detectCollision(Entity* character, Entity* object);
 bool detectSink(Entity* character, Entity* hole);
 void showText(float x, float y, std::string string);
@@ -36,7 +38,9 @@ int main(int argc, char** argv) {
 	glutReshapeFunc(reshape);
 	if (!isGameEnd) {
 		glutTimerFunc(1, move, 0);
+	glutTimerFunc(3000, holemaker, 0);
 	}
+	glutKeyboardFunc(keyboard); // Ű���� �Է�
 	glutMainLoop();
 	return 0;
 }
@@ -71,8 +75,14 @@ void draw() {
 	glutSwapBuffers();
 }
 
+void holemaker(int time) {
+	hole = new Hole();
+	glutTimerFunc(3000, holemaker, 0);
+}
+
 void move(int time) {
 	hole->move();
+	character->jump();
 	if (fire != nullptr) {
 		fire->move();
 	}
@@ -119,6 +129,14 @@ void reshape(int w, int h) {
 	}
 }
 
+void keyboard(unsigned char key, int x, int y)
+{
+	switch (key) {
+	case 32:
+		character->setjump();
+	}
+	glutPostRedisplay();
+}
 bool detectCollision(Entity* character, Entity* object) {
 	if (object == nullptr) {
 		return false;

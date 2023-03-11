@@ -4,7 +4,7 @@
 #include "Hole.h"
 
 Hole::Hole()
-: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_WIDTH) / 7, glutGet(GLUT_WINDOW_HEIGHT) / 4, -0.2) { }
+: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_WIDTH) / 7, glutGet(GLUT_WINDOW_HEIGHT) / 4, -3.5) { }
 
 void Hole::draw() {
 	glColor3f(0.0, 0.0, 0.0);
