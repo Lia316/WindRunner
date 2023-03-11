@@ -1,13 +1,12 @@
 #pragma once
 #include "Entity.h"
 
-class Star : Entity {
+class Ground : Entity {
 protected:
-	int point;
+
 public:
-	Star();
+	Ground();
 	void draw();
 	void move();
-	void reshape(float);
-	int getPoint();
+	void reshape(float w, float h);
 };

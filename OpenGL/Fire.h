@@ -7,4 +7,6 @@ protected:
 public:
 	Fire();
 	void draw();
+	void move();
+	void reshape(float);
 };
