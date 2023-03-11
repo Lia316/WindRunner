@@ -22,7 +22,7 @@ void Character::draw() {
 void Character::jump() {
 	y += speed;
 	if(jumpState == true)
-		speed = speed - 0.5;
+		speed = speed - 0.4;
 	if (speed <=-jumpSpeed) {
 		speed = 0;
 		y = glutGet(GLUT_WINDOW_HEIGHT) / 4;

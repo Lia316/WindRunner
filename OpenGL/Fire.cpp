@@ -3,8 +3,8 @@
 #include <gl/glut.h>
 #include "Fire.h"
 
-Fire::Fire()
-	: Entity(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) / 3, 30, 30, -5) { }
+Fire::Fire(float x, float y)
+	: Entity(x, y, 30, 30, -10) { }
 
 void Fire::draw() {
 	glColor3f(9.0, 0.0, 0.0);
