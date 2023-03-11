@@ -29,6 +29,14 @@ float Entity::getPositionX() {
 	return x;
 }
 
+float Entity::getPositionY() {
+	return y;
+}
+
 float Entity::getWidth() {
 	return width;
+}
+
+float Entity::getHeight() {
+	return height;
 }

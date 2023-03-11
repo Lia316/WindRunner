@@ -137,15 +137,25 @@ void keyboard(unsigned char key, int x, int y)
 	}
 	glutPostRedisplay();
 }
+
 bool detectCollision(Entity* character, Entity* object) {
 	if (object == nullptr) {
 		return false;
 	}
-	return character->getPositionX() + character->getWidth() >= object->getPositionX();
+	bool collisionX = character->getPositionX() + character->getWidth() >= object->getPositionX() &&
+		object->getPositionX() + object->getWidth() >= character->getPositionX();
+	bool collisionY = character->getPositionY() + character->getHeight() >= object->getPositionY() &&
+		object->getPositionY() + object->getHeight() >= character->getPositionY();
+
+	return collisionX && collisionY;
 }
 
 bool detectSink(Entity* character, Entity* hole) {
-	return character->getPositionX() + character->getWidth() / 10 >= hole->getPositionX();
+	bool collisionX = character->getPositionX() >= hole->getPositionX() &&
+		hole->getPositionX() + hole->getWidth() >= character->getPositionX() + character->getWidth();
+	bool collisionY = hole->getPositionY() + hole->getHeight() >= character->getPositionY();
+
+	return collisionX && collisionY;
 }
 
 void showText(float x, float y, std::string string) {
