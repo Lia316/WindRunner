@@ -3,8 +3,8 @@
 #include <gl/glut.h>
 #include "Star.h"
 
-Star::Star()
-	: Entity(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) / 3, 30, 30, -3.5) { 
+Star::Star(float x, float y)
+	: Entity(x, y, 30, 30, -3.5) { 
 	point = 5;
 }
 

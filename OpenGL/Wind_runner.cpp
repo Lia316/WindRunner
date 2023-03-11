@@ -8,20 +8,30 @@
 #include "Character.h"
 #include "Fire.h"
 #include "Star.h"
+#include <random>
+
+#define MAXFIRE 4
+#define MAXSTAR 10
+
+using namespace std;
 
 Ground* ground;
 Hole* hole;
 Character* character;
-Fire* fire;
-Star* star;
+Fire* fire[MAXFIRE];
+Star* star[MAXSTAR];
 bool isGameEnd = false;
 int score = 0;
+int firenum = 0;
+int starnum = 0;
 
 void init();
 void draw();
 void move(int time);
 void reshape(int w, int h);
 void holemaker(int time);
+void firemaker(int time);
+void starmaker(int time);
 void keyboard(unsigned char key, int x, int y);
 bool detectCollision(Entity* character, Entity* object);
 bool detectSink(Entity* character, Entity* hole);
@@ -38,9 +48,11 @@ int main(int argc, char** argv) {
 	glutReshapeFunc(reshape);
 	if (!isGameEnd) {
 		glutTimerFunc(10, move, 0);
+		glutTimerFunc(1300, firemaker, 0);
 		glutTimerFunc(3000, holemaker, 0);
+		glutTimerFunc(500, starmaker, 0);
 	}
-	glutKeyboardFunc(keyboard); // Ű���� �Է�
+	glutKeyboardFunc(keyboard);
 	glutMainLoop();
 	return 0;
 }
@@ -52,8 +64,8 @@ void init(void) {
 	ground = new Ground();
 	hole = new Hole();
 	character = new Character();
-	fire = new Fire();
-	star = new Star();
+	//fire = new Fire();
+	//star = new Star();
 }
 
 void draw() {
@@ -61,11 +73,15 @@ void draw() {
 	ground->draw();
 	hole->draw();
 	character->draw();
-	if (fire != nullptr) {
-		fire->draw();
+	for (int i = 0; i < MAXFIRE; i++) {
+		if (fire[i] != nullptr) {
+			fire[i]->draw();
+		}
 	}
-	if (star != nullptr) {
-		star->draw();
+	for (int i = 0; i < MAXSTAR; i++) {
+		if (star[i] != nullptr) {
+			star[i]->draw();
+		}
 	}
 	std::string scoreText = "score: " + std::to_string(score);
 	showText(0, 30, scoreText);
@@ -75,39 +91,73 @@ void draw() {
 	glutSwapBuffers();
 }
 
-void holemaker(int time) {
-	hole = new Hole();
-	glutTimerFunc(3000, holemaker, 0);
-}
-
 void move(int time) {
 	hole->move();
 	character->jump();
-	if (fire != nullptr) {
-		fire->move();
+	for (int i = 0; i < MAXFIRE; i++) {
+		if (fire[i] != nullptr) {
+			fire[i]->move();
+		}
 	}
-	if (star != nullptr) {
-		star->move();
+	for (int i = 0; i < MAXSTAR; i++) {
+		if (star[i] != nullptr) {
+			star[i]->move();
+		}
 	}
 	glutPostRedisplay();
 
 	if (detectSink(character, hole)) {
 		isGameEnd = true;
 	}
-	if (detectCollision(character, fire)) {
-		isGameEnd = true;
-		delete fire;
-		fire = nullptr;
+	for (int i = 0; i < MAXFIRE; i++) {
+		if (detectCollision(character, fire[i])) {
+			isGameEnd = true;
+		}
 	}
-	if (detectCollision(character, star)) {
-		score += star->getPoint();
-		delete star;
-		star = nullptr;
+	for (int i = 0; i < MAXSTAR; i++) {
+		if (detectCollision(character, star[i])) {
+			score += star[i]->getPoint();
+			delete star[i];
+			star[i] = nullptr;
+		}
 	}
 
 	if (!isGameEnd) {
 		glutTimerFunc(10, move, 0);
 	}
+}
+
+void holemaker(int time) {
+	hole = new Hole();
+	glutTimerFunc(3000, holemaker, 0);
+}
+
+void firemaker(int time) {
+	random_device rd;
+	int pos = rd() % 225 + 175;
+	fire[firenum] = new Fire(glutGet(GLUT_WINDOW_WIDTH), pos);
+	if (firenum == MAXFIRE - 1)
+		firenum = 0;
+	else
+		firenum++;
+	if (!isGameEnd) {
+		glutTimerFunc(1300, firemaker, 0);
+	}
+
+}
+
+void starmaker(int time) {
+	random_device rd;
+	int pos = rd() % 250 + 150;
+	star[starnum] = new Star(glutGet(GLUT_WINDOW_WIDTH), pos);
+	if (starnum == MAXSTAR - 1)
+		starnum = 0;
+	else
+		starnum++;
+	if (!isGameEnd) {
+		glutTimerFunc(500, starmaker, 0);
+	}
+
 }
 
 void reshape(int w, int h) {
@@ -121,11 +171,15 @@ void reshape(int w, int h) {
 	ground->reshape(w, h);
 	hole->reshape(h);
 	character->reshape(h);
-	if (fire != nullptr) {
-		fire->reshape(h);
+	for (int i = 0; i < MAXFIRE; i++) {
+		if (fire[i] != nullptr) {
+			fire[i] -> reshape(h);
+		}
 	}
-	if (star != nullptr) {
-		star->reshape(h);
+	for (int i = 0; i < MAXSTAR; i++) {
+		if (star[i] != nullptr) {
+			star[i]->reshape(h);
+		}
 	}
 }
 
