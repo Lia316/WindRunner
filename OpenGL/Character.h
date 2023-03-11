@@ -11,4 +11,5 @@ public:
 	void jump();
 	void reshape(float);
 	void setjump();
+	void sink();
 };

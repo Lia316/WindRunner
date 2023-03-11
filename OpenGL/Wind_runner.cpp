@@ -28,6 +28,7 @@ int starnum = 0;
 void init();
 void draw();
 void move(int time);
+void sink(int time);
 void reshape(int w, int h);
 void holemaker(int time);
 void firemaker(int time);
@@ -46,12 +47,13 @@ int main(int argc, char** argv) {
 	init();
 	glutDisplayFunc(draw);
 	glutReshapeFunc(reshape);
-	if (!isGameEnd) {
-		glutTimerFunc(10, move, 0);
-		glutTimerFunc(1300, firemaker, 0);
-		glutTimerFunc(3000, holemaker, 0);
-		glutTimerFunc(500, starmaker, 0);
-	}
+
+	glutTimerFunc(10, move, 0);
+	glutTimerFunc(1300, firemaker, 0);
+	glutTimerFunc(3000, holemaker, 0);
+	glutTimerFunc(500, starmaker, 0);
+	glutTimerFunc(10, sink, 0);
+
 	glutKeyboardFunc(keyboard);
 	glutMainLoop();
 	return 0;
@@ -64,8 +66,6 @@ void init(void) {
 	ground = new Ground();
 	hole = new Hole();
 	character = new Character();
-	//fire = new Fire();
-	//star = new Star();
 }
 
 void draw() {
@@ -127,6 +127,14 @@ void move(int time) {
 	}
 }
 
+void sink(int time) {
+	if (isGameEnd) {
+		character->sink();
+		glutPostRedisplay();
+	}
+	glutTimerFunc(10, sink, 0);
+}
+
 void holemaker(int time) {
 	hole = new Hole();
 	glutTimerFunc(3000, holemaker, 0);
@@ -171,6 +179,7 @@ void reshape(int w, int h) {
 	ground->reshape(w, h);
 	hole->reshape(h);
 	character->reshape(h);
+	
 	for (int i = 0; i < MAXFIRE; i++) {
 		if (fire[i] != nullptr) {
 			fire[i] -> reshape(h);
@@ -183,8 +192,7 @@ void reshape(int w, int h) {
 	}
 }
 
-void keyboard(unsigned char key, int x, int y)
-{
+void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 32:
 		character->setjump();
