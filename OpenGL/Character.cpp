@@ -39,3 +39,7 @@ void Character::setjump() {
 		jumpState = true;
 	}
 }
+
+void Character::sink() {
+	y -= 10;
+}

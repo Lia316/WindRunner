@@ -8,6 +8,7 @@
 #include "Character.h"
 #include "Fire.h"
 #include "Star.h"
+#include <iostream>
 
 Ground* ground;
 Hole* hole;
@@ -20,6 +21,7 @@ int score = 0;
 void init();
 void draw();
 void move(int time);
+void sink(int time);
 void reshape(int w, int h);
 void holemaker(int time);
 void keyboard(unsigned char key, int x, int y);
@@ -36,10 +38,9 @@ int main(int argc, char** argv) {
 	init();
 	glutDisplayFunc(draw);
 	glutReshapeFunc(reshape);
-	if (!isGameEnd) {
-		glutTimerFunc(10, move, 0);
-		glutTimerFunc(3000, holemaker, 0);
-	}
+	glutTimerFunc(10, move, 0);
+	glutTimerFunc(3000, holemaker, 0);
+	glutTimerFunc(10, sink, 0);
 	glutKeyboardFunc(keyboard); // Ű���� �Է�
 	glutMainLoop();
 	return 0;
@@ -108,6 +109,14 @@ void move(int time) {
 	if (!isGameEnd) {
 		glutTimerFunc(10, move, 0);
 	}
+}
+
+void sink(int time) {
+	if (isGameEnd) {
+		character->sink();
+		glutPostRedisplay();
+	}
+	glutTimerFunc(10, sink, 0);
 }
 
 void reshape(int w, int h) {
