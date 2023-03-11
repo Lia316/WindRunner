@@ -18,6 +18,8 @@ void init();
 void draw();
 void move(int time);
 void reshape(int w, int h);
+void holemaker(int time);
+void keyboard(unsigned char key, int x, int y);
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -28,7 +30,9 @@ int main(int argc, char** argv) {
 	init();
 	glutDisplayFunc(draw);
 	glutReshapeFunc(reshape);
-	glutTimerFunc(1, move, 0);
+	glutTimerFunc(10, move, 0); // 10
+	glutTimerFunc(3000, holemaker, 0);
+	glutKeyboardFunc(keyboard); // 키보드 입력
 	glutMainLoop();
 	return 0;
 }
@@ -54,12 +58,18 @@ void draw() {
 	glutSwapBuffers();
 }
 
+void holemaker(int time) {
+	hole = new Hole();
+	glutTimerFunc(3000, holemaker, 0);
+}
+
 void move(int time) {
 	hole->move();
 	fire->move();
 	star->move();
+	character->jump();
 	glutPostRedisplay();
-	glutTimerFunc(1, move, 0);
+	glutTimerFunc(10, move, 0);
 }
 
 void reshape(int w, int h) {
@@ -74,4 +84,13 @@ void reshape(int w, int h) {
 	character->reshape(h);
 	fire->reshape(h);
 	star->reshape(h);
+}
+
+void keyboard(unsigned char key, int x, int y)
+{
+	switch (key) {
+	case 32:
+		character->setjump();
+	}
+	glutPostRedisplay();
 }

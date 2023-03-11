@@ -2,10 +2,10 @@
 #include <gl/gl.h> 
 #include <gl/glut.h>
 #include "Character.h"
-
 Character::Character()
 	: Entity(glutGet(GLUT_WINDOW_WIDTH) / 10, glutGet(GLUT_WINDOW_HEIGHT) / 4, 50, 50, 0) {
-	jumpSpeed = 5;
+	jumpSpeed = 12;
+	jumpState = false;
 }
 
 void Character::draw() {
@@ -19,9 +19,23 @@ void Character::draw() {
 }
 
 void Character::jump() {
-
+	y += speed;
+	if(jumpState == true)
+		speed = speed - 0.5;
+	if (speed <=-jumpSpeed) {
+		speed = 0;
+		y = glutGet(GLUT_WINDOW_HEIGHT) / 4;
+		jumpState = false;
+	}
 }
 
 void Character::reshape(float h) {
 	Entity::reshape(x, h / 4, width, height);
+}
+
+void Character::setjump() {
+	if (!jumpState) {//점프중이 아닐 때,
+		speed = jumpSpeed;
+		jumpState = true;
+	}
 }
