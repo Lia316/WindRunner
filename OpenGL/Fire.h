@@ -5,7 +5,7 @@ class Fire : public Entity {
 protected:
 
 public:
-	Fire();
+	Fire(float x, float y);
 	void draw();
 	void move();
 	void reshape(float);
