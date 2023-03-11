@@ -4,7 +4,7 @@
 #include "Fire.h"
 
 Fire::Fire()
-	: Entity(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) / 3, 30, 30, -0.3) { }
+	: Entity(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) / 3, 30, 30, -5) { }
 
 void Fire::draw() {
 	glColor3f(9.0, 0.0, 0.0);
