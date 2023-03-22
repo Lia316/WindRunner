@@ -154,6 +154,7 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Fire.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Hole.cpp" />
     <ClCompile Include="Star.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Fire.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Hole.h" />
     <ClInclude Include="Star.h" />

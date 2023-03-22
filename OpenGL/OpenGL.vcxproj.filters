@@ -36,6 +36,9 @@
     <ClCompile Include="Ground.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Star.h">
@@ -54,6 +57,9 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="Ground.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
