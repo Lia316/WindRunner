@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-10.0, 10.0, -10.0, 10.0, -20.0, 20.0);
+	glOrtho(0.0, 10.0, 0.0, 10.0, -20.0, 20.0);
 
 	glClearColor(0.5, 0.5, 0.5, 0.0);
 
@@ -55,7 +55,7 @@ void draw() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	gluLookAt(3, 3, 5, 0, 0, 0, 0, 1, 0);
+	gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
 
 	gameManager->draw();
 	glutSwapBuffers();
