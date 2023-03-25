@@ -23,10 +23,6 @@ void Star::move() {
 	Entity::move();
 }
 
-void Star::reshape(float h) {
-	Entity::reshape(x, h / 3, width, height);
-}
-
 int Star::getPoint() {
 	return point;
 }

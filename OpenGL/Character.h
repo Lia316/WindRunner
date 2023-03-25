@@ -46,7 +46,6 @@ public:
 	Character();
 	void draw();
 	void jump();
-	void reshape(float);
 	void setjump();
 	void sink();
 	void animation(void(*t)(int));

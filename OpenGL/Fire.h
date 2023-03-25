@@ -8,5 +8,4 @@ public:
 	Fire(float x, float y);
 	void draw();
 	void move();
-	void reshape(float);
 };

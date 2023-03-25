@@ -120,23 +120,6 @@ void GameManager::starmaker(void(*t)(int)) {
 	}
 }
 
-void GameManager::reshape(int w, int h) {
-	ground->reshape(w, h);
-	hole->reshape(h);
-	character->reshape(h);
-
-	for (int i = 0; i < MAXFIRE; i++) {
-		if (fire[i] != nullptr) {
-			fire[i]->reshape(h);
-		}
-	}
-	for (int i = 0; i < MAXSTAR; i++) {
-		if (star[i] != nullptr) {
-			star[i]->reshape(h);
-		}
-	}
-}
-
 void GameManager::keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 32:

@@ -15,7 +15,6 @@ public:
 	GameManager();
 	void draw();
 	void move(void(*t)(int));
-	void reshape(int w, int h);
 	void characterAnimation(void(*t)(int));
 	void holemaker(void(*t)(int));
 	void firemaker(void(*t)(int));

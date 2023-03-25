@@ -8,6 +8,5 @@ public:
 	Star(float x, float y);
 	void draw();
 	void move();
-	void reshape(float);
 	int getPoint();
 };

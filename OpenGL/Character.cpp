@@ -50,10 +50,6 @@ void Character::jump() {
 	}
 }
 
-void Character::reshape(float h) {
-	Entity::reshape(x, h / 4, width, height);
-}
-
 void Character::setjump() {
 	if (!jumpState) {//점프중이 아닐 때,
 		speed = jumpSpeed;

@@ -20,7 +20,3 @@ void Fire::draw() {
 void Fire::move() {
 	Entity::move();
 }
-
-void Fire::reshape(float h) {
-	Entity::reshape(x, h / 3, width, height);
-}
