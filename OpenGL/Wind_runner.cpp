@@ -78,17 +78,6 @@ void starTimer(int time) {
 	gameManager->starmaker(starTimer);
 }
 
-void reshape(int w, int h) {
-	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, w, 0, h, -1, 1);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	gameManager->reshape(w, h);
-}
-
 void keyboard(unsigned char key, int x, int y) {
 	gameManager->keyboard(key, x, y);
 }

@@ -19,7 +19,3 @@ void Ground::draw() {
 void Ground::move() {
 	Entity::move();
 }
-
-void Ground::reshape(float w, float h) {
-	Entity::reshape(x, y, w, h / 4);
-}
