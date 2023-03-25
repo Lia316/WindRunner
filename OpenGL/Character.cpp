@@ -8,8 +8,8 @@
 #define JOINT_NUM 8
 
 Character::Character()
-	: Entity(1, 3, 50, 50, 0) { // TODO fix width, height for Box collide detection
-	jumpSpeed = 0.4;
+    : Entity(glutGet(GLUT_WINDOW_WIDTH) / 10, glutGet(GLUT_WINDOW_HEIGHT) / 4, 50, 50, 0) { // TODO fix width, height for Box collide detection
+	jumpSpeed = 12;
 	jumpState = false;
 
 	upArmAngleL = 0.0f;
@@ -28,8 +28,9 @@ Character::Character()
 void Character::draw() {
     glPushMatrix();
         glTranslatef(x, y, 0);
-        glScalef(0.2, 0.1, 0.2);
+        glScalef(7, 3, 7);
         glRotatef(90, 0, 1, 0);
+        glTranslatef(0, 8, 0);
    
 	    drawHead();
 	    drawTorso();
@@ -42,10 +43,9 @@ void Character::draw() {
 void Character::jump() {
 	y += speed;
 	if(jumpState == true)
-		speed = speed - 0.02;
+		speed = speed - 0.4;
 	if (speed <=-jumpSpeed) {
 		speed = 0;
-		y =  3;
 		jumpState = false;
 	}
 }

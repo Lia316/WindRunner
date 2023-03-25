@@ -23,14 +23,13 @@ int main(int argc, char** argv) {
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0, 10.0, 0.0, 10.0, -20.0, 20.0);
+	glOrtho(0.0, 500.0, 0.0, 500.0, -20.0, 20.0);
 
 	glClearColor(0.5, 0.5, 0.5, 0.0);
 
 	glEnable(GL_DEPTH_TEST);
 
 	glutDisplayFunc(draw);
-	// glutReshapeFunc(reshape);
 
 	glutTimerFunc(10, moveTimer, 0);
 	// glutTimerFunc(1300, fireTimer, 0);
