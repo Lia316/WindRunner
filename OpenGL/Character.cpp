@@ -8,7 +8,7 @@
 #define JOINT_NUM 8
 
 Character::Character()
-    : Entity(glutGet(GLUT_WINDOW_WIDTH) / 10, glutGet(GLUT_WINDOW_HEIGHT) / 4, 50, 50, 0) { // TODO fix width, height for Box collide detection
+    : Entity(glutGet(GLUT_WINDOW_WIDTH) / 10, glutGet(GLUT_WINDOW_HEIGHT) / 4, 30, 50, 0) {
 	jumpSpeed = 12;
 	jumpState = false;
 
@@ -27,8 +27,11 @@ Character::Character()
 
 void Character::draw() {
     glPushMatrix();
+        // to world coordinate
         glTranslatef(x, y, 0);
         glScalef(7, 3, 7);
+        // to make character stand up at model coordinate origin
+        glTranslatef(2, 0, 0);
         glRotatef(90, 0, 1, 0);
         glTranslatef(0, 8, 0);
    
