@@ -95,8 +95,6 @@ void Character::animation(void(*t)(int))
 	lowLegAngleR = angles[7];
 
 	glutPostRedisplay();
-
-	glutTimerFunc(10, t, 1);
 }
 
 void Character::drawHead()

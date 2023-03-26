@@ -32,9 +32,9 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(draw);
 
 	glutTimerFunc(10, moveTimer, 0);
-	// glutTimerFunc(1300, fireTimer, 0);
-	// glutTimerFunc(3000, holeTimer, 0);
-	// glutTimerFunc(500, starTimer, 0);
+	glutTimerFunc(1300, fireTimer, 0);
+	glutTimerFunc(3000, holeTimer, 0);
+	glutTimerFunc(1000, starTimer, 0);
 
 	glutKeyboardFunc(keyboard);
 	glutMainLoop();

@@ -21,9 +21,9 @@ GameManager::GameManager() {
 
 void GameManager::draw() {
 	ground->draw();
-	//hole->draw();
+	hole->draw();
 	character->draw();
-	/*
+	
 	for (int i = 0; i < MAXFIRE; i++) {
 		if (fire[i] != nullptr) {
 			fire[i]->draw();
@@ -39,13 +39,13 @@ void GameManager::draw() {
 	if (isGameEnd) {
 		showText(0, 60, "The Game End");
 	}
-	*/
+	
 }
 
 void GameManager::move(void(*t)(int)) {
-	// hole->move();
+	hole->move();
 	character->jump();
-	/*
+	
 	for (int i = 0; i < MAXFIRE; i++) {
 		if (fire[i] != nullptr) {
 			fire[i]->move();
@@ -73,16 +73,16 @@ void GameManager::move(void(*t)(int)) {
 			star[i] = nullptr;
 		}
 	}
-	*/
+
 	glutPostRedisplay();
-	/*
+
 	if (isGameEnd) {
 		character->sink();
 		glutPostRedisplay();
 	}
 	if (!isGameEnd) {
 		glutTimerFunc(10, t, 0);
-	}*/
+	}
 }
 
 void GameManager::characterAnimation(void(*t)(int)) {
@@ -116,7 +116,7 @@ void GameManager::starmaker(void(*t)(int)) {
 	else
 		starnum++;
 	if (!isGameEnd) {
-		glutTimerFunc(500, t, 0);
+		glutTimerFunc(1000, t, 0);
 	}
 }
 
