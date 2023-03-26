@@ -18,13 +18,6 @@ void Entity::draw() {
 	glPopMatrix();
 }
 
-void Entity::reshape(float _x, float _y, float _w, float _h) {
-	x = _x;
-	y = _y;
-	width = _w;
-	height = _h;
-}
-
 float Entity::getPositionX() {
 	return x;
 }

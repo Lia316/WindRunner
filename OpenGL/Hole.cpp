@@ -4,10 +4,10 @@
 #include "Hole.h"
 
 Hole::Hole()
-: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_WIDTH) / 7, glutGet(GLUT_WINDOW_HEIGHT) / 4, -3.5) { }
+: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_WIDTH) / 7, glutGet(GLUT_WINDOW_HEIGHT) / 3, -3.5) { }
 
 void Hole::draw() {
-	glColor3f(0.0, 0.0, 0.0);
+	glColor3f(1.0, 0.0, 0.0);
 	glBegin(GL_POLYGON);
 	glVertex2f(x, y);
 	glVertex2f(x + width, y);
@@ -19,8 +19,4 @@ void Hole::draw() {
 
 void Hole::move() {
 	Entity::move();
-}
-
-void Hole::reshape(float h) {
-	Entity::reshape(x, y, width, h / 4);
 }

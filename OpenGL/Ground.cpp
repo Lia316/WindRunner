@@ -6,7 +6,6 @@
 Ground::Ground()
 	: Entity(0, 0, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) / 4, 0) { }
 
-
 void Ground::draw() {
 	glColor3f(0.7f, 0.5f, 0.3f);
 	glBegin(GL_POLYGON);
@@ -19,8 +18,4 @@ void Ground::draw() {
 
 void Ground::move() {
 	Entity::move();
-}
-
-void Ground::reshape(float w, float h) {
-	Entity::reshape(x, y, w, h / 4);
 }

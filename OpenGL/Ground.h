@@ -8,5 +8,4 @@ public:
 	Ground();
 	void draw();
 	void move();
-	void reshape(float w, float h);
 };
