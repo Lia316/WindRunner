@@ -12,6 +12,7 @@ Character::Character()
 	jumpSpeed = 14;
     lowjumpSpeed = 10;
 	jumpState = false;
+    fallState = false;
 
 	upArmAngleL = 0.0f;
 	upArmAngleR = 0.0f;
@@ -69,16 +70,31 @@ void Character::setlowjump() {
     }
 }
 
+void Character::setfall() {
+    fallState = true;
+}
+
 void Character::stop(Entity* ground) {
     speed = 0;
     jumpState = false;
-    y = ground->getPositionX() + ground->getHeight();
+    y = ground->getHeight();
 }
 
 void Character::sink() {
 	y -= 10;
 }
 
+bool Character::isJumping() {
+    return this->jumpState;
+}
+
+float Character::getPositionX() {
+    return x;
+}
+
+float Character::getPositionY() {
+    return y;
+}
 
 float* Character::interpolateKeyframes(double& time)
 {

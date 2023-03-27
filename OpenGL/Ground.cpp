@@ -4,10 +4,10 @@
 #include "Ground.h"
 
 Ground::Ground()
-	: Entity(0, 0, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) / 4, 0) { }
+	: Entity(0, 0, glutGet(GLUT_WINDOW_WIDTH)*1.5, glutGet(GLUT_WINDOW_HEIGHT) / 4, -3.5) { }
 
 Ground::Ground(float height)
-	: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_WIDTH) / 3, height, -3.5) { }
+	: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_WIDTH) / 2, height, -3.5) { }
 
 void Ground::draw() {
 	glColor3f(0.7f, 0.5f, 0.3f);

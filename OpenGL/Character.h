@@ -10,7 +10,7 @@ protected:
 	float jumpSpeed;
 	float lowjumpSpeed;
 	bool jumpState; // 점프중(true), 정지중(false)
-
+	bool fallState; 
 	// animation
 	float upArmAngleL;
 	float upArmAngleR;
@@ -49,7 +49,12 @@ public:
 	void jump();
 	void setjump();
 	void setlowjump();
+	void setfall();
 	void stop(Entity* ground);
 	void sink();
+
+	bool isJumping();
+	float getPositionX();
+	float getPositionY();
 	void animation(void(*t)(int));
 };

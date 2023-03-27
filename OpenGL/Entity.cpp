@@ -33,3 +33,7 @@ float Entity::getWidth() {
 float Entity::getHeight() {
 	return height;
 }
+
+float Entity::getSpeed() {
+	return speed;
+}

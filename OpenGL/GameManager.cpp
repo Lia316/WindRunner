@@ -8,7 +8,7 @@ using namespace std;
 
 GameManager::GameManager() {
 	ground = new Ground();
-	hole = new Hole();
+	//hole = new Hole();
 	character = new Character();
 	fill_n(fire, MAXFIRE, nullptr);
 	fill_n(star, MAXSTAR, nullptr);
@@ -22,7 +22,7 @@ GameManager::GameManager() {
 
 void GameManager::draw() {
 	ground->draw();
-	hole->draw();
+	//hole->draw();
 	character->draw();
 	
 	for (int i = 0; i < MAXFIRE; i++) {
@@ -51,11 +51,19 @@ void GameManager::draw() {
 }
 
 void GameManager::move(void(*t)(int)) {
-	hole->move();
-	if (detectCollisionY(character, ground))
+	ground->move();
+	//hole->move();
+	if (detectCollisionYground(character, ground))
 		character->stop(ground);
-	else
-		character->jump();
+
+	for (int i = 0; i < MAXGROUND; i++) {
+		if (newground[i] != nullptr && detectCollisionYground(character, newground[i])) {
+			character->stop(newground[i]);
+		}
+	}
+	//if (detectFall(character, newground))
+	//	character->setfall();
+	character->jump();
 	
 	for (int i = 0; i < MAXFIRE; i++) {
 		if (fire[i] != nullptr) {
@@ -74,14 +82,22 @@ void GameManager::move(void(*t)(int)) {
 	}
 	glutPostRedisplay();
 
-	if (detectSink(character, hole)) {
+	if (detectSink(character)) {
 		isGameEnd = true;
 	}
-	for (int i = 0; i < MAXFIRE; i++) {
-		if (detectCollision(character, fire[i])) {
+	
+	//for (int i = 0; i < MAXFIRE; i++) {
+	//	if (detectCollision(character, fire[i])) {
+	//		isGameEnd = true;
+	//	}
+	//}테스트를 위해 임시로 비활성화
+	
+	for (int i = 0; i < MAXGROUND; i++) {
+		if (detectCollision(character, newground[i]) && detectUnderground(character, newground[i])) {
 			isGameEnd = true;
 		}
 	}
+
 	for (int i = 0; i < MAXSTAR; i++) {
 		if (detectCollision(character, star[i])) {
 			score += star[i]->getPoint();
@@ -105,10 +121,10 @@ void GameManager::characterAnimation(void(*t)(int)) {
 	character->animation(t);
 }
 
-void GameManager::holemaker(void(*t)(int)) {
-	hole = new Hole();
-	glutTimerFunc(3000, t, 0);
-}
+//void GameManager::holemaker(void(*t)(int)) {
+//	hole = new Hole();
+//	glutTimerFunc(3000, t, 0);
+//}
 
 void GameManager::firemaker(void(*t)(int)) {
 	random_device rd;
@@ -145,7 +161,7 @@ void GameManager::groundmaker(void(*t)(int)) {
 	else
 		groundnum++;
 	if (!isGameEnd) {
-		glutTimerFunc(1500, t, 0);
+		glutTimerFunc(GROUNDTIME, t, 0);
 	}
 }
 void GameManager::keyboard(unsigned char key, int x, int y) {
@@ -180,16 +196,36 @@ bool GameManager::detectCollisionY(Entity* character, Entity* object) {
 	return collisionY;
 }
 
+bool GameManager::detectCollisionYground(Entity* character, Entity* ground) { // predict Character's next y pos, and then predict if it were crashed with ground.
+	if (ground == nullptr) {
+		return false;
+	}
+	bool collisionY = ground->getHeight() > character->getPositionY() + character->getSpeed();
+	return collisionY && detectCollisionX(character, ground);
+}
+
 bool GameManager::detectCollision(Entity* character, Entity* object) {
 	return detectCollisionX(character,object) && detectCollisionY(character, object);
 }
 
-bool GameManager::detectSink(Entity* character, Entity* hole) {
-	bool collisionX = character->getPositionX() >= hole->getPositionX() &&
-		hole->getPositionX() + hole->getWidth() >= character->getPositionX() + character->getWidth();
-	bool collisionY = hole->getPositionY() + hole->getHeight() >= character->getPositionY();
+bool GameManager::detectUnderground(Entity* character, Entity* ground) {
+	bool checkY = character->getPositionX() < ground->getHeight();
+	return checkY && detectCollisionX(character, ground);
+}
 
-	return collisionX && collisionY;
+bool GameManager::detectSink(Entity* character) {
+	if (character->getPositionY() <=0)
+		return true;
+	else
+		return false;
+}
+
+bool GameManager::detectFall(Character* character, Ground** newground) { // 조건 1. y좌표가 처음좌표보다 큼 조건 2. 점프중이 아님 3. 그 어떤 
+	if (character->getPositionX() > glutGet(GLUT_WINDOW_HEIGHT) / 4)
+	{
+		
+	}
+	return true;
 }
 
 void GameManager::showText(float x, float y, std::string string) {

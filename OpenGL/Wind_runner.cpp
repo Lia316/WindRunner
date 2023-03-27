@@ -8,7 +8,7 @@ GameManager* gameManager;
 void init();
 void draw();
 void moveTimer(int time);
-void holeTimer(int time);
+//void holeTimer(int time);
 void fireTimer(int time);
 void starTimer(int time);
 void groundTimer(int time);
@@ -34,9 +34,9 @@ int main(int argc, char** argv) {
 
 	glutTimerFunc(10, moveTimer, 0);
 	glutTimerFunc(1300, fireTimer, 0);
-	glutTimerFunc(3000, holeTimer, 0);
+	//glutTimerFunc(3000, holeTimer, 0);
 	glutTimerFunc(1000, starTimer, 0);
-	glutTimerFunc(1500, groundTimer, 0);
+	glutTimerFunc(GROUNDTIME, groundTimer, 0);
 	glutKeyboardFunc(keyboard);
 	glutMainLoop();
 	return 0;
@@ -65,9 +65,9 @@ void moveTimer(int time) {
 	gameManager->characterAnimation(moveTimer);
 }
 
-void holeTimer(int time) {
-	gameManager->holemaker(holeTimer);
-}
+//void holeTimer(int time) {
+//	gameManager->holemaker(holeTimer);
+//}
 
 void fireTimer(int time) {
 	gameManager->firemaker(fireTimer);
