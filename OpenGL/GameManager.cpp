@@ -43,11 +43,10 @@ void GameManager::draw() {
 		}
 	}
 	string scoreText = "score: " + to_string(score);
-	showText(0, 30, scoreText);
+	showText(0, glutGet(GLUT_WINDOW_HEIGHT) - 30, scoreText);
 	if (isGameEnd) {
-		showText(0, 60, "The Game End");
+		showText(0, glutGet(GLUT_WINDOW_HEIGHT) - 60, "The Game End");
 	}
-	
 }
 
 void GameManager::move(void(*t)(int)) {
