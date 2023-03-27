@@ -49,10 +49,10 @@ void Character::jump() {
 	if(jumpState == true)
 		speed = speed - 0.4;
 	//점프의 종료조건 수정해야함 : 바닥이랑 닿였을 때
-    if (speed <=-jumpSpeed) {
-		speed = 0;
-		jumpState = false;
-	}
+ //   if (speed <=-jumpSpeed) {
+	//	speed = 0;
+	//	jumpState = false;
+	//}
 }
 
 void Character::setjump() {
@@ -69,9 +69,10 @@ void Character::setlowjump() {
     }
 }
 
-void Character::stop() {
+void Character::stop(Entity* ground) {
     speed = 0;
     jumpState = false;
+    y = ground->getPositionX() + ground->getHeight();
 }
 
 void Character::sink() {

@@ -44,8 +44,10 @@ void GameManager::draw() {
 
 void GameManager::move(void(*t)(int)) {
 	hole->move();
-	
-	character->jump();
+	if (detectCollisionY(character, ground))
+		character->stop(ground);
+	else
+		character->jump();
 	
 	for (int i = 0; i < MAXFIRE; i++) {
 		if (fire[i] != nullptr) {
@@ -139,8 +141,8 @@ bool GameManager::detectCollisionX(Entity* character, Entity* object) {
 	if (object == nullptr) {
 		return false;
 	}
-	bool collisionX = character->getPositionX() + character->getWidth() >= object->getPositionX() &&
-		object->getPositionX() + object->getWidth() >= character->getPositionX();
+	bool collisionX = character->getPositionX() + character->getWidth() > object->getPositionX() &&
+		object->getPositionX() + object->getWidth() > character->getPositionX();
 	return collisionX;
 }
 
@@ -148,8 +150,8 @@ bool GameManager::detectCollisionY(Entity* character, Entity* object) {
 	if (object == nullptr) {
 		return false;
 	}
-	bool collisionY = character->getPositionY() + character->getHeight() >= object->getPositionY() &&
-		object->getPositionY() + object->getHeight() >= character->getPositionY();
+	bool collisionY = character->getPositionY() + character->getHeight() > object->getPositionY() &&
+		object->getPositionY() + object->getHeight() > character->getPositionY();
 	return collisionY;
 }
 

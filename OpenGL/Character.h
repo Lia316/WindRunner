@@ -49,7 +49,7 @@ public:
 	void jump();
 	void setjump();
 	void setlowjump();
-	void stop();
+	void stop(Entity* ground);
 	void sink();
 	void animation(void(*t)(int));
 };
