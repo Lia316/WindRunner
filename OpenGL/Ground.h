@@ -6,6 +6,7 @@ protected:
 
 public:
 	Ground();
+	Ground(float height);
 	void draw();
 	void move();
 };

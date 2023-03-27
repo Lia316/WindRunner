@@ -6,6 +6,9 @@
 Ground::Ground()
 	: Entity(0, 0, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) / 4, 0) { }
 
+Ground::Ground(float height)
+	: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_WIDTH) / 2, height, 0) { }
+
 void Ground::draw() {
 	glColor3f(0.7f, 0.5f, 0.3f);
 	glBegin(GL_POLYGON);
