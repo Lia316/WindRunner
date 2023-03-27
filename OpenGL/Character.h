@@ -8,6 +8,7 @@ class Character : public Entity {
 
 protected:
 	float jumpSpeed;
+	float lowjumpSpeed;
 	bool jumpState; // 점프중(true), 정지중(false)
 
 	// animation
@@ -47,6 +48,7 @@ public:
 	void draw();
 	void jump();
 	void setjump();
+	void setlowjump();
 	void sink();
 	void animation(void(*t)(int));
 };

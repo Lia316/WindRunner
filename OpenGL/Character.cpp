@@ -9,7 +9,8 @@
 
 Character::Character()
     : Entity(glutGet(GLUT_WINDOW_WIDTH) / 10, glutGet(GLUT_WINDOW_HEIGHT) / 4, 30, 50, 0) {
-	jumpSpeed = 12;
+	jumpSpeed = 14;
+    lowjumpSpeed = 10;
 	jumpState = false;
 
 	upArmAngleL = 0.0f;
@@ -47,7 +48,8 @@ void Character::jump() {
 	y += speed;
 	if(jumpState == true)
 		speed = speed - 0.4;
-	if (speed <=-jumpSpeed) {
+	//점프의 종료조건 수정해야함 : 바닥이랑 닿였을 때
+    if (speed <=-jumpSpeed) {
 		speed = 0;
 		jumpState = false;
 	}
@@ -58,6 +60,13 @@ void Character::setjump() {
 		speed = jumpSpeed;
 		jumpState = true;
 	}
+}
+
+void Character::setlowjump() {
+    if (!jumpState) {//점프중이 아닐 때,
+        speed = lowjumpSpeed;
+        jumpState = true;
+    }
 }
 
 void Character::sink() {

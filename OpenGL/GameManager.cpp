@@ -123,7 +123,11 @@ void GameManager::starmaker(void(*t)(int)) {
 void GameManager::keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 32:
-		character->setjump();
+		int mod = glutGetModifiers();
+		if (mod == GLUT_ACTIVE_SHIFT)
+			character->setjump();
+		else
+			character->setlowjump();
 	}
 	glutPostRedisplay();
 }
