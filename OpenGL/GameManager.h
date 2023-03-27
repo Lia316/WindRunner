@@ -20,8 +20,12 @@ public:
 	void firemaker(void(*t)(int));
 	void starmaker(void(*t)(int));
 	void keyboard(unsigned char key, int x, int y);
+
+	bool detectCollisionX(Entity* character, Entity* object);
+	bool detectCollisionY(Entity* character, Entity* object);
 	bool detectCollision(Entity* character, Entity* object);
 	bool detectSink(Entity* character, Entity* hole);
+
 	void showText(float x, float y, std::string string);
 
 	Ground* ground;

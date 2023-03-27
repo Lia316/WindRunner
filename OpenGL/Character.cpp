@@ -69,6 +69,11 @@ void Character::setlowjump() {
     }
 }
 
+void Character::stop() {
+    speed = 0;
+    jumpState = false;
+}
+
 void Character::sink() {
 	y -= 10;
 }

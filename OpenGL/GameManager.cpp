@@ -44,6 +44,7 @@ void GameManager::draw() {
 
 void GameManager::move(void(*t)(int)) {
 	hole->move();
+	
 	character->jump();
 	
 	for (int i = 0; i < MAXFIRE; i++) {
@@ -132,16 +133,28 @@ void GameManager::keyboard(unsigned char key, int x, int y) {
 	glutPostRedisplay();
 }
 
-bool GameManager::detectCollision(Entity* character, Entity* object) {
+
+
+bool GameManager::detectCollisionX(Entity* character, Entity* object) {
 	if (object == nullptr) {
 		return false;
 	}
 	bool collisionX = character->getPositionX() + character->getWidth() >= object->getPositionX() &&
 		object->getPositionX() + object->getWidth() >= character->getPositionX();
+	return collisionX;
+}
+
+bool GameManager::detectCollisionY(Entity* character, Entity* object) {
+	if (object == nullptr) {
+		return false;
+	}
 	bool collisionY = character->getPositionY() + character->getHeight() >= object->getPositionY() &&
 		object->getPositionY() + object->getHeight() >= character->getPositionY();
+	return collisionY;
+}
 
-	return collisionX && collisionY;
+bool GameManager::detectCollision(Entity* character, Entity* object) {
+	return detectCollisionX(character,object) && detectCollisionY(character, object);
 }
 
 bool GameManager::detectSink(Entity* character, Entity* hole) {

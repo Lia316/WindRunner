@@ -49,6 +49,7 @@ public:
 	void jump();
 	void setjump();
 	void setlowjump();
+	void stop();
 	void sink();
 	void animation(void(*t)(int));
 };
