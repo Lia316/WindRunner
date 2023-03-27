@@ -9,6 +9,7 @@
 
 #define MAXFIRE 4
 #define MAXSTAR 10
+#define MAXGROUND 3
 
 class GameManager {
 public:
@@ -19,6 +20,7 @@ public:
 	void holemaker(void(*t)(int));
 	void firemaker(void(*t)(int));
 	void starmaker(void(*t)(int));
+	void groundmaker(void(*t)(int));
 	void keyboard(unsigned char key, int x, int y);
 
 	bool detectCollisionX(Entity* character, Entity* object);
@@ -33,9 +35,11 @@ public:
 	Character* character;
 	Fire* fire[MAXFIRE];
 	Star* star[MAXSTAR];
+	Ground* newground[MAXGROUND];
 
 	bool isGameEnd;
 	int score;
 	int firenum;
 	int starnum;
+	int groundnum;
 };

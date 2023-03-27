@@ -12,11 +12,12 @@ GameManager::GameManager() {
 	character = new Character();
 	fill_n(fire, MAXFIRE, nullptr);
 	fill_n(star, MAXSTAR, nullptr);
-
+	fill_n(newground, MAXGROUND, nullptr);
 	isGameEnd = false;
 	score = 0;
 	firenum = 0;
 	starnum = 0;
+	groundnum = 0;
 }
 
 void GameManager::draw() {
@@ -29,9 +30,16 @@ void GameManager::draw() {
 			fire[i]->draw();
 		}
 	}
+
 	for (int i = 0; i < MAXSTAR; i++) {
 		if (star[i] != nullptr) {
 			star[i]->draw();
+		}
+	}
+
+	for (int i = 0; i < MAXGROUND; i++) {
+		if (newground[i] != nullptr) {
+			newground[i]->draw();
 		}
 	}
 	string scoreText = "score: " + to_string(score);
@@ -57,6 +65,11 @@ void GameManager::move(void(*t)(int)) {
 	for (int i = 0; i < MAXSTAR; i++) {
 		if (star[i] != nullptr) {
 			star[i]->move();
+		}
+	}
+	for (int i = 0; i < MAXGROUND; i++) {
+		if (newground[i] != nullptr) {
+			newground[i]->move();
 		}
 	}
 	glutPostRedisplay();
@@ -123,6 +136,18 @@ void GameManager::starmaker(void(*t)(int)) {
 	}
 }
 
+void GameManager::groundmaker(void(*t)(int)) {
+	random_device rd;
+	int height = rd() % (glutGet(GLUT_WINDOW_WIDTH)/2) + glutGet(GLUT_WINDOW_WIDTH) / 4;
+	newground[groundnum] = new Ground(height);
+	if (groundnum == MAXGROUND - 1)
+		groundnum = 0;
+	else
+		groundnum++;
+	if (!isGameEnd) {
+		glutTimerFunc(1500, t, 0);
+	}
+}
 void GameManager::keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 32:
