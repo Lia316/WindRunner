@@ -12,7 +12,6 @@ Character::Character()
 	jumpSpeed = 14;
     lowjumpSpeed = 10;
 	jumpState = false;
-    fallState = false;
 
 	upArmAngleL = 0.0f;
 	upArmAngleR = 0.0f;
@@ -71,7 +70,7 @@ void Character::setlowjump() {
 }
 
 void Character::setfall() {
-    fallState = true;
+    jumpState = true;
 }
 
 void Character::stop(Entity* ground) {

@@ -10,7 +10,6 @@ protected:
 	float jumpSpeed;
 	float lowjumpSpeed;
 	bool jumpState; // 점프중(true), 정지중(false)
-	bool fallState; 
 	// animation
 	float upArmAngleL;
 	float upArmAngleR;

@@ -31,7 +31,7 @@ public:
 	bool detectCollision(Entity* character, Entity* object);
 	bool detectSink(Entity* character);
 
-	bool detectFall(Character* character, Ground** newground);
+	bool detectFall(Character* character, Ground* ground, Ground** newground);
 	bool detectUnderground(Entity* character, Entity* ground);
 	void showText(float x, float y, std::string string);
 

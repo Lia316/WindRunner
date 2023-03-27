@@ -61,8 +61,9 @@ void GameManager::move(void(*t)(int)) {
 			character->stop(newground[i]);
 		}
 	}
-	//if (detectFall(character, newground))
-	//	character->setfall();
+	if (detectFall(character, ground, newground))
+	  character->setfall();
+
 	character->jump();
 	
 	for (int i = 0; i < MAXFIRE; i++) {
@@ -154,8 +155,8 @@ void GameManager::starmaker(void(*t)(int)) {
 
 void GameManager::groundmaker(void(*t)(int)) {
 	random_device rd;
-	int height = rd() % (glutGet(GLUT_WINDOW_WIDTH)/2) + glutGet(GLUT_WINDOW_WIDTH) / 4;
-	newground[groundnum] = new Ground(height);
+	int height = rd() % (glutGet(GLUT_WINDOW_WIDTH)/2) + glutGet(GLUT_WINDOW_WIDTH) / 4 + 1;
+	newground[groundnum] = new Ground(height); 
 	if (groundnum == MAXGROUND - 1)
 		groundnum = 0;
 	else
@@ -220,10 +221,14 @@ bool GameManager::detectSink(Entity* character) {
 		return false;
 }
 
-bool GameManager::detectFall(Character* character, Ground** newground) { // 조건 1. y좌표가 처음좌표보다 큼 조건 2. 점프중이 아님 3. 그 어떤 
-	if (character->getPositionX() > glutGet(GLUT_WINDOW_HEIGHT) / 4)
-	{
-		
+bool GameManager::detectFall(Character* character, Ground* ground, Ground** newground) { // 조건 1. y좌표가 처음좌표보다 큼 조건 2. 점프중이 아님 3. 그 어떤 
+	if (detectCollisionX(character, ground))
+		return false;
+	if (character->isJumping())
+		return false;
+	for (int i = 0; i < MAXGROUND; i++) {
+		if (detectCollisionX(character, newground[i]))
+			return false;
 	}
 	return true;
 }
