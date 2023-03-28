@@ -167,16 +167,16 @@ void GameManager::groundmaker(void(*t)(int)) {
 	}
 }
 
-//void GameManager::mushmaker(void(*t)(int)) {
-//	mush[mushnum] = new Mush();
-//	if (mushnum == MAXMUSH - 1)
-//		mushnum = 0;
-//	else
-//		mushnum++;
-//	if (!isGameEnd) {
-//		glutTimerFunc(GROUNDTIME * 2, t, 0);
-//	}
-//}
+void GameManager::mushmaker(void(*t)(int)) {
+	mush[mushnum] = new Mush();
+	if (mushnum == MAXMUSH - 1)
+		mushnum = 0;
+	else
+		mushnum++;
+	if (!isGameEnd) {
+		glutTimerFunc(GROUNDTIME * 2, t, 0);
+	}
+}
 
 void GameManager::keyboard(unsigned char key, int x, int y) {
 	switch (key) {

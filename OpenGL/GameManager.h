@@ -1,5 +1,5 @@
 #pragma once
-#include<string>
+#include <string>
 #include "Entity.h"
 #include "Ground.h"
 #include "Hole.h"

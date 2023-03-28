@@ -12,6 +12,7 @@ void moveTimer(int time);
 void fireTimer(int time);
 void starTimer(int time);
 void groundTimer(int time);
+void mushTimer(int time);
 void keyboard(unsigned char key, int x, int y);
 
 int main(int argc, char** argv) {
@@ -37,6 +38,7 @@ int main(int argc, char** argv) {
 	//glutTimerFunc(3000, holeTimer, 0);
 	glutTimerFunc(1000, starTimer, 0);
 	glutTimerFunc(GROUNDTIME, groundTimer, 0);
+	/*glutTimerFunc(GROUNDTIME * 2, mushTimer, 0);*/
 	glutKeyboardFunc(keyboard);
 	glutMainLoop();
 	return 0;
@@ -80,6 +82,10 @@ void starTimer(int time) {
 void groundTimer(int time) {
 	gameManager->groundmaker(groundTimer);
 }
+
+//void mushTimer(int time) {
+//	gameManager->mushmaker(mushTimer);
+//}
 
 void keyboard(unsigned char key, int x, int y) {
 	gameManager->keyboard(key, x, y);

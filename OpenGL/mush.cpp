@@ -4,7 +4,7 @@
 #include "Mush.h"
 
 Mush::Mush()
-	: Entity(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) / 4, 30,30, -3.5) { }
+	: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, 30, 30, -3.5) { }
 
 void Mush::draw() {
 	glColor3f(2.0, 0.55, 0.0);
