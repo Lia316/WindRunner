@@ -4,7 +4,7 @@
 #include "Mush.h"
 
 Mush::Mush()
-	: Entity(glutGet(GLUT_WINDOW_WIDTH) + 100, 400, 50, 50, -5.5) { }
+	: Entity(glutGet(GLUT_WINDOW_WIDTH) + 100, 400, 50, 50, -4.5) { }
 
 void Mush::draw() {
 	glColor3f(2.0, 0.55, 0.0);
@@ -31,7 +31,7 @@ void Mush::setY(float posY) {
 
 void Mush::reverse() {//reverse direction
 	if (this->speed < -3.5)
-		this->speed = -1.5;
+		this->speed = -2.5;
 	else
-		this->speed = -5.5;
+		this->speed = -4.5;
 }

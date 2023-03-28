@@ -51,6 +51,7 @@ public:
 	void setfall();
 	void stop(Entity* ground);
 	void sink();
+	void stepMush();
 
 	bool isJumping();
 	float getPositionX();

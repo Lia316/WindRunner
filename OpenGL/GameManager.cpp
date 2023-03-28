@@ -60,11 +60,11 @@ void GameManager::draw() {
 void GameManager::move(void(*t)(int)) {
 	ground->move();
 	//hole->move();
-	if (detectCollisionYground(character, ground))
+	if (detectCollisionYpredict(character, ground))
 		character->stop(ground);
 
 	for (int i = 0; i < MAXGROUND; i++) {
-		if (newground[i] != nullptr && detectCollisionYground(character, newground[i])) {
+		if (newground[i] != nullptr && detectCollisionYpredict(character, newground[i])) {
 			character->stop(newground[i]);
 		}
 	}
@@ -83,6 +83,15 @@ void GameManager::move(void(*t)(int)) {
 			star[i]->move();
 		}
 	}
+
+	//for (int i = 0; i < MAXSTAR; i++) {
+	//	for (int j = 0; i < MAXGROUND; j++) {
+	//		if (detectCollision(star[i],newground[j])) {
+	//			/*star[i]->upper()*/;//to prevent that stars were under the ground
+	//		}
+	//	}
+	//}
+
 	for (int i = 0; i < MAXGROUND; i++) {
 		if (newground[i] != nullptr) {
 			newground[i]->move();
@@ -110,18 +119,21 @@ void GameManager::move(void(*t)(int)) {
 		isGameEnd = true;
 	}
 	
-	//for (int i = 0; i < MAXFIRE; i++) {
-	//	if (detectCollision(character, fire[i])) {
-	//		isGameEnd = true;
-	//	}
-	//}테스트를 위해 임시로 비활성화
-	
-	for (int i = 0; i < MAXGROUND; i++) {
-		if (detectCollision(character, newground[i]) && detectUnderground(character, newground[i])) {
+	for (int i = 0; i < MAXFIRE; i++) {
+		if (detectCollision(character, fire[i])) {
 			isGameEnd = true;
 		}
 	}
-
+	for (int i = 0; i < MAXGROUND; i++) {
+		if (detectCollision(character, newground[i]) && detectUnderobject(character, newground[i])) {
+			isGameEnd = true;
+		}
+	}
+	for (int i = 0; i < MAXMUSH; i++) {
+		if (detectCollision(character, mush[i]) && detectUnderobject(character, mush[i])) {
+			isGameEnd = true;
+		}
+	}
 	for (int i = 0; i < MAXSTAR; i++) {
 		if (detectCollision(character, star[i])) {
 			score += star[i]->getPoint();
@@ -129,12 +141,13 @@ void GameManager::move(void(*t)(int)) {
 			star[i] = nullptr;
 		}
 	}
-
-	//for (int i = 0; i < MAXMUSH; i++) {
-	//	if (detectCollision(character, mush[i])) {
-	//		if()
-	//	}
-	//}
+	for (int i = 0; i < MAXMUSH; i++) {
+		if (detectCollisionYpredict(character, mush[i])) {
+			character->stepMush();
+			delete mush[i];
+			mush[i] = nullptr;
+		}
+	}
 
 	glutPostRedisplay();
 
@@ -165,7 +178,7 @@ void GameManager::firemaker(void(*t)(int)) {
 	else
 		firenum++;
 	if (!isGameEnd) {
-		glutTimerFunc(1300, t, 0);
+		glutTimerFunc(FIRETIME, t, 0);
 	}
 }
 
@@ -178,7 +191,7 @@ void GameManager::starmaker(void(*t)(int)) {
 	else
 		starnum++;
 	if (!isGameEnd) {
-		glutTimerFunc(1000, t, 0);
+		glutTimerFunc(STARTIME, t, 0);
 	}
 }
 
@@ -196,7 +209,11 @@ void GameManager::groundmaker(void(*t)(int)) {
 }
 
 void GameManager::mushmaker(void(*t)(int)) {
+	random_device rd;
+	int coin = rd() % 2;
 	mush[mushnum] = new Mush();
+	if (coin)
+		mush[mushnum]->reverse();
 	if (mushnum == MAXMUSH - 1)
 		mushnum = 0;
 	else
@@ -230,7 +247,7 @@ bool GameManager::detectCollisionX(Entity* character, Entity* object) {
 }
 
 bool GameManager::detectCollisionY(Entity* character, Entity* object) {
-	if (object == nullptr) {
+	if (character == nullptr || object == nullptr) {
 		return false;
 	}
 	bool collisionY = character->getPositionY() + character->getHeight() > object->getPositionY() &&
@@ -238,21 +255,27 @@ bool GameManager::detectCollisionY(Entity* character, Entity* object) {
 	return collisionY;
 }
 
-bool GameManager::detectCollisionYground(Entity* character, Entity* ground) { // predict Character's next y pos, and then predict if it were crashed with ground.
-	if (ground == nullptr) {
+bool GameManager::detectCollisionYpredict(Entity* character, Entity* object) { // predict Character's next y pos, and then predict if it were crashed with ground.
+	if (object == nullptr) {
 		return false;
 	}
-	bool collisionY = ground->getHeight() > character->getPositionY() + character->getSpeed();
-	return collisionY && detectCollisionX(character, ground);
+	bool collisionY = object->getPositionY() + object->getHeight() > character->getPositionY() + character->getSpeed();
+	return collisionY && detectCollisionX(character, object);
 }
 
 bool GameManager::detectCollision(Entity* character, Entity* object) {
+	if (character == nullptr || object == nullptr) {
+		return false;
+	}
 	return detectCollisionX(character,object) && detectCollisionY(character, object);
 }
 
-bool GameManager::detectUnderground(Entity* character, Entity* ground) {
-	bool checkY = character->getPositionX() < ground->getHeight();
-	return checkY && detectCollisionX(character, ground);
+bool GameManager::detectUnderobject(Entity* character, Entity* object) {
+	if (character == nullptr || object == nullptr) {
+		return false;
+	}
+	bool checkY = character->getPositionY() < object->getPositionY() + object->getHeight();
+	return checkY && detectCollisionX(character, object);
 }
 
 bool GameManager::detectSink(Entity* character) {
@@ -274,6 +297,9 @@ bool GameManager::detectFall(Character* character, Ground* ground, Ground** newg
 	return true;
 }
 
+bool GameManager::detectMushStep(Entity* character, Entity* mush) {
+	return false;
+}
 bool GameManager::detectMushMove(Entity* mush, Ground** newground) {
 	if (mush == nullptr)
 		return false;

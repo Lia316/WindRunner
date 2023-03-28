@@ -13,6 +13,8 @@
 #define MAXGROUND 4
 #define MAXMUSH 4
 
+#define FIRETIME 2100
+#define STARTIME 1000
 #define GROUNDTIME 1700
 
 class GameManager {
@@ -31,13 +33,14 @@ public:
 
 	bool detectCollisionX(Entity* character, Entity* object);
 	bool detectCollisionY(Entity* character, Entity* object);
-	bool detectCollisionYground(Entity* character, Entity* ground);
+	bool detectCollisionYpredict(Entity* character, Entity* ground);
 	bool detectCollision(Entity* character, Entity* object);
 	bool detectSink(Entity* character);
 	bool detectMushMove(Entity* mush, Ground** newground);
+	bool detectMushStep(Entity* character, Entity* mush);
 
 	bool detectFall(Character* character, Ground* ground, Ground** newground);
-	bool detectUnderground(Entity* character, Entity* ground);
+	bool detectUnderobject(Entity* character, Entity* ground);
 	void showText(float x, float y, std::string string);
 
 	Ground* ground;

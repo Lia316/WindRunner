@@ -27,4 +27,6 @@ int Star::getPoint() {
 	return point;
 }
 
-//void Star::
+void Star::upper() {
+	y += 50;
+}

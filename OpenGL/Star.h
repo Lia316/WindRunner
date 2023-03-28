@@ -9,4 +9,5 @@ public:
 	void draw();
 	void move();
 	int getPoint();
+	void upper();
 };

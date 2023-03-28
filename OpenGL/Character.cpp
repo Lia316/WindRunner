@@ -74,6 +74,9 @@ void Character::stop(Entity* ground) {
     y = ground->getHeight();
 }
 
+void Character::stepMush() {
+    speed = 7;
+}
 void Character::sink() {
 	y -= 10;
 }
