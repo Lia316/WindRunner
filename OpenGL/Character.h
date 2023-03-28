@@ -8,8 +8,8 @@ class Character : public Entity {
 
 protected:
 	float jumpSpeed;
+	float lowjumpSpeed;
 	bool jumpState; // 점프중(true), 정지중(false)
-
 	// animation
 	float upArmAngleL;
 	float upArmAngleR;
@@ -47,6 +47,14 @@ public:
 	void draw();
 	void jump();
 	void setjump();
+	void setlowjump();
+	void setfall();
+	void stop(Entity* ground);
 	void sink();
+	void stepMush();
+
+	bool isJumping();
+	float getPositionX();
+	float getPositionY();
 	void animation(void(*t)(int));
 };

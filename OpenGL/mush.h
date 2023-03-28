@@ -1,11 +1,13 @@
 #pragma once
 #include "Entity.h"
 
-class Hole : public Entity {
+class Mush : public Entity {
 protected:
 
 public:
-	Hole();
+	Mush();
 	void draw();
 	void move();
+	void setY(float y);
+	void reverse();
 };

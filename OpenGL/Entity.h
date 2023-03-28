@@ -12,4 +12,5 @@ public:
 	virtual float getPositionY();
 	virtual float getWidth();
 	virtual float getHeight();
+	virtual float getSpeed();
 };

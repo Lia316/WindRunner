@@ -9,7 +9,8 @@
 
 Character::Character()
     : Entity(glutGet(GLUT_WINDOW_WIDTH) / 10, glutGet(GLUT_WINDOW_HEIGHT) / 4, 30, 50, 0) {
-	jumpSpeed = 12;
+	jumpSpeed = 14;
+    lowjumpSpeed = 10;
 	jumpState = false;
 
 	upArmAngleL = 0.0f;
@@ -47,10 +48,6 @@ void Character::jump() {
 	y += speed;
 	if(jumpState == true)
 		speed = speed - 0.4;
-	if (speed <=-jumpSpeed) {
-		speed = 0;
-		jumpState = false;
-	}
 }
 
 void Character::setjump() {
@@ -60,10 +57,41 @@ void Character::setjump() {
 	}
 }
 
+void Character::setlowjump() {
+    if (!jumpState) {//점프중이 아닐 때,
+        speed = lowjumpSpeed;
+        jumpState = true;
+    }
+}
+
+void Character::setfall() {
+    jumpState = true;
+}
+
+void Character::stop(Entity* ground) {
+    speed = 0;
+    jumpState = false;
+    y = ground->getHeight();
+}
+
+void Character::stepMush() {
+    speed = 7;
+}
 void Character::sink() {
 	y -= 10;
 }
 
+bool Character::isJumping() {
+    return this->jumpState;
+}
+
+float Character::getPositionX() {
+    return x;
+}
+
+float Character::getPositionY() {
+    return y;
+}
 
 float* Character::interpolateKeyframes(double& time)
 {

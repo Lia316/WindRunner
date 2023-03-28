@@ -26,3 +26,7 @@ void Star::move() {
 int Star::getPoint() {
 	return point;
 }
+
+void Star::upper() {
+	y += 100;
+}
