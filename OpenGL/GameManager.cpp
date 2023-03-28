@@ -8,7 +8,6 @@ using namespace std;
 
 GameManager::GameManager() {
 	ground = new Ground();
-	//hole = new Hole();
 	character = new Character();
 	fill_n(fire, MAXFIRE, nullptr);
 	fill_n(star, MAXSTAR, nullptr);
@@ -24,7 +23,6 @@ GameManager::GameManager() {
 
 void GameManager::draw() {
 	ground->draw();
-	//hole->draw();
 	character->draw();
 	
 	for (int i = 0; i < MAXFIRE; i++) {
@@ -59,7 +57,6 @@ void GameManager::draw() {
 
 void GameManager::move(void(*t)(int)) {
 	ground->move();
-	//hole->move();
 	if (detectCollisionYpredict(character, ground))
 		character->stop(ground);
 
@@ -163,11 +160,6 @@ void GameManager::move(void(*t)(int)) {
 void GameManager::characterAnimation(void(*t)(int)) {
 	character->animation(t);
 }
-
-//void GameManager::holemaker(void(*t)(int)) {
-//	hole = new Hole();
-//	glutTimerFunc(3000, t, 0);
-//}
 
 void GameManager::firemaker(void(*t)(int)) {
 	random_device rd;
