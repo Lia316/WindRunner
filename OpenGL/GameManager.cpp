@@ -44,6 +44,12 @@ void GameManager::draw() {
 			newground[i]->draw();
 		}
 	}
+
+	for (int i = 0; i < MAXMUSH; i++) {
+		if (mush[i] != nullptr) {
+			mush[i]->draw();
+		}
+	}
 	string scoreText = "score: " + to_string(score);
 	showText(0, glutGet(GLUT_WINDOW_HEIGHT) - 30, scoreText);
 	if (isGameEnd) {
@@ -82,6 +88,22 @@ void GameManager::move(void(*t)(int)) {
 			newground[i]->move();
 		}
 	}
+	for (int i = 0; i < MAXGROUND; i++) {
+		for(int j = 0; j < MAXMUSH; j++)
+		if (detectCollisionX(mush[j], newground[i])) {
+			mush[j]->setY(newground[i]->getHeight());
+		}
+	}
+	for (int i = 0; i < MAXMUSH; i++) {
+		if (mush[i] != nullptr) {
+			mush[i]->move();
+		}
+	}
+	for (int i = 0; i < MAXMUSH; i++) {
+		if (detectMushMove(mush[i],newground)) {
+			mush[i]->reverse();
+		}
+	}
 	glutPostRedisplay();
 
 	if (detectSink(character)) {
@@ -107,6 +129,12 @@ void GameManager::move(void(*t)(int)) {
 			star[i] = nullptr;
 		}
 	}
+
+	//for (int i = 0; i < MAXMUSH; i++) {
+	//	if (detectCollision(character, mush[i])) {
+	//		if()
+	//	}
+	//}
 
 	glutPostRedisplay();
 
@@ -174,7 +202,7 @@ void GameManager::mushmaker(void(*t)(int)) {
 	else
 		mushnum++;
 	if (!isGameEnd) {
-		glutTimerFunc(GROUNDTIME * 2, t, 0);
+		glutTimerFunc(GROUNDTIME * 2 , t, 0);
 	}
 }
 
@@ -193,7 +221,7 @@ void GameManager::keyboard(unsigned char key, int x, int y) {
 
 
 bool GameManager::detectCollisionX(Entity* character, Entity* object) {
-	if (object == nullptr) {
+	if (character == nullptr || object == nullptr) {
 		return false;
 	}
 	bool collisionX = character->getPositionX() + character->getWidth() > object->getPositionX() &&
@@ -234,13 +262,23 @@ bool GameManager::detectSink(Entity* character) {
 		return false;
 }
 
-bool GameManager::detectFall(Character* character, Ground* ground, Ground** newground) { // 조건 1. y좌표가 처음좌표보다 큼 조건 2. 점프중이 아님 3. 그 어떤 
+bool GameManager::detectFall(Character* character, Ground* ground, Ground** newground) {
 	if (detectCollisionX(character, ground))
 		return false;
 	if (character->isJumping())
 		return false;
 	for (int i = 0; i < MAXGROUND; i++) {
 		if (detectCollisionX(character, newground[i]))
+			return false;
+	}
+	return true;
+}
+
+bool GameManager::detectMushMove(Entity* mush, Ground** newground) {
+	if (mush == nullptr)
+		return false;
+	for (int i = 0; i < MAXGROUND; i++) {
+		if (detectCollisionX(mush, newground[i]))
 			return false;
 	}
 	return true;

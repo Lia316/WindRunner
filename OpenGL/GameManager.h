@@ -34,6 +34,7 @@ public:
 	bool detectCollisionYground(Entity* character, Entity* ground);
 	bool detectCollision(Entity* character, Entity* object);
 	bool detectSink(Entity* character);
+	bool detectMushMove(Entity* mush, Ground** newground);
 
 	bool detectFall(Character* character, Ground* ground, Ground** newground);
 	bool detectUnderground(Entity* character, Entity* ground);

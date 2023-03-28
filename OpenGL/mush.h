@@ -8,4 +8,6 @@ public:
 	Mush();
 	void draw();
 	void move();
+	void setY(float y);
+	void reverse();
 };

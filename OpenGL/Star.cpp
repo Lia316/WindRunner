@@ -26,3 +26,5 @@ void Star::move() {
 int Star::getPoint() {
 	return point;
 }
+
+//void Star::
