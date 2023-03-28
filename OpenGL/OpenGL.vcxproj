@@ -156,7 +156,6 @@
     <ClCompile Include="Fire.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Ground.cpp" />
-    <ClCompile Include="Hole.cpp" />
     <ClCompile Include="mush.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Wind_runner.cpp" />
@@ -167,7 +166,6 @@
     <ClInclude Include="Fire.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Ground.h" />
-    <ClInclude Include="Hole.h" />
     <ClInclude Include="mush.h" />
     <ClInclude Include="Star.h" />
   </ItemGroup>
