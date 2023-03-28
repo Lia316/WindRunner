@@ -84,13 +84,13 @@ void GameManager::move(void(*t)(int)) {
 		}
 	}
 
-	//for (int i = 0; i < MAXSTAR; i++) {
-	//	for (int j = 0; i < MAXGROUND; j++) {
-	//		if (detectCollision(star[i],newground[j])) {
-	//			/*star[i]->upper()*/;//to prevent that stars were under the ground
-	//		}
-	//	}
-	//}
+	for (int i = 0; i < MAXSTAR; i++) {
+		for (int j = 0; j < MAXGROUND; j++) {
+			if (detectCollision(star[i],newground[j])) {
+				star[i]->upper();//to prevent that stars were under the ground
+			}
+		}
+	}
 
 	for (int i = 0; i < MAXGROUND; i++) {
 		if (newground[i] != nullptr) {
