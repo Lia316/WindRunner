@@ -13,11 +13,13 @@ GameManager::GameManager() {
 	fill_n(fire, MAXFIRE, nullptr);
 	fill_n(star, MAXSTAR, nullptr);
 	fill_n(newground, MAXGROUND, nullptr);
+	fill_n(mush, MAXMUSH, nullptr);
 	isGameEnd = false;
 	score = 0;
 	firenum = 0;
 	starnum = 0;
 	groundnum = 0;
+	mushnum = 0;
 }
 
 void GameManager::draw() {
@@ -164,6 +166,18 @@ void GameManager::groundmaker(void(*t)(int)) {
 		glutTimerFunc(GROUNDTIME, t, 0);
 	}
 }
+
+//void GameManager::mushmaker(void(*t)(int)) {
+//	mush[mushnum] = new Mush();
+//	if (mushnum == MAXMUSH - 1)
+//		mushnum = 0;
+//	else
+//		mushnum++;
+//	if (!isGameEnd) {
+//		glutTimerFunc(GROUNDTIME * 2, t, 0);
+//	}
+//}
+
 void GameManager::keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 32:

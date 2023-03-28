@@ -6,10 +6,12 @@
 #include "Character.h"
 #include "Fire.h"
 #include "Star.h"
+#include "Mush.h"
 
 #define MAXFIRE 4
 #define MAXSTAR 10
 #define MAXGROUND 4
+#define MAXMUSH 4
 
 #define GROUNDTIME 1700
 
@@ -23,6 +25,8 @@ public:
 	void firemaker(void(*t)(int));
 	void starmaker(void(*t)(int));
 	void groundmaker(void(*t)(int));
+	void mushmaker(void(*t)(int));
+
 	void keyboard(unsigned char key, int x, int y);
 
 	bool detectCollisionX(Entity* character, Entity* object);
@@ -41,10 +45,12 @@ public:
 	Fire* fire[MAXFIRE];
 	Star* star[MAXSTAR];
 	Ground* newground[MAXGROUND];
+	Mush* mush[MAXMUSH];
 
 	bool isGameEnd;
 	int score;
 	int firenum;
 	int starnum;
 	int groundnum;
+	int mushnum;
 };
