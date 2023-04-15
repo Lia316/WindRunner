@@ -156,6 +156,7 @@
     <ClCompile Include="Fire.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="mush.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Wind_runner.cpp" />
@@ -166,20 +167,9 @@
     <ClInclude Include="Fire.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="mush.h" />
     <ClInclude Include="Star.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="character_pose1.obj">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Object>
-    <Object Include="character_pose2.obj" />
-    <Object Include="character_pose3.obj" />
-    <Object Include="cube.obj" />
-    <Object Include="fireball.obj" />
-    <Object Include="Mushroom.obj" />
-    <Object Include="star.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,42 @@
 #include <windows.h> 
 #include <gl/gl.h> 
 #include <gl/glut.h>
+#include "Model.h"
+
+void display() {
+	Model* character = new Model("C:/Users/light/source/repos/character_pose1.obj");
+	character->draw();
+	glutSwapBuffers();
+}
+
+int main(int argc, char** argv) {
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitWindowSize(500, 500);
+	glutInitWindowPosition(100, 100);
+	glutCreateWindow("Wind Runner");
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0.0, 500.0, 0.0, 500.0, -20.0, 20.0);
+
+	glClearColor(0.5, 0.5, 0.5, 0.0);
+
+	glEnable(GL_DEPTH_TEST);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glutDisplayFunc(display);
+
+	glutMainLoop();
+	return 0;
+}
+
+
+/*
+#include <windows.h>
+#include <gl/gl.h>
+#include <gl/glut.h>
 #include "GameManager.h"
 
 GameManager* gameManager;
@@ -84,3 +120,4 @@ void mushTimer(int time) {
 void keyboard(unsigned char key, int x, int y) {
 	gameManager->keyboard(key, x, y);
 }
+*/
