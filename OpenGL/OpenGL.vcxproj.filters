@@ -63,4 +63,27 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="character_pose1.obj">
+      <Filter>리소스 파일</Filter>
+    </Object>
+    <Object Include="character_pose2.obj">
+      <Filter>리소스 파일</Filter>
+    </Object>
+    <Object Include="character_pose3.obj">
+      <Filter>리소스 파일</Filter>
+    </Object>
+    <Object Include="cube.obj">
+      <Filter>리소스 파일</Filter>
+    </Object>
+    <Object Include="fireball.obj">
+      <Filter>리소스 파일</Filter>
+    </Object>
+    <Object Include="Mushroom.obj">
+      <Filter>리소스 파일</Filter>
+    </Object>
+    <Object Include="star.obj">
+      <Filter>리소스 파일</Filter>
+    </Object>
+  </ItemGroup>
 </Project>

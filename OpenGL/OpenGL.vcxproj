@@ -169,6 +169,18 @@
     <ClInclude Include="mush.h" />
     <ClInclude Include="Star.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="character_pose1.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="character_pose2.obj" />
+    <Object Include="character_pose3.obj" />
+    <Object Include="cube.obj" />
+    <Object Include="fireball.obj" />
+    <Object Include="Mushroom.obj" />
+    <Object Include="star.obj" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
