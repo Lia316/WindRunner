@@ -6,17 +6,18 @@
 class Character : public Entity {
 
 protected:
-	Model** models;
 	float jumpSpeed;
 	float lowjumpSpeed;
 	bool jumpState; // 점프중(true), 정지중(false)
 
+	Model* models[KEY_FRAME_NUM - 1];
 	double time;
 	int currentKeyFrame;
 	const float keyFrameTimes[KEY_FRAME_NUM] = { 0.0f, 1.0f, 2.0f, 3.0f };
 
 public:
-	Character(Model** models);
+	Character(Model* models[KEY_FRAME_NUM - 1]);
+
 	void draw();
 	void jump();
 	void setjump();

@@ -1,4 +1,4 @@
-#include <windows.h> 
+/*#include <windows.h> 
 #include <gl/gl.h> 
 #include <gl/glut.h>
 #include "Model.h"
@@ -48,9 +48,9 @@ int main(int argc, char** argv) {
 	glutMainLoop();
 	return 0;
 }
+*/
 
 
-/*
 #include <windows.h>
 #include <gl/gl.h>
 #include <gl/glut.h>
@@ -137,4 +137,3 @@ void mushTimer(int time) {
 void keyboard(unsigned char key, int x, int y) {
 	gameManager->keyboard(key, x, y);
 }
-*/

@@ -9,7 +9,7 @@ using namespace std;
 GameManager::GameManager() {
 	materials = new Materials();
 
-	Model* characterPoses[3] = { materials->getModel(CHARACTER1), materials->getModel(CHARACTER1), materials->getModel(CHARACTER1) };
+	Model* characterPoses[KEY_FRAME_NUM - 1] = { materials->getModel(CHARACTER1), materials->getModel(CHARACTER2), materials->getModel(CHARACTER3) };
 	ground = new Ground(materials->getModel(GROUND));
 	character = new Character(characterPoses);
 
@@ -118,22 +118,22 @@ void GameManager::move(void(*t)(int)) {
 	glutPostRedisplay();
 
 	if (detectSink(character)) {
-		isGameEnd = true;
+		//isGameEnd = true;
 	}
 	
 	for (int i = 0; i < MAXFIRE; i++) {
 		if (detectCollision(character, fire[i])) {
-			isGameEnd = true;
+			//isGameEnd = true;
 		}
 	}
 	for (int i = 0; i < MAXGROUND; i++) {
 		if (detectCollision(character, newground[i]) && detectUnderobject(character, newground[i])) {
-			isGameEnd = true;
+			//isGameEnd = true;
 		}
 	}
 	for (int i = 0; i < MAXMUSH; i++) {
 		if (detectCollision(character, mush[i]) && detectUnderobject(character, mush[i])) {
-			isGameEnd = true;
+			//isGameEnd = true;
 		}
 	}
 	for (int i = 0; i < MAXSTAR; i++) {

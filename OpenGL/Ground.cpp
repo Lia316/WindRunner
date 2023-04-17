@@ -4,7 +4,7 @@
 #include "Ground.h"
 
 Ground::Ground(Model* model)
-	: Entity(0, 0, 0, -3.5, model) { }
+	: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, 0, -3.5, model) { }
 
 //Ground::Ground(float height)
 //	: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_WIDTH) / 2, height, -3.5) { }
