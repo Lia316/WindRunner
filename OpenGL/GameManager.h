@@ -10,12 +10,12 @@
 
 #define MAXFIRE 4
 #define MAXSTAR 10
-#define MAXGROUND 4
-#define MAXMUSH 4
+#define MAXGROUND 30
+#define MAXMUSH 2
 
 #define FIRETIME 2100
 #define STARTIME 1000
-#define GROUNDTIME 1700
+#define GROUNDTIME 1000
 
 class GameManager {
 private: 
@@ -39,6 +39,7 @@ public:
 	bool detectSink(Entity* character);
 	bool detectMushMove(Entity* mush, Ground** newground);
 	bool detectMushStep(Entity* character, Entity* mush);
+	bool detectWindowOut(Entity* object);
 
 	bool detectFall(Character* character, Ground* ground, Ground** newground);
 	bool detectUnderobject(Entity* character, Entity* ground);
@@ -57,4 +58,5 @@ public:
 	int starnum;
 	int groundnum;
 	int mushnum;
+	float groundMaxX;
 };

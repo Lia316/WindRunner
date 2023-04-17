@@ -4,9 +4,13 @@
 #include "Model.h"
 #include "Materials.h"
 #include "Ground.h"
+#include <random>
 
 Materials* materials = new Materials();
-Ground* ground = new Ground(materials->getModel(GROUND));
+int height[10] = { 0, 1, 1, 1, 1, 1, 1, 2, 2, 3 };
+random_device rd;
+int random = rd() % 10;
+Ground* ground;
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -42,6 +46,8 @@ int main(int argc, char** argv) {
 
 	glEnable(GL_DEPTH_TEST);
 
+	ground = new Ground(height[random], materials->getModel(GROUND));
+
 	glutDisplayFunc(display);
 	glutTimerFunc(10, groundTimer, 0);
 
@@ -49,7 +55,6 @@ int main(int argc, char** argv) {
 	return 0;
 }
 */
-
 
 #include <windows.h>
 #include <gl/gl.h>
@@ -70,14 +75,14 @@ void keyboard(unsigned char key, int x, int y);
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(500, 500);
-	glutInitWindowPosition(100, 100);
+	glutInitWindowSize(1000, 500);
+	glutInitWindowPosition(900, 0);
 	glutCreateWindow("Wind Runner");
 	init();
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0, 500.0, 0.0, 500.0, -20.0, 20.0);
+	glOrtho(0.0, 1000.0, 0.0, 500.0, -200.0, 200.0);
 
 	glClearColor(0.5, 0.5, 0.5, 0.0);
 
@@ -89,7 +94,7 @@ int main(int argc, char** argv) {
 	glutTimerFunc(FIRETIME, fireTimer, 0);
 	glutTimerFunc(STARTIME, starTimer, 0);
 	glutTimerFunc(GROUNDTIME, groundTimer, 0);
-	glutTimerFunc(GROUNDTIME * 2, mushTimer, 0);
+	glutTimerFunc(GROUNDTIME * 5, mushTimer, 0);
 	glutKeyboardFunc(keyboard);
 	glutMainLoop();
 	return 0;

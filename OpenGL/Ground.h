@@ -5,7 +5,6 @@ class Ground : public Entity {
 protected:
 
 public:
-	Ground(Model* model);
-	//Ground(float height);
+	Ground(float posX, int height, Model* model);
 	void draw();
 };

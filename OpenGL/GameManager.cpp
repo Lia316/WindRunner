@@ -10,7 +10,7 @@ GameManager::GameManager() {
 	materials = new Materials();
 
 	Model* characterPoses[KEY_FRAME_NUM - 1] = { materials->getModel(CHARACTER1), materials->getModel(CHARACTER2), materials->getModel(CHARACTER3) };
-	ground = new Ground(materials->getModel(GROUND));
+	ground = new Ground(0, 1, materials->getModel(GROUND));
 	character = new Character(characterPoses);
 
 	fill_n(fire, MAXFIRE, nullptr);
@@ -24,6 +24,7 @@ GameManager::GameManager() {
 	starnum = 0;
 	groundnum = 0;
 	mushnum = 0;
+	groundMaxX = 0;
 }
 
 void GameManager::draw() {
@@ -115,7 +116,6 @@ void GameManager::move(void(*t)(int)) {
 			mush[i]->reverse();
 		}
 	}
-	glutPostRedisplay();
 
 	if (detectSink(character)) {
 		//isGameEnd = true;
@@ -169,7 +169,9 @@ void GameManager::characterAnimation(void(*t)(int)) {
 void GameManager::firemaker(void(*t)(int)) {
 	random_device rd;
 	int pos = rd() % 225 + 175;
+	if (fire[firenum]) delete fire[firenum];
 	fire[firenum] = new Fire(glutGet(GLUT_WINDOW_WIDTH), pos, materials->getModel(FIRE));
+
 	if (firenum == MAXFIRE - 1)
 		firenum = 0;
 	else
@@ -182,7 +184,10 @@ void GameManager::firemaker(void(*t)(int)) {
 void GameManager::starmaker(void(*t)(int)) {
 	random_device rd;
 	int pos = rd() % 250 + 150;
+
+	if (star[starnum]) delete star[starnum];
 	star[starnum] = new Star(glutGet(GLUT_WINDOW_WIDTH), pos, materials->getModel(STAR));
+
 	if (starnum == MAXSTAR - 1)
 		starnum = 0;
 	else
@@ -193,13 +198,20 @@ void GameManager::starmaker(void(*t)(int)) {
 }
 
 void GameManager::groundmaker(void(*t)(int)) {
+	int height[20] = {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3};
 	random_device rd;
-	int height = rd() % (glutGet(GLUT_WINDOW_WIDTH)/2) + glutGet(GLUT_WINDOW_WIDTH) / 4 + 1;
-	newground[groundnum] = new Ground(materials->getModel(GROUND));
-	if (groundnum == MAXGROUND - 1)
-		groundnum = 0;
-	else
-		groundnum++;
+	int random = rd() % 20;
+
+	for (int i = 0; i < height[random]; i++) {
+		if (newground[groundnum]) delete newground[groundnum];
+		newground[groundnum] = new Ground(groundMaxX, i, materials->getModel(GROUND));
+		groundMaxX = newground[groundnum]->getPositionX() + newground[groundnum]->getWidth() - 20;
+
+		if (groundnum == MAXGROUND - 1)
+			groundnum = 0;
+		else
+			groundnum++;
+	}
 	if (!isGameEnd) {
 		glutTimerFunc(GROUNDTIME, t, 0);
 	}
@@ -208,7 +220,9 @@ void GameManager::groundmaker(void(*t)(int)) {
 void GameManager::mushmaker(void(*t)(int)) {
 	random_device rd;
 	int coin = rd() % 2;
+	if (mush[mushnum]) delete mush[mushnum];
 	mush[mushnum] = new Mush(materials->getModel(MUSHROOM));
+
 	if (coin)
 		mush[mushnum]->reverse();
 	if (mushnum == MAXMUSH - 1)
@@ -216,7 +230,7 @@ void GameManager::mushmaker(void(*t)(int)) {
 	else
 		mushnum++;
 	if (!isGameEnd) {
-		glutTimerFunc(GROUNDTIME * 2 , t, 0);
+		glutTimerFunc(GROUNDTIME * 5 , t, 0);
 	}
 }
 
@@ -305,6 +319,12 @@ bool GameManager::detectMushMove(Entity* mush, Ground** newground) {
 			return false;
 	}
 	return true;
+}
+
+bool GameManager::detectWindowOut(Entity* object) {
+	if (object == nullptr) 
+		return false;
+	return object->getPositionX() + object->getWidth() <= 0;
 }
 
 void GameManager::showText(float x, float y, std::string string) {
