@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Materials.h"
 #include "Entity.h"
 #include "Ground.h"
 #include "Character.h"
@@ -17,6 +18,8 @@
 #define GROUNDTIME 1700
 
 class GameManager {
+private: 
+	Materials* materials;
 public:
 	GameManager();
 	void draw();

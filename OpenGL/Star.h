@@ -5,9 +5,8 @@ class Star : public Entity {
 protected:
 	int point;
 public:
-	Star(float x, float y);
+	Star(float x, float y, Model* model);
 	void draw();
-	void move();
 	int getPoint();
 	void upper();
 };

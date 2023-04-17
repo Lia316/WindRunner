@@ -3,8 +3,8 @@
 #include <gl/glut.h>
 #include "Entity.h"
 
-Entity::Entity(float x, float y, float z=0, float speed, Model* model)
-: x(x), y(y), speed(speed), model(model) { 
+Entity::Entity(float x, float y, float z, float speed, Model* model)
+: x(x), y(y), z(z), speed(speed), model(model) { 
 	this->z = model->getminZ() + z;
 	width = model->getWidth();
 	height = model->getHeight();

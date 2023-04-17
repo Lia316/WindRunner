@@ -5,9 +5,8 @@ class Mush : public Entity {
 protected:
 
 public:
-	Mush();
+	Mush(Model* model);
 	void draw();
-	void move();
 	void setY(float y);
 	void reverse();
 };

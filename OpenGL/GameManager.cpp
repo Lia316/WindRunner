@@ -7,12 +7,17 @@
 using namespace std;
 
 GameManager::GameManager() {
-	ground = new Ground();
-	character = new Character();
+	materials = new Materials();
+
+	Model* characterPoses[3] = { materials->getModel(CHARACTER1), materials->getModel(CHARACTER1), materials->getModel(CHARACTER1) };
+	ground = new Ground(materials->getModel(GROUND));
+	character = new Character(characterPoses);
+
 	fill_n(fire, MAXFIRE, nullptr);
 	fill_n(star, MAXSTAR, nullptr);
 	fill_n(newground, MAXGROUND, nullptr);
 	fill_n(mush, MAXMUSH, nullptr);
+
 	isGameEnd = false;
 	score = 0;
 	firenum = 0;
@@ -164,7 +169,7 @@ void GameManager::characterAnimation(void(*t)(int)) {
 void GameManager::firemaker(void(*t)(int)) {
 	random_device rd;
 	int pos = rd() % 225 + 175;
-	fire[firenum] = new Fire(glutGet(GLUT_WINDOW_WIDTH), pos);
+	fire[firenum] = new Fire(glutGet(GLUT_WINDOW_WIDTH), pos, materials->getModel(FIRE));
 	if (firenum == MAXFIRE - 1)
 		firenum = 0;
 	else
@@ -177,7 +182,7 @@ void GameManager::firemaker(void(*t)(int)) {
 void GameManager::starmaker(void(*t)(int)) {
 	random_device rd;
 	int pos = rd() % 250 + 150;
-	star[starnum] = new Star(glutGet(GLUT_WINDOW_WIDTH), pos);
+	star[starnum] = new Star(glutGet(GLUT_WINDOW_WIDTH), pos, materials->getModel(STAR));
 	if (starnum == MAXSTAR - 1)
 		starnum = 0;
 	else
@@ -190,7 +195,7 @@ void GameManager::starmaker(void(*t)(int)) {
 void GameManager::groundmaker(void(*t)(int)) {
 	random_device rd;
 	int height = rd() % (glutGet(GLUT_WINDOW_WIDTH)/2) + glutGet(GLUT_WINDOW_WIDTH) / 4 + 1;
-	newground[groundnum] = new Ground(height); 
+	newground[groundnum] = new Ground(materials->getModel(GROUND));
 	if (groundnum == MAXGROUND - 1)
 		groundnum = 0;
 	else
@@ -203,7 +208,7 @@ void GameManager::groundmaker(void(*t)(int)) {
 void GameManager::mushmaker(void(*t)(int)) {
 	random_device rd;
 	int coin = rd() % 2;
-	mush[mushnum] = new Mush();
+	mush[mushnum] = new Mush(materials->getModel(MUSHROOM));
 	if (coin)
 		mush[mushnum]->reverse();
 	if (mushnum == MAXMUSH - 1)

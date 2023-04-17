@@ -3,20 +3,10 @@
 #include <gl/glut.h>
 #include "Fire.h"
 
-Fire::Fire(float x, float y)
-	: Entity(x, y, 30, 10, -10) { }
+Fire::Fire(float x, float y, Model* model)
+	: Entity(x, y, 0, -10, model) { }
 
 void Fire::draw() {
 	glColor3f(9.0, 0.0, 0.0);
-	glBegin(GL_POLYGON);
-	glVertex2f(x, y);
-	glVertex2f(x + width, y);
-	glVertex2f(x + width, y + height);
-	glVertex2f(x, y + height);
-	glEnd();
 	Entity::draw();
-}
-
-void Fire::move() {
-	Entity::move();
 }
