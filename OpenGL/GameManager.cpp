@@ -18,6 +18,8 @@ GameManager::GameManager() {
 	groundMaxX = 0;
 }
 
+// ###### Draw ######
+
 void GameManager::draw() {
 	sceneGraph->draw();
 
@@ -27,6 +29,18 @@ void GameManager::draw() {
 		showText(0, glutGet(GLUT_WINDOW_HEIGHT) - 60, "The Game End");
 	}
 }
+
+void GameManager::showText(float x, float y, std::string string) {
+	glColor3f(1.0, 1.0, 1.0);
+	glRasterPos2f(x, y);
+	const char* str = string.c_str();
+
+	for (const char* c = str; *c != '\0'; c++) {
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
+	}
+}
+
+// ###### Update ######
 
 void GameManager::move(void(*t)(int)) {
 	// 1. Character move
@@ -116,15 +130,28 @@ void GameManager::move(void(*t)(int)) {
 		}
 	}*/
 
-	glutPostRedisplay();
-
 	if (isGameEnd) {
 		character->sink();
 		glutPostRedisplay();
 	}
 	if (!isGameEnd) {
+		glutPostRedisplay();
 		glutTimerFunc(10, t, 0);
 	}
+}
+
+void GameManager::keyboard(unsigned char key, int x, int y) {
+	Character* character = dynamic_cast<Character*>(sceneGraph->findNode(typeid(Character))->getEntity());
+
+	switch (key) {
+	case 32:
+		int mod = glutGetModifiers();
+		if (mod == GLUT_ACTIVE_SHIFT)
+			character->setjump();
+		else
+			character->setlowjump();
+	}
+	glutPostRedisplay();
 }
 
 // ###### Timer functions ######
@@ -228,21 +255,7 @@ void GameManager::mushmaker(void(*t)(int)) {
 	}
 }
 
-void GameManager::keyboard(unsigned char key, int x, int y) {
-	Character* character = dynamic_cast<Character*>(sceneGraph->findNode(typeid(Character))->getEntity());
-
-	switch (key) {
-	case 32:
-		int mod = glutGetModifiers();
-		if (mod == GLUT_ACTIVE_SHIFT)
-			character->setjump();
-		else
-			character->setlowjump();
-	}
-	glutPostRedisplay();
-}
-
-// ###### collision functions ######
+// ###### Collision functions ######
 
 bool GameManager::detectCollisionX(Entity* character, Entity* object) {
 	if (character == nullptr || object == nullptr) {
@@ -292,21 +305,10 @@ bool GameManager::detectSink(Entity* character) {
 		return false;
 }
 
-bool GameManager::detectFall(Character* character, Ground* ground, Ground** newground) {
-	if (detectCollisionX(character, ground))
-		return false;
-	if (character->isJumping())
-		return false;
-	for (int i = 0; i < MAXGROUND; i++) {
-		if (detectCollisionX(character, newground[i]))
-			return false;
-	}
-	return true;
-}
-
 bool GameManager::detectMushStep(Entity* character, Entity* mush) {
 	return false;
 }
+
 bool GameManager::detectMushMove(Entity* mush) {
 	SceneNode* groundGroup = sceneGraph->findGroup(typeid(Ground));
 	for (auto groundNode = groundGroup->childBegin(); groundNode != groundGroup->childEnd(); ++groundNode) {
@@ -322,14 +324,4 @@ bool GameManager::detectWindowOut(Entity* object) {
 	if (object == nullptr) 
 		return false;
 	return object->getPositionX() + object->getWidth() <= 0;
-}
-
-void GameManager::showText(float x, float y, std::string string) {
-	glColor3f(1.0, 1.0, 1.0);
-	glRasterPos2f(x, y);
-	const char* str = string.c_str();
-
-	for (const char* c = str; *c != '\0'; c++) {
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
-	}
 }

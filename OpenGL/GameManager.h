@@ -35,7 +35,6 @@ public:
 	bool detectMushStep(Entity* character, Entity* mush);
 	bool detectWindowOut(Entity* object);
 
-	bool detectFall(Character* character, Ground* ground, Ground** newground);
 	bool detectUnderobject(Entity* character, Entity* ground);
 	void showText(float x, float y, std::string string);
 
