@@ -2,16 +2,29 @@
 #include <gl/gl.h> 
 #include <gl/glut.h>
 #include "Model.h"
+#include "Materials.h"
+#include "Ground.h"
 
-Model* character = new Model("C:/Users/light/source/repos/fireball.obj");
+Materials* materials = new Materials();
+Ground* ground = new Ground(materials->getModel(GROUND));
 
 void display() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	glPushMatrix();
-		//glTranslatef(10, 10, 0);
-		character->draw();
+		glTranslatef(glutGet(GLUT_WINDOW_WIDTH) - 50, 10, 0);
+		ground->draw();
 	glPopMatrix();
 
 	glutSwapBuffers();
+}
+
+void groundTimer(int time) {
+	ground->move();
+	glutPostRedisplay();
+	glutTimerFunc(10, groundTimer, 0);
 }
 
 int main(int argc, char** argv) {
@@ -29,11 +42,8 @@ int main(int argc, char** argv) {
 
 	glEnable(GL_DEPTH_TEST);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 	glutDisplayFunc(display);
+	glutTimerFunc(10, groundTimer, 0);
 
 	glutMainLoop();
 	return 0;
