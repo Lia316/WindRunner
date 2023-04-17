@@ -1,12 +1,6 @@
 #pragma once
 #include <string>
-#include "Materials.h"
-#include "Entity.h"
-#include "Ground.h"
-#include "Character.h"
-#include "Fire.h"
-#include "Star.h"
-#include "Mush.h"
+#include "SceneNode.h"
 
 #define MAXFIRE 4
 #define MAXSTAR 10
@@ -19,7 +13,7 @@
 
 class GameManager {
 private: 
-	Materials* materials;
+	SceneGraph* sceneGraph;
 public:
 	GameManager();
 	void draw();
@@ -37,20 +31,13 @@ public:
 	bool detectCollisionYpredict(Entity* character, Entity* ground);
 	bool detectCollision(Entity* character, Entity* object);
 	bool detectSink(Entity* character);
-	bool detectMushMove(Entity* mush, Ground** newground);
+	bool detectMushMove(Entity* mush);
 	bool detectMushStep(Entity* character, Entity* mush);
 	bool detectWindowOut(Entity* object);
 
 	bool detectFall(Character* character, Ground* ground, Ground** newground);
 	bool detectUnderobject(Entity* character, Entity* ground);
 	void showText(float x, float y, std::string string);
-
-	Ground* ground;
-	Character* character;
-	Fire* fire[MAXFIRE];
-	Star* star[MAXSTAR];
-	Ground* newground[MAXGROUND];
-	Mush* mush[MAXMUSH];
 
 	bool isGameEnd;
 	int score;

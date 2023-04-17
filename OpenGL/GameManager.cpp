@@ -7,16 +7,7 @@
 using namespace std;
 
 GameManager::GameManager() {
-	materials = new Materials();
-
-	Model* characterPoses[KEY_FRAME_NUM - 1] = { materials->getModel(CHARACTER1), materials->getModel(CHARACTER2), materials->getModel(CHARACTER3) };
-	ground = new Ground(0, 1, materials->getModel(GROUND));
-	character = new Character(characterPoses);
-
-	fill_n(fire, MAXFIRE, nullptr);
-	fill_n(star, MAXSTAR, nullptr);
-	fill_n(newground, MAXGROUND, nullptr);
-	fill_n(mush, MAXMUSH, nullptr);
+	sceneGraph = new SceneGraph();
 
 	isGameEnd = false;
 	score = 0;
@@ -28,32 +19,8 @@ GameManager::GameManager() {
 }
 
 void GameManager::draw() {
-	ground->draw();
-	character->draw();
-	
-	for (int i = 0; i < MAXFIRE; i++) {
-		if (fire[i] != nullptr) {
-			fire[i]->draw();
-		}
-	}
+	sceneGraph->draw();
 
-	for (int i = 0; i < MAXSTAR; i++) {
-		if (star[i] != nullptr) {
-			star[i]->draw();
-		}
-	}
-
-	for (int i = 0; i < MAXGROUND; i++) {
-		if (newground[i] != nullptr) {
-			newground[i]->draw();
-		}
-	}
-
-	for (int i = 0; i < MAXMUSH; i++) {
-		if (mush[i] != nullptr) {
-			mush[i]->draw();
-		}
-	}
 	string scoreText = "score: " + to_string(score);
 	showText(0, glutGet(GLUT_WINDOW_HEIGHT) - 30, scoreText);
 	if (isGameEnd) {
@@ -62,31 +29,78 @@ void GameManager::draw() {
 }
 
 void GameManager::move(void(*t)(int)) {
-	ground->move();
-	if (detectCollisionYpredict(character, ground))
-		character->stop(ground);
-
-	for (int i = 0; i < MAXGROUND; i++) {
-		if (newground[i] != nullptr && detectCollisionYpredict(character, newground[i])) {
-			character->stop(newground[i]);
-		}
-	}
-	if (detectFall(character, ground, newground))
-	  character->setfall();
-
+	// 1. Character move
+	Character* character = dynamic_cast<Character*>(sceneGraph->findNode(typeid(Character))->getEntity());
 	character->jump();
-	
-	for (int i = 0; i < MAXFIRE; i++) {
-		if (fire[i] != nullptr) {
-			fire[i]->move();
-		}
+
+	if (detectSink(character)) {
+		//isGameEnd = true;
 	}
-	for (int i = 0; i < MAXSTAR; i++) {
-		if (star[i] != nullptr) {
-			star[i]->move();
+
+	// 2. Ground
+	SceneNode* groundGroup = sceneGraph->findGroup(typeid(Ground));
+	for (auto groundNode = groundGroup->childBegin(); groundNode != groundGroup->childEnd(); ++groundNode) {
+		Entity* ground = (*groundNode)->getEntity();
+
+		ground->move();
+
+		if (detectCollisionYpredict(character, ground)) {
+			character->stop(ground);
+		}
+		if (!character->isJumping()) { // detectFall()
+			if (detectCollisionX(character, ground)) break;
+			character->setfall();
+		}
+		if (detectCollision(character, ground) && detectUnderobject(character, ground)) {
+			//isGameEnd = true;
 		}
 	}
 
+	// 3. Fire
+	SceneNode* fireGroup = sceneGraph->findGroup(typeid(Fire));
+	for (auto fireNode = fireGroup->childBegin(); fireNode != fireGroup->childEnd(); ++fireNode) {
+		Entity* fire = (*fireNode)->getEntity();
+
+		fire->move();
+
+		if (detectCollision(character, fire)) {
+			//isGameEnd = true;
+		}
+	}
+
+	// 4. Star
+	SceneNode* starGroup = sceneGraph->findGroup(typeid(Star));
+	for (auto starNode = starGroup->childBegin(); starNode != starGroup->childEnd(); ++starNode) {
+		Star* star = dynamic_cast<Star*>((*starNode)->getEntity());
+
+		star->move();
+
+		if (detectCollision(character, star)) {
+			score += star->getPoint();
+			delete star;
+		}
+	}
+
+	// 5. Mushroom
+	SceneNode* mushGroup = sceneGraph->findGroup(typeid(Mush));
+	for (auto mushNode = mushGroup->childBegin(); mushNode != mushGroup->childEnd(); ++mushNode) {
+		Mush* mush = dynamic_cast<Mush*>((*mushNode)->getEntity());
+
+		mush->move();
+
+		if (detectMushMove(mush)) {
+			mush->reverse();
+		}
+		if (detectCollision(character, mush) && detectUnderobject(character, mush)) {
+			//isGameEnd = true;
+		}
+		if (detectCollisionYpredict(character, mush)) {
+			character->stepMush();
+			delete mush;
+		}
+	}
+
+	/*
 	for (int i = 0; i < MAXSTAR; i++) {
 		for (int j = 0; j < MAXGROUND; j++) {
 			if (detectCollision(star[i],newground[j])) {
@@ -96,60 +110,11 @@ void GameManager::move(void(*t)(int)) {
 	}
 
 	for (int i = 0; i < MAXGROUND; i++) {
-		if (newground[i] != nullptr) {
-			newground[i]->move();
-		}
-	}
-	for (int i = 0; i < MAXGROUND; i++) {
 		for(int j = 0; j < MAXMUSH; j++)
 		if (detectCollisionX(mush[j], newground[i])) {
 			mush[j]->setY(newground[i]->getHeight());
 		}
-	}
-	for (int i = 0; i < MAXMUSH; i++) {
-		if (mush[i] != nullptr) {
-			mush[i]->move();
-		}
-	}
-	for (int i = 0; i < MAXMUSH; i++) {
-		if (detectMushMove(mush[i],newground)) {
-			mush[i]->reverse();
-		}
-	}
-
-	if (detectSink(character)) {
-		//isGameEnd = true;
-	}
-	
-	for (int i = 0; i < MAXFIRE; i++) {
-		if (detectCollision(character, fire[i])) {
-			//isGameEnd = true;
-		}
-	}
-	for (int i = 0; i < MAXGROUND; i++) {
-		if (detectCollision(character, newground[i]) && detectUnderobject(character, newground[i])) {
-			//isGameEnd = true;
-		}
-	}
-	for (int i = 0; i < MAXMUSH; i++) {
-		if (detectCollision(character, mush[i]) && detectUnderobject(character, mush[i])) {
-			//isGameEnd = true;
-		}
-	}
-	for (int i = 0; i < MAXSTAR; i++) {
-		if (detectCollision(character, star[i])) {
-			score += star[i]->getPoint();
-			delete star[i];
-			star[i] = nullptr;
-		}
-	}
-	for (int i = 0; i < MAXMUSH; i++) {
-		if (detectCollisionYpredict(character, mush[i])) {
-			character->stepMush();
-			delete mush[i];
-			mush[i] = nullptr;
-		}
-	}
+	}*/
 
 	glutPostRedisplay();
 
@@ -162,20 +127,29 @@ void GameManager::move(void(*t)(int)) {
 	}
 }
 
+// ###### Timer functions ######
+
 void GameManager::characterAnimation(void(*t)(int)) {
+	Character* character = dynamic_cast<Character*>(sceneGraph->findNode(typeid(Character))->getEntity());
 	character->animation(t);
 }
 
 void GameManager::firemaker(void(*t)(int)) {
 	random_device rd;
 	int pos = rd() % 225 + 175;
-	if (fire[firenum]) delete fire[firenum];
-	fire[firenum] = new Fire(glutGet(GLUT_WINDOW_WIDTH), pos, materials->getModel(FIRE));
 
-	if (firenum == MAXFIRE - 1)
-		firenum = 0;
-	else
+	Entity* oldestFire = sceneGraph->findNode(typeid(Fire))->getEntity();
+
+	if (detectWindowOut(oldestFire)) {
+		delete oldestFire;
+		firenum--;
+	}
+	if (firenum < MAXFIRE) {
+		Fire* newFire = new Fire(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(FIRE));
+		SceneNode* fireNode = new SceneNode(newFire);
+		sceneGraph->findGroup(typeid(Fire))->addChild(fireNode);
 		firenum++;
+	}
 	if (!isGameEnd) {
 		glutTimerFunc(FIRETIME, t, 0);
 	}
@@ -185,13 +159,18 @@ void GameManager::starmaker(void(*t)(int)) {
 	random_device rd;
 	int pos = rd() % 250 + 150;
 
-	if (star[starnum]) delete star[starnum];
-	star[starnum] = new Star(glutGet(GLUT_WINDOW_WIDTH), pos, materials->getModel(STAR));
+	Entity* oldestStar = sceneGraph->findNode(typeid(Star))->getEntity();
 
-	if (starnum == MAXSTAR - 1)
-		starnum = 0;
-	else
+	if (detectWindowOut(oldestStar)) {
+		delete oldestStar;
+		starnum--;
+	}
+	if (starnum < MAXSTAR) {
+		Star* newStar = new Star(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(STAR));
+		SceneNode* starNode = new SceneNode(newStar);
+		sceneGraph->findGroup(typeid(Star))->addChild(starNode);
 		starnum++;
+	}
 	if (!isGameEnd) {
 		glutTimerFunc(STARTIME, t, 0);
 	}
@@ -202,15 +181,23 @@ void GameManager::groundmaker(void(*t)(int)) {
 	random_device rd;
 	int random = rd() % 20;
 
-	for (int i = 0; i < height[random]; i++) {
-		if (newground[groundnum]) delete newground[groundnum];
-		newground[groundnum] = new Ground(groundMaxX, i, materials->getModel(GROUND));
-		groundMaxX = newground[groundnum]->getPositionX() + newground[groundnum]->getWidth() - 20;
+	Entity* oldestGround = sceneGraph->findNode(typeid(Ground))->getEntity();
 
-		if (groundnum == MAXGROUND - 1)
-			groundnum = 0;
-		else
+	if (detectWindowOut(oldestGround)) {
+		delete oldestGround;
+		groundnum--;
+	}
+	if (groundnum < MAXGROUND) {
+		for (int i = 0; i < height[random]; i++) {
+			Ground* newGround = new Ground(groundMaxX, i, sceneGraph->materials->getModel(GROUND));
+			SceneNode* groundNode = new SceneNode(newGround);
+			groundNode->translate = vec3(0 , newGround->getHeight(), 0);
+
+			sceneGraph->findGroup(typeid(Ground))->addChild(groundNode);
+
+			groundMaxX = newGround->getPositionX() + newGround->getWidth() - 20;
 			groundnum++;
+		}
 	}
 	if (!isGameEnd) {
 		glutTimerFunc(GROUNDTIME, t, 0);
@@ -220,21 +207,30 @@ void GameManager::groundmaker(void(*t)(int)) {
 void GameManager::mushmaker(void(*t)(int)) {
 	random_device rd;
 	int coin = rd() % 2;
-	if (mush[mushnum]) delete mush[mushnum];
-	mush[mushnum] = new Mush(materials->getModel(MUSHROOM));
 
-	if (coin)
-		mush[mushnum]->reverse();
-	if (mushnum == MAXMUSH - 1)
-		mushnum = 0;
-	else
+	Entity* oldestMush = sceneGraph->findNode(typeid(Mush))->getEntity();
+
+	if (detectWindowOut(oldestMush)) {
+		delete oldestMush;
+		mushnum--;
+	}
+	if (mushnum < MAXMUSH) {
+		Mush* newMush = new Mush(sceneGraph->materials->getModel(MUSHROOM));
+		SceneNode* mushNode = new SceneNode(newMush);
+		sceneGraph->findGroup(typeid(Mush))->addChild(mushNode);
+
+		if (coin)
+			newMush->reverse();
 		mushnum++;
+	}
 	if (!isGameEnd) {
 		glutTimerFunc(GROUNDTIME * 5 , t, 0);
 	}
 }
 
 void GameManager::keyboard(unsigned char key, int x, int y) {
+	Character* character = dynamic_cast<Character*>(sceneGraph->findNode(typeid(Character))->getEntity());
+
 	switch (key) {
 	case 32:
 		int mod = glutGetModifiers();
@@ -246,7 +242,7 @@ void GameManager::keyboard(unsigned char key, int x, int y) {
 	glutPostRedisplay();
 }
 
-
+// ###### collision functions ######
 
 bool GameManager::detectCollisionX(Entity* character, Entity* object) {
 	if (character == nullptr || object == nullptr) {
@@ -311,11 +307,12 @@ bool GameManager::detectFall(Character* character, Ground* ground, Ground** newg
 bool GameManager::detectMushStep(Entity* character, Entity* mush) {
 	return false;
 }
-bool GameManager::detectMushMove(Entity* mush, Ground** newground) {
-	if (mush == nullptr)
-		return false;
-	for (int i = 0; i < MAXGROUND; i++) {
-		if (detectCollisionX(mush, newground[i]))
+bool GameManager::detectMushMove(Entity* mush) {
+	SceneNode* groundGroup = sceneGraph->findGroup(typeid(Ground));
+	for (auto groundNode = groundGroup->childBegin(); groundNode != groundGroup->childEnd(); ++groundNode) {
+		Entity* ground = (*groundNode)->getEntity();
+
+		if (detectCollisionX(mush, ground))
 			return false;
 	}
 	return true;
