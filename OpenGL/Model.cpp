@@ -91,8 +91,8 @@ void Model::draw() {
 
         glBegin(GL_TRIANGLES);
         for (int i = 0; i < facet_vrt.size(); i++) {
-            glNormal3f(norms[facet_nrm[i]].x, norms[facet_nrm[i]].y, norms[facet_nrm[i]].z);
-            glTexCoord2f(tex_coord[facet_tex[i]].x, tex_coord[facet_tex[i]].y);
+            //glNormal3f(norms[facet_nrm[i]].x, norms[facet_nrm[i]].y, norms[facet_nrm[i]].z);
+            //glTexCoord2f(tex_coord[facet_tex[i]].x, tex_coord[facet_tex[i]].y);
             glVertex3f(verts[facet_vrt[i]].x, verts[facet_vrt[i]].y, verts[facet_vrt[i]].z);
         }
         glEnd();

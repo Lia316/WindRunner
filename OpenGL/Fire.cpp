@@ -8,5 +8,9 @@ Fire::Fire(float x, float y, Model* model)
 
 void Fire::draw() {
 	glColor3f(9.0, 0.0, 0.0);
-	Entity::draw();
+	glPushMatrix();
+		glTranslatef(x, y, 0);
+		glutSolidSphere(15, 15, 15);
+	glPopMatrix();
+	//Entity::draw();
 }
