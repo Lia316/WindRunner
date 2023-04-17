@@ -158,6 +158,7 @@
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="mush.cpp" />
+    <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Wind_runner.cpp" />
   </ItemGroup>
@@ -169,6 +170,7 @@
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="mush.h" />
+    <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Star.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -3,22 +3,27 @@
 #include <gl/glut.h>
 #include "Model.h"
 
+Model* character = new Model("C:/Users/light/source/repos/fireball.obj");
+
 void display() {
-	Model* character = new Model("C:/Users/light/source/repos/character_pose1.obj");
-	character->draw();
+	glPushMatrix();
+		//glTranslatef(10, 10, 0);
+		character->draw();
+	glPopMatrix();
+
 	glutSwapBuffers();
 }
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(1000, 500);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Wind Runner");
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0, 500.0, 0.0, 500.0, -20.0, 20.0);
+	glOrtho(0.0, 1000.0, 0.0, 500.0, -200.0, 200.0);
 
 	glClearColor(0.5, 0.5, 0.5, 0.0);
 
@@ -26,6 +31,8 @@ int main(int argc, char** argv) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 	glutDisplayFunc(display);
 
 	glutMainLoop();
