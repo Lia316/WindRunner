@@ -19,6 +19,7 @@ Character::Character(Model* models[KEY_FRAME_NUM - 1])
 }
 
 void Character::draw() {
+	glColor3f(0.9f, 0.9f, 0.8f);
 	Entity::draw();
 }
 
@@ -85,8 +86,5 @@ void Character::animation(void(*t)(int))
 			break;
 		}
 	}
-
 	Entity::model = models[currentKeyFrame];
-
-	glutPostRedisplay();
 }
