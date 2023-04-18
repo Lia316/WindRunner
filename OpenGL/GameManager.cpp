@@ -91,7 +91,7 @@ void GameManager::move(void(*t)(int)) {
 
 		if (detectCollision(character, star)) {
 			score += star->getPoint();
-			delete star;
+			starGroup->deleteChild(*starNode);
 		}
 	}
 
@@ -110,7 +110,7 @@ void GameManager::move(void(*t)(int)) {
 		}
 		if (detectCollisionYpredict(character, mush)) {
 			character->stepMush();
-			delete mush;
+			mushGroup->deleteChild(*mushNode);
 		}
 	}
 
@@ -165,16 +165,18 @@ void GameManager::firemaker(void(*t)(int)) {
 	random_device rd;
 	int pos = rd() % 225 + 175;
 
-	Entity* oldestFire = sceneGraph->findNode(typeid(Fire))->getEntity();
+	Entity* oldestFire = sceneGraph->findNodeEntity(typeid(Fire));
+	SceneNode* fireGroup = sceneGraph->findGroup(typeid(Fire));
+	SceneNode* fireNode = sceneGraph->findNode(typeid(Fire));
 
 	if (detectWindowOut(oldestFire)) {
-		delete oldestFire;
+		fireGroup->deleteChild(fireNode);
 		firenum--;
 	}
 	if (firenum < MAXFIRE) {
 		Fire* newFire = new Fire(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(FIRE));
 		SceneNode* fireNode = new SceneNode(newFire);
-		sceneGraph->findGroup(typeid(Fire))->addChild(fireNode);
+		sceneGraph->addChild(fireGroup, fireNode);
 		firenum++;
 	}
 	if (!isGameEnd) {
@@ -186,16 +188,18 @@ void GameManager::starmaker(void(*t)(int)) {
 	random_device rd;
 	int pos = rd() % 250 + 150;
 
-	Entity* oldestStar = sceneGraph->findNode(typeid(Star))->getEntity();
+	Entity* oldestStar = sceneGraph->findNodeEntity(typeid(Star));
+	SceneNode* starGroup = sceneGraph->findGroup(typeid(Star));
+	SceneNode* starNode = sceneGraph->findNode(typeid(Star));
 
 	if (detectWindowOut(oldestStar)) {
-		delete oldestStar;
+		starGroup->deleteChild(starNode);
 		starnum--;
 	}
 	if (starnum < MAXSTAR) {
 		Star* newStar = new Star(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(STAR));
 		SceneNode* starNode = new SceneNode(newStar);
-		sceneGraph->findGroup(typeid(Star))->addChild(starNode);
+		sceneGraph->addChild(starGroup, starNode);
 		starnum++;
 	}
 	if (!isGameEnd) {
@@ -208,10 +212,12 @@ void GameManager::groundmaker(void(*t)(int)) {
 	random_device rd;
 	int random = rd() % 20;
 
-	Entity* oldestGround = sceneGraph->findNode(typeid(Ground))->getEntity();
+	Entity* oldestGround = sceneGraph->findNodeEntity(typeid(Ground));
+	SceneNode* groundGroup = sceneGraph->findGroup(typeid(Ground));
+	SceneNode* groundNode = sceneGraph->findNode(typeid(Ground));
 
 	if (detectWindowOut(oldestGround)) {
-		delete oldestGround;
+		groundGroup->deleteChild(groundNode);
 		groundnum--;
 	}
 	if (groundnum < MAXGROUND) {
@@ -220,7 +226,7 @@ void GameManager::groundmaker(void(*t)(int)) {
 			SceneNode* groundNode = new SceneNode(newGround);
 			groundNode->translate = vec3(0 , newGround->getHeight(), 0);
 
-			sceneGraph->findGroup(typeid(Ground))->addChild(groundNode);
+			sceneGraph->addChild(groundGroup, groundNode);
 
 			groundMaxX = newGround->getPositionX() + newGround->getWidth() - 20;
 			groundnum++;
@@ -235,16 +241,18 @@ void GameManager::mushmaker(void(*t)(int)) {
 	random_device rd;
 	int coin = rd() % 2;
 
-	Entity* oldestMush = sceneGraph->findNode(typeid(Mush))->getEntity();
+	Entity* oldestMush = sceneGraph->findNodeEntity(typeid(Mush));
+	SceneNode* mushGroup = sceneGraph->findGroup(typeid(Mush));
+	SceneNode* mushNode = sceneGraph->findNode(typeid(Mush));
 
 	if (detectWindowOut(oldestMush)) {
-		delete oldestMush;
+		mushGroup->deleteChild(mushNode);
 		mushnum--;
 	}
 	if (mushnum < MAXMUSH) {
 		Mush* newMush = new Mush(sceneGraph->materials->getModel(MUSHROOM));
 		SceneNode* mushNode = new SceneNode(newMush);
-		sceneGraph->findGroup(typeid(Mush))->addChild(mushNode);
+		sceneGraph->addChild(mushGroup, mushNode);
 
 		if (coin)
 			newMush->reverse();

@@ -17,6 +17,8 @@ protected:
 
 public:
 	Character(Model* models[KEY_FRAME_NUM - 1]);
+	~Character();
+	const type_info& getType() override { return typeid(Character); }
 
 	void draw();
 	void jump();

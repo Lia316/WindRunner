@@ -21,11 +21,12 @@ public:
 	~SceneNode();
 	vec3 translate;
 	void addChild(SceneNode* s);
-	void deleteChild();
+	void deleteChild(SceneNode* node);
 	void draw();
 	Entity* getEntity() { return entity;  }
 	vector<SceneNode*>::iterator childBegin() { return children.begin(); }
 	vector<SceneNode*>::iterator childEnd() { return children.end(); }
+	bool isChild() { return children.size() != 0;  }
 };
 
 
@@ -38,6 +39,7 @@ public:
 	void initialStructure();
 	SceneNode* findGroup(const type_info& type);
 	SceneNode* findNode(const type_info& type);
+	Entity* findNodeEntity(const type_info& type);
 	void addChild(SceneNode* parent, SceneNode* node);
 	void draw() { root->draw(); }
 };

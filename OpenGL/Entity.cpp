@@ -5,10 +5,17 @@
 
 Entity::Entity(float x, float y, float z, float speed, Model* model)
 : x(x), y(y), z(z), speed(speed), model(model) { 
+	UuidCreate(&uuid);
+	if (model == nullptr) return;
+
 	this->z = model->getminZ() + z;
 	width = model->getWidth();
 	height = model->getHeight();
 	depth = model->getDepth();
+}
+
+Entity::~Entity() {
+	delete model;
 }
 
 void Entity::move() {
@@ -16,6 +23,7 @@ void Entity::move() {
 }
 
 void Entity::draw() {
+	if (model == nullptr) return;
 	glPushMatrix();
 		glTranslatef(x, y, 0);
 		model->draw();

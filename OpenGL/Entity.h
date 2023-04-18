@@ -1,14 +1,29 @@
 #pragma once
 #include "Model.h"
+#include <Rpc.h>
+#pragma comment(lib, "Rpcrt4.lib")
 
 class Entity {
 protected:
+	UUID uuid;
 	Model* model;
 	float x, y, z;
 	float width, height, depth;
 	float speed;
 public:
 	Entity(float, float, float, float, Model*);
+	virtual ~Entity();
+
+	virtual const type_info& getType() { return typeid(Entity); }
+	const UUID& getUuid() const { return uuid; }
+
+	bool operator==(const Entity& R) const {
+		RPC_STATUS s;
+		UUID uuid1 = getUuid();
+		UUID uuid2 = R.getUuid();
+		return UuidCompare(&uuid1, &uuid2, &s) == 0;
+	}
+
 	virtual void draw();
 	virtual void move();
 	virtual float getPositionX();	

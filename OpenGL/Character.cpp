@@ -8,14 +8,23 @@
 #define KEY_FRAME_NUM 4
 
 Character::Character(Model* models[KEY_FRAME_NUM - 1])
-    : Entity(glutGet(GLUT_WINDOW_WIDTH) / 10, glutGet(GLUT_WINDOW_HEIGHT) / 4, 0, 0, models[0]) {
+    : Entity(glutGet(GLUT_WINDOW_WIDTH) / 10, glutGet(GLUT_WINDOW_HEIGHT) / 4, 0, 0, NULL) {
 	jumpSpeed = 14;
     lowjumpSpeed = 10;
 	jumpState = false;
 	
-	copy(models, models + KEY_FRAME_NUM - 1, this->models);
+	if (models != nullptr) {
+		model = models[0];
+		copy(models, models + KEY_FRAME_NUM - 1, this->models);
+	}
 	time = 0;
 	currentKeyFrame = 0;
+}
+
+Character::~Character() {
+	for (int i = 0; i < KEY_FRAME_NUM - 1; i++) {
+		delete models[i];
+	}
 }
 
 void Character::draw() {
