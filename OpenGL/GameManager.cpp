@@ -16,7 +16,7 @@ GameManager::GameManager() {
 	groundnum = 0;
 	mushnum = 0;
 
-	groundMaxX = 100;
+	groundMaxX = 1000;
 	isHole = false;
 }
 
@@ -64,12 +64,13 @@ void GameManager::move(void(*t)(int)) {
 			character->stop(ground);
 		}
 		if (!character->isJumping()) { // detectFall()
-			if (detectCollisionX(character, ground)) break;
+			if (detectCollisionX(character, ground)) 
+				continue;
 			character->setfall();
 		}
-		if (detectCollision(character, ground) && detectUnderobject(character, ground)) {
-			//isGameEnd = true;
-		}
+		//if (detectCollision(character, ground) && detectUnderobject(character, ground)) {
+		//	//isGameEnd = true;
+		//}
 	}
 	if (groundGroup->isChild()) {
 		Entity* lastGround = (*prev((groundGroup->childEnd())))->getEntity();
