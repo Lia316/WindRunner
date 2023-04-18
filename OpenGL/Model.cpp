@@ -12,6 +12,15 @@ Model::Model(string filename) {
     load(filename);
 }
 
+Model::~Model() {
+    verts.clear();
+    tex_coord.clear();
+    norms.clear();
+    facet_vrt.clear();
+    facet_tex.clear();
+    facet_nrm.clear();
+}
+
 void Model::load(string filename) {
     float sumX = 0;
     float sumY = 0;

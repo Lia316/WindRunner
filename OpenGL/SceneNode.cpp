@@ -8,8 +8,10 @@ SceneNode::SceneNode(Entity* entity) {
 
 SceneNode::~SceneNode() {
 	delete entity;
+	entity = nullptr;
 	for (unsigned int i = 0; i < children.size(); ++i) {
 		delete children[i];
+		children[i] = nullptr;
 	}
 }
 
@@ -18,23 +20,25 @@ void SceneNode::addChild(SceneNode* s) {
 }
 
 void SceneNode::deleteChild(SceneNode* node) {
-	if (children.empty() || node != nullptr)
+	if (children.empty() || node == nullptr)
 		return;
-	for (int i = 0; i < children.size(); i++) {
-		if (children[i] == node) {
-			delete children[i];
-			children.erase(children.begin() + i);
-			return;
+	for (auto it = children.begin(); it != children.end(); ++it) {
+		if (*it == node) {
+			delete node;
+			*it = nullptr;
+			node = nullptr;
+			children.erase(it);
+			break;
 		}
 	}
 }
 
 void SceneNode::draw() {
 	glPushMatrix();
-	glTranslatef(translate.x, translate.y, translate.z);
+	// glTranslatef(translate.x, translate.y, translate.z);
 	if (entity != nullptr) 
 		entity->draw();
-	// glTranslatef(translate.x, translate.y, translate.z);
+	 glTranslatef(translate.x, translate.y, translate.z);
 	for (vector<SceneNode*>::iterator i = children.begin(); i != children.end(); ++i) {
 		(*i)->draw();
 	}
@@ -68,12 +72,10 @@ void SceneGraph::initialStructure() {
 }
 
 SceneNode* SceneGraph::findGroup(const type_info& type) {
-	for (auto i = root->childBegin(); true; ++i) {
+	for (auto i = root->childBegin(); i != root->childEnd(); ++i) {
 		if ((*i)->getEntity()->getType() == type) {
 			return (*i);
 		}
-		if (i == root->childEnd()) 
-			break;
 	}
 	return nullptr;
 }

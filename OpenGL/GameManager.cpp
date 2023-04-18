@@ -92,6 +92,8 @@ void GameManager::move(void(*t)(int)) {
 		if (detectCollision(character, star)) {
 			score += star->getPoint();
 			starGroup->deleteChild(*starNode);
+			starnum--;
+			break; // if not, out of idx
 		}
 	}
 
@@ -111,6 +113,8 @@ void GameManager::move(void(*t)(int)) {
 		if (detectCollisionYpredict(character, mush)) {
 			character->stepMush();
 			mushGroup->deleteChild(*mushNode);
+			mushnum--;
+			break;
 		}
 	}
 

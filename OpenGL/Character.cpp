@@ -24,6 +24,7 @@ Character::Character(Model* models[KEY_FRAME_NUM - 1])
 Character::~Character() {
 	for (int i = 0; i < KEY_FRAME_NUM - 1; i++) {
 		delete models[i];
+		models[i] = nullptr;
 	}
 }
 

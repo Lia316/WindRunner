@@ -15,7 +15,7 @@ Entity::Entity(float x, float y, float z, float speed, Model* model)
 }
 
 Entity::~Entity() {
-	delete model;
+	model = nullptr;
 }
 
 void Entity::move() {

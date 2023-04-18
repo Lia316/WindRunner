@@ -37,6 +37,8 @@ protected:
 
 public:
 	Model(string filename);
+	~Model();
+
 	void load(string filename);
 	void draw();
 
