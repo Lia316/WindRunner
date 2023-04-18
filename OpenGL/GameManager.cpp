@@ -15,7 +15,9 @@ GameManager::GameManager() {
 	starnum = 0;
 	groundnum = 0;
 	mushnum = 0;
-	groundMaxX = 0;
+
+	groundMaxX = 100;
+	isHole = false;
 }
 
 // ###### Draw ######
@@ -68,6 +70,12 @@ void GameManager::move(void(*t)(int)) {
 		if (detectCollision(character, ground) && detectUnderobject(character, ground)) {
 			//isGameEnd = true;
 		}
+	}
+	if (groundGroup->isChild()) {
+		Entity* lastGround = (*prev((groundGroup->childEnd())))->getEntity();
+		groundMaxX = lastGround->getPositionX() + lastGround->getWidth();
+		if (isHole)
+			groundMaxX += lastGround->getWidth();
 	}
 
 	// 3. Fire
@@ -212,7 +220,7 @@ void GameManager::starmaker(void(*t)(int)) {
 }
 
 void GameManager::groundmaker(void(*t)(int)) {
-	int height[20] = {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3};
+	int height[20] = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3};
 	random_device rd;
 	int random = rd() % 20;
 
@@ -228,13 +236,11 @@ void GameManager::groundmaker(void(*t)(int)) {
 		for (int i = 0; i < height[random]; i++) {
 			Ground* newGround = new Ground(groundMaxX, i, sceneGraph->materials->getModel(GROUND));
 			SceneNode* groundNode = new SceneNode(newGround);
-			groundNode->translate = vec3(0 , newGround->getHeight(), 0);
 
 			sceneGraph->addChild(groundGroup, groundNode);
-
-			groundMaxX = newGround->getPositionX() + newGround->getWidth() - 20;
 			groundnum++;
 		}
+		isHole = !height[random];
 	}
 	if (!isGameEnd) {
 		glutTimerFunc(GROUNDTIME, t, 0);

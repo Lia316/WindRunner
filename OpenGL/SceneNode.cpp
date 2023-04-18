@@ -35,10 +35,10 @@ void SceneNode::deleteChild(SceneNode* node) {
 
 void SceneNode::draw() {
 	glPushMatrix();
-	// glTranslatef(translate.x, translate.y, translate.z);
+	glTranslatef(translate.x, translate.y, translate.z);
 	if (entity != nullptr) 
 		entity->draw();
-	 glTranslatef(translate.x, translate.y, translate.z);
+	// glTranslatef(translate.x, translate.y, translate.z);
 	for (vector<SceneNode*>::iterator i = children.begin(); i != children.end(); ++i) {
 		(*i)->draw();
 	}

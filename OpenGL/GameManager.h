@@ -9,7 +9,7 @@
 
 #define FIRETIME 2100
 #define STARTIME 1000
-#define GROUNDTIME 1000
+#define GROUNDTIME 500
 
 class GameManager {
 private: 
@@ -45,4 +45,5 @@ public:
 	int groundnum;
 	int mushnum;
 	float groundMaxX;
+	bool isHole;
 };
