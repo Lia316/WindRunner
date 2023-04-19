@@ -25,7 +25,7 @@ public:
 	void setjump();
 	void setlowjump();
 	void setfall();
-	void stop(Entity* ground);
+	void stop(float groundHeight);
 	void sink();
 	void stepMush();
 

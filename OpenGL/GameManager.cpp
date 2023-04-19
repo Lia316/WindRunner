@@ -54,29 +54,32 @@ void GameManager::move(void(*t)(int)) {
 	}
 
 	// 2. Ground
+	bool fallFlag = true;
 	SceneNode* groundGroup = sceneGraph->findGroup(typeid(Ground));
 	for (auto groundNode = groundGroup->childBegin(); groundNode != groundGroup->childEnd(); ++groundNode) {
 		Entity* ground = (*groundNode)->getEntity();
 
 		ground->move();
 
-		if (detectCollisionYpredict(character, ground)) {
-			character->stop(ground);
+		if (character->isJumping() && detectCollisionYpredict(character, ground)) {
+			float groundHeight = ground->getHeight() + ground->getPositionY();
+			character->stop(groundHeight);
 		}
-		if (!character->isJumping()) { // detectFall()
-			if (detectCollisionX(character, ground)) 
-				continue;
-			character->setfall();
+		else if (fallFlag && detectIntersectY(character, ground)) {
+			fallFlag = false;
 		}
-		//if (detectCollision(character, ground) && detectUnderobject(character, ground)) {
-		//	//isGameEnd = true;
-		//}
+		if (detectCollision(character, ground) && detectUnderobject(character, ground)) {
+			//isGameEnd = true;
+		}
 	}
 	if (groundGroup->isChild()) {
 		Entity* lastGround = (*prev((groundGroup->childEnd())))->getEntity();
 		groundMaxX = lastGround->getPositionX() + lastGround->getWidth();
 		if (isHole)
 			groundMaxX += lastGround->getWidth();
+	}
+	if (fallFlag && !character->isJumping()) {
+		character->setfall();
 	}
 
 	// 3. Fire
@@ -294,11 +297,19 @@ bool GameManager::detectCollisionY(Entity* character, Entity* object) {
 	return collisionY;
 }
 
+bool GameManager::detectIntersectY(Entity* character, Entity* object) {
+	if (character == nullptr || object == nullptr) {
+		return false;
+	}
+	bool intersectY = object->getPositionY() + object->getHeight() + 1 >= character->getPositionY();
+	return intersectY && detectCollisionX(character, object);
+}
+
 bool GameManager::detectCollisionYpredict(Entity* character, Entity* object) { // predict Character's next y pos, and then predict if it were crashed with ground.
 	if (object == nullptr) {
 		return false;
 	}
-	bool collisionY = object->getPositionY() + object->getHeight() > character->getPositionY() + character->getSpeed();
+	bool collisionY = object->getPositionY() + object->getHeight() >= character->getPositionY() + character->getSpeed();
 	return collisionY && detectCollisionX(character, object);
 }
 

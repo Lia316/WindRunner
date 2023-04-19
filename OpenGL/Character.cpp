@@ -16,6 +16,8 @@ Character::Character(Model* models[KEY_FRAME_NUM - 1])
 	if (models != nullptr) {
 		model = models[0];
 		copy(models, models + KEY_FRAME_NUM - 1, this->models);
+		width = 20; // can't read model's width height now..
+		height = 60;
 	}
 	time = 0;
 	currentKeyFrame = 0;
@@ -57,15 +59,17 @@ void Character::setfall() {
     jumpState = true;
 }
 
-void Character::stop(Entity* ground) {
+void Character::stop(float groundHeight) {
     speed = 0;
     jumpState = false;
-    y = ground->getHeight();
+    y = groundHeight;
 }
 
 void Character::stepMush() {
     speed = 7;
+	jumpState = true;
 }
+
 void Character::sink() {
 	y -= 10;
 }
@@ -96,5 +100,8 @@ void Character::animation(void(*t)(int))
 			break;
 		}
 	}
-	Entity::model = models[currentKeyFrame];
+	if (!jumpState)
+		Entity::model = models[currentKeyFrame];
+	else
+		Entity::model = models[0];
 }
