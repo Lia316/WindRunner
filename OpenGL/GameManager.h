@@ -14,6 +14,7 @@
 class GameManager {
 private: 
 	SceneGraph* sceneGraph;
+	int viewMode;
 public:
 	GameManager();
 	void draw();
@@ -25,6 +26,8 @@ public:
 	void mushmaker(void(*t)(int));
 
 	void keyboard(unsigned char key, int x, int y);
+	void viewProjectionMode();
+	void viewLookMode();
 
 	bool detectCollisionX(Entity* character, Entity* object);
 	bool detectCollisionY(Entity* character, Entity* object);

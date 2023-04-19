@@ -8,6 +8,7 @@ using namespace std;
 
 GameManager::GameManager() {
 	sceneGraph = new SceneGraph();
+	viewMode = 1;
 
 	isGameEnd = false;
 	score = 0;
@@ -158,6 +159,15 @@ void GameManager::keyboard(unsigned char key, int x, int y) {
 	Character* character = dynamic_cast<Character*>(sceneGraph->findNode(typeid(Character))->getEntity());
 
 	switch (key) {
+	case '1':
+		viewMode = 1;
+		break;
+	case '2':
+		viewMode = 2;
+		break;
+	case '3':
+		viewMode = 3;
+		break;
 	case 32:
 		int mod = glutGetModifiers();
 		if (mod == GLUT_ACTIVE_SHIFT)
@@ -166,6 +176,36 @@ void GameManager::keyboard(unsigned char key, int x, int y) {
 			character->setlowjump();
 	}
 	glutPostRedisplay();
+}
+
+void GameManager::viewProjectionMode() {
+	switch (viewMode) {
+	case 1:
+		gluPerspective(60.0, 2.0, 1.0, 1000.0);
+		break;
+	case 2:
+		gluPerspective(60.0, 2.0, 1.0, 700.0);
+		break;
+	case 3:
+		glOrtho(0.0, 1000.0, 0.0, 500.0, -200.0, 200.0);
+		break;
+	}
+}
+
+void GameManager::viewLookMode() {
+	switch (viewMode) {
+	case 1:
+		glTranslatef(0, -100, 0);
+		gluLookAt(-300, 150, 0, 0, 0, 0, 0, 1, 0);
+		break;
+	case 2:
+		glTranslatef(-500, -250, 0);
+		gluLookAt(0, 0, 500, 0, 0, 0, 0, 1, 0);
+		break;
+	case 3:
+		gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
+		break;
+	}
 }
 
 // ###### Timer functions ######
