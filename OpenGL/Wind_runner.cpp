@@ -1,5 +1,5 @@
-#include <windows.h> 
-#include <gl/gl.h> 
+#include <windows.h>
+#include <gl/gl.h>
 #include <gl/glut.h>
 #include "GameManager.h"
 
@@ -16,19 +16,7 @@ void keyboard(unsigned char key, int x, int y);
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(500, 500);
-	glutInitWindowPosition(100, 100);
-	glutCreateWindow("Wind Runner");
 	init();
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0.0, 500.0, 0.0, 500.0, -20.0, 20.0);
-
-	glClearColor(0.5, 0.5, 0.5, 0.0);
-
-	glEnable(GL_DEPTH_TEST);
 
 	glutDisplayFunc(draw);
 
@@ -36,13 +24,18 @@ int main(int argc, char** argv) {
 	glutTimerFunc(FIRETIME, fireTimer, 0);
 	glutTimerFunc(STARTIME, starTimer, 0);
 	glutTimerFunc(GROUNDTIME, groundTimer, 0);
-	glutTimerFunc(GROUNDTIME * 2, mushTimer, 0);
+	glutTimerFunc(GROUNDTIME * 5, mushTimer, 0);
 	glutKeyboardFunc(keyboard);
+
 	glutMainLoop();
 	return 0;
 }
 
 void init(void) {
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitWindowSize(1000, 500);
+	glutInitWindowPosition(900, 0);
+	glutCreateWindow("Wind Runner");
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 
@@ -50,12 +43,19 @@ void init(void) {
 }
 
 void draw() {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gameManager->viewProjectionMode();
+
+	glClearColor(0.5, 0.5, 0.5, 0.0);
+
+	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-	gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
-
+	gameManager->viewLookMode();
+	
 	gameManager->draw();
 	glutSwapBuffers();
 }

@@ -1,22 +1,20 @@
 #pragma once
 #include <string>
-#include "Entity.h"
-#include "Ground.h"
-#include "Character.h"
-#include "Fire.h"
-#include "Star.h"
-#include "Mush.h"
+#include "SceneNode.h"
 
 #define MAXFIRE 4
 #define MAXSTAR 10
-#define MAXGROUND 4
-#define MAXMUSH 4
+#define MAXGROUND 30
+#define MAXMUSH 2
 
 #define FIRETIME 2100
 #define STARTIME 1000
-#define GROUNDTIME 1700
+#define GROUNDTIME 100
 
 class GameManager {
+private: 
+	SceneGraph* sceneGraph;
+	int viewMode;
 public:
 	GameManager();
 	void draw();
@@ -28,25 +26,19 @@ public:
 	void mushmaker(void(*t)(int));
 
 	void keyboard(unsigned char key, int x, int y);
+	void viewProjectionMode();
+	void viewLookMode();
 
 	bool detectCollisionX(Entity* character, Entity* object);
 	bool detectCollisionY(Entity* character, Entity* object);
-	bool detectCollisionYpredict(Entity* character, Entity* ground);
 	bool detectCollision(Entity* character, Entity* object);
+	bool detectIntersectY(Entity* character, Entity* object);
+	bool detectCollisionYpredict(Entity* character, Entity* ground);
 	bool detectSink(Entity* character);
-	bool detectMushMove(Entity* mush, Ground** newground);
-	bool detectMushStep(Entity* character, Entity* mush);
+	bool detectWindowOut(Entity* object);
 
-	bool detectFall(Character* character, Ground* ground, Ground** newground);
 	bool detectUnderobject(Entity* character, Entity* ground);
 	void showText(float x, float y, std::string string);
-
-	Ground* ground;
-	Character* character;
-	Fire* fire[MAXFIRE];
-	Star* star[MAXSTAR];
-	Ground* newground[MAXGROUND];
-	Mush* mush[MAXMUSH];
 
 	bool isGameEnd;
 	int score;
@@ -54,4 +46,6 @@ public:
 	int starnum;
 	int groundnum;
 	int mushnum;
+	float groundMaxX;
+	bool isHole;
 };

@@ -5,9 +5,11 @@ class Mush : public Entity {
 protected:
 
 public:
-	Mush();
+	Mush(Model* model);
+	~Mush() {};
+	const type_info& getType() override { return typeid(Mush); }
+
 	void draw();
-	void move();
 	void setY(float y);
 	void reverse();
 };
