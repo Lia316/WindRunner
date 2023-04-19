@@ -67,8 +67,16 @@ void SceneGraph::initialStructure() {
 	root->addChild(mushGroup);
 	root->addChild(characterGroup);
 
-	groundGroup->addChild(new SceneNode(new Ground(0, 0, materials->getModel(GROUND))));
 	characterGroup->addChild(new SceneNode(new Character(characterPoses)));
+
+	float groundWidth = materials->getModel(GROUND)->getWidth();
+
+	for (int i = 0; i < 20; i++) {
+		Ground* newGround = new Ground(i * groundWidth, 0, materials->getModel(GROUND));
+		SceneNode* groundNode = new SceneNode(newGround);
+
+		groundGroup->addChild(groundNode);
+	}
 }
 
 SceneNode* SceneGraph::findGroup(const type_info& type) {

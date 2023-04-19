@@ -13,7 +13,7 @@ GameManager::GameManager() {
 	score = 0;
 	firenum = 0;
 	starnum = 0;
-	groundnum = 0;
+	groundnum =0;
 	mushnum = 0;
 
 	groundMaxX = 1000;
@@ -55,7 +55,7 @@ void GameManager::move(void(*t)(int)) {
 	character->jump();
 
 	if (detectSink(character)) {
-		//isGameEnd = true;
+		isGameEnd = true;
 	}
 
 	// 2. Ground
@@ -88,7 +88,7 @@ void GameManager::move(void(*t)(int)) {
 			}
 		}
 		if (detectCollision(character, ground) && detectUnderobject(character, ground)) {
-			//isGameEnd = true;
+			isGameEnd = true;
 		}
 	}
 	if (fallFlag && !character->isJumping()) {
@@ -109,7 +109,7 @@ void GameManager::move(void(*t)(int)) {
 		fire->move();
 
 		if (detectCollision(character, fire)) {
-			//isGameEnd = true;
+			isGameEnd = true;
 		}
 	}
 
@@ -134,7 +134,7 @@ void GameManager::move(void(*t)(int)) {
 		mush->move();
 
 		if (detectCollision(character, mush) && detectUnderobject(character, mush)) {
-			//isGameEnd = true;
+			isGameEnd = true;
 		}
 		if (detectCollisionYpredict(character, mush)) {
 			character->stepMush();
@@ -327,7 +327,7 @@ bool GameManager::detectUnderobject(Entity* character, Entity* object) {
 }
 
 bool GameManager::detectSink(Entity* character) {
-	if (character->getPositionY() <=0)
+	if (character->getPositionY() <= 55)
 		return true;
 	else
 		return false;
