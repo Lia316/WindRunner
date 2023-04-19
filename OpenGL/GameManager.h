@@ -9,7 +9,7 @@
 
 #define FIRETIME 2100
 #define STARTIME 1000
-#define GROUNDTIME 50
+#define GROUNDTIME 100
 
 class GameManager {
 private: 
@@ -28,12 +28,10 @@ public:
 
 	bool detectCollisionX(Entity* character, Entity* object);
 	bool detectCollisionY(Entity* character, Entity* object);
+	bool detectCollision(Entity* character, Entity* object);
 	bool detectIntersectY(Entity* character, Entity* object);
 	bool detectCollisionYpredict(Entity* character, Entity* ground);
-	bool detectCollision(Entity* character, Entity* object);
 	bool detectSink(Entity* character);
-	bool detectMushMove(Entity* mush);
-	bool detectMushStep(Entity* character, Entity* mush);
 	bool detectWindowOut(Entity* object);
 
 	bool detectUnderobject(Entity* character, Entity* ground);

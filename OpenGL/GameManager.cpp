@@ -45,6 +45,11 @@ void GameManager::showText(float x, float y, std::string string) {
 // ###### Update ######
 
 void GameManager::move(void(*t)(int)) {
+	SceneNode* groundGroup = sceneGraph->findGroup(typeid(Ground));
+	SceneNode* fireGroup = sceneGraph->findGroup(typeid(Fire));
+	SceneNode* starGroup = sceneGraph->findGroup(typeid(Star));
+	SceneNode* mushGroup = sceneGraph->findGroup(typeid(Mush));
+
 	// 1. Character move
 	Character* character = dynamic_cast<Character*>(sceneGraph->findNode(typeid(Character))->getEntity());
 	character->jump();
@@ -55,7 +60,6 @@ void GameManager::move(void(*t)(int)) {
 
 	// 2. Ground
 	bool fallFlag = true;
-	SceneNode* groundGroup = sceneGraph->findGroup(typeid(Ground));
 	for (auto groundNode = groundGroup->childBegin(); groundNode != groundGroup->childEnd(); ++groundNode) {
 		Entity* ground = (*groundNode)->getEntity();
 
@@ -68,9 +72,27 @@ void GameManager::move(void(*t)(int)) {
 		else if (fallFlag && detectIntersectY(character, ground)) {
 			fallFlag = false;
 		}
+
+		for (auto mushNode = mushGroup->childBegin(); mushNode != mushGroup->childEnd(); ++mushNode) {
+			Mush* mush = dynamic_cast<Mush*>((*mushNode)->getEntity());
+			if (detectCollisionX(mush, ground)) {
+				float groundHeight = ground->getPositionY() + ground->getHeight();
+				mush->setY(groundHeight);
+				mush->reverse();
+			}
+		}
+		for (auto starNode = starGroup->childBegin(); starNode != starGroup->childEnd(); ++starNode) {
+			Star* star = dynamic_cast<Star*>((*starNode)->getEntity());
+			if (detectCollision(star, ground)) {
+				star->upper(); //to prevent that stars were under the ground
+			}
+		}
 		if (detectCollision(character, ground) && detectUnderobject(character, ground)) {
 			//isGameEnd = true;
 		}
+	}
+	if (fallFlag && !character->isJumping()) {
+		character->setfall();
 	}
 	if (groundGroup->isChild()) {
 		Entity* lastGround = (*prev((groundGroup->childEnd())))->getEntity();
@@ -78,12 +100,9 @@ void GameManager::move(void(*t)(int)) {
 		if (isHole)
 			groundMaxX += lastGround->getWidth();
 	}
-	if (fallFlag && !character->isJumping()) {
-		character->setfall();
-	}
+
 
 	// 3. Fire
-	SceneNode* fireGroup = sceneGraph->findGroup(typeid(Fire));
 	for (auto fireNode = fireGroup->childBegin(); fireNode != fireGroup->childEnd(); ++fireNode) {
 		Entity* fire = (*fireNode)->getEntity();
 
@@ -95,7 +114,6 @@ void GameManager::move(void(*t)(int)) {
 	}
 
 	// 4. Star
-	SceneNode* starGroup = sceneGraph->findGroup(typeid(Star));
 	for (auto starNode = starGroup->childBegin(); starNode != starGroup->childEnd(); ++starNode) {
 		Star* star = dynamic_cast<Star*>((*starNode)->getEntity());
 
@@ -110,15 +128,11 @@ void GameManager::move(void(*t)(int)) {
 	}
 
 	// 5. Mushroom
-	SceneNode* mushGroup = sceneGraph->findGroup(typeid(Mush));
 	for (auto mushNode = mushGroup->childBegin(); mushNode != mushGroup->childEnd(); ++mushNode) {
 		Mush* mush = dynamic_cast<Mush*>((*mushNode)->getEntity());
 
 		mush->move();
 
-		if (detectMushMove(mush)) {
-			mush->reverse();
-		}
 		if (detectCollision(character, mush) && detectUnderobject(character, mush)) {
 			//isGameEnd = true;
 		}
@@ -129,22 +143,6 @@ void GameManager::move(void(*t)(int)) {
 			break;
 		}
 	}
-
-	/*
-	for (int i = 0; i < MAXSTAR; i++) {
-		for (int j = 0; j < MAXGROUND; j++) {
-			if (detectCollision(star[i],newground[j])) {
-				star[i]->upper();//to prevent that stars were under the ground
-			}
-		}
-	}
-
-	for (int i = 0; i < MAXGROUND; i++) {
-		for(int j = 0; j < MAXMUSH; j++)
-		if (detectCollisionX(mush[j], newground[i])) {
-			mush[j]->setY(newground[i]->getHeight());
-		}
-	}*/
 
 	if (isGameEnd) {
 		character->sink();
@@ -297,6 +295,13 @@ bool GameManager::detectCollisionY(Entity* character, Entity* object) {
 	return collisionY;
 }
 
+bool GameManager::detectCollision(Entity* character, Entity* object) {
+	if (character == nullptr || object == nullptr) {
+		return false;
+	}
+	return detectCollisionX(character, object) && detectCollisionY(character, object);
+}
+
 bool GameManager::detectIntersectY(Entity* character, Entity* object) {
 	if (character == nullptr || object == nullptr) {
 		return false;
@@ -313,13 +318,6 @@ bool GameManager::detectCollisionYpredict(Entity* character, Entity* object) { /
 	return collisionY && detectCollisionX(character, object);
 }
 
-bool GameManager::detectCollision(Entity* character, Entity* object) {
-	if (character == nullptr || object == nullptr) {
-		return false;
-	}
-	return detectCollisionX(character,object) && detectCollisionY(character, object);
-}
-
 bool GameManager::detectUnderobject(Entity* character, Entity* object) {
 	if (character == nullptr || object == nullptr) {
 		return false;
@@ -333,21 +331,6 @@ bool GameManager::detectSink(Entity* character) {
 		return true;
 	else
 		return false;
-}
-
-bool GameManager::detectMushStep(Entity* character, Entity* mush) {
-	return false;
-}
-
-bool GameManager::detectMushMove(Entity* mush) {
-	SceneNode* groundGroup = sceneGraph->findGroup(typeid(Ground));
-	for (auto groundNode = groundGroup->childBegin(); groundNode != groundGroup->childEnd(); ++groundNode) {
-		Entity* ground = (*groundNode)->getEntity();
-
-		if (detectCollisionX(mush, ground))
-			return false;
-	}
-	return true;
 }
 
 bool GameManager::detectWindowOut(Entity* object) {
