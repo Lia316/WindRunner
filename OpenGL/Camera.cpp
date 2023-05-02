@@ -12,6 +12,10 @@ mat4 Camera::getViewMatrix() {
     return view;
 }
 
+mat4 Camera::getProjectionMatrix() {
+    return projection;
+}
+
 void Camera::setCameraMode(CameraMode mode) {
     currentMode = mode;
 }
@@ -22,6 +26,10 @@ void Camera::changeEyePos(CameraMode direction, float time) {
 }
 
 vec3 Camera::getEye(CameraMode mode) {
+    const vec3 frontEye = vec3(800, -150, 0);
+    const vec3 sideEye = vec3(0, 0, 500);
+    const vec3 orthoEye = vec3(0, 0, 500);
+
     switch (mode)
     {
     case FRONT:
@@ -32,5 +40,24 @@ vec3 Camera::getEye(CameraMode mode) {
         return orthoEye;
     default:
         return sideEye;
+    }
+}
+
+void Camera::changeProjection(CameraMode mode, float time) {
+    if (time <= 1 && time >= 0)
+        projection = getProjection(currentMode) + time * (getProjection(mode) - getProjection(currentMode));
+}
+
+mat4 Camera::getProjection(CameraMode mode) {
+    switch (mode)
+    {
+    case FRONT:
+        return perspective(60.0, 2.0, 1.0, 1000.0);
+    case SIDE:
+        return perspective(60.0, 2.0, 1.0, 700.0);
+    case ORTHO:
+        return ortho(0.0, 1000.0, 0.0, 500.0, -200.0, 1000.0);
+    default:
+        return perspective(60.0, 2.0, 1.0, 700.0);
     }
 }

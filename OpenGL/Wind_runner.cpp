@@ -60,7 +60,7 @@ void colorcube() {
 }
 
 GLuint  model_view;  // model-view matrix uniform shader variable location
-//GLuint  projection; // projection matrix uniform shader variable location
+GLuint  projection; // projection matrix uniform shader variable location
 
 Camera* camera;
 CameraMode viewMode = SIDE;
@@ -99,7 +99,7 @@ void init() {
     glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(points)));
 
     model_view = glGetUniformLocation(program, "model_view");
-    //projection = glGetUniformLocation(program, "projection");
+    projection = glGetUniformLocation(program, "projection");
     camera = new Camera();
 
     glEnable(GL_DEPTH_TEST);
@@ -109,8 +109,13 @@ void init() {
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    mat4  mv = camera->getViewMatrix();
-    glUniformMatrix4fv(model_view, 1, GL_TRUE, &mv[0][0]);
+    mat4 mv = camera->getViewMatrix();
+    mat4 pv = camera->getProjectionMatrix();
+    mat4 sc = scale(mat4(1.0f), vec3(500, 500, 500));
+    mv = mv * sc;
+
+    glUniformMatrix4fv(model_view, 1, GL_FALSE, &mv[0][0]);
+    glUniformMatrix4fv(projection, 1, GL_FALSE, &pv[0][0]);
     
     glDrawArrays(GL_TRIANGLES, 0, NumVertices);
     glutSwapBuffers();
@@ -147,33 +152,16 @@ void idle() {
             isCamMoving = false;
         }
         camera->changeEyePos(viewMode, camTime);
+        camera->changeProjection(viewMode, camTime);
 
         glutPostRedisplay();
     }
 }
 
-//void mouse(int button, int state, int x, int y) {
-//    if (state == GLUT_DOWN) {
-//        switch (button) {
-//        case GLUT_LEFT_BUTTON:    Axis = Xaxis;  break;
-//        case GLUT_MIDDLE_BUTTON:  Axis = Yaxis;  break;
-//        case GLUT_RIGHT_BUTTON:   Axis = Zaxis;  break;
-//        }
-//    }
-//}
-//
-//void idle() {
-//    Theta[Axis] += 0.01;
-//    if (Theta[Axis] > 360.0) {
-//        Theta[Axis] -= 360.0;
-//    }
-//    glutPostRedisplay();
-//}
-
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowSize(512, 512);
+    glutInitWindowSize(1000, 500);
     glutCreateWindow("Color Cube");
     glewInit();
 
@@ -181,7 +169,6 @@ int main(int argc, char** argv) {
 
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
-    //glutMouseFunc(mouse);
     glutIdleFunc(idle);
 
     glutMainLoop();
