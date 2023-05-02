@@ -1,13 +1,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "shader.h"
+#include "Shader.h"
+#include "Camera.h"
 
 using namespace std;
 using namespace glm;
 
 typedef vec4  color4;
 typedef vec4  point4;
+
 const int NumVertices = 36; //(6 faces)(2 triangles/face)(3 vertices/triangle)
 
 point4 points[NumVertices];
@@ -37,16 +39,7 @@ color4 vertex_colors[8] = {
     color4(0.0, 1.0, 1.0, 1.0)   // cyan
 };
 
-// Array of rotation angles (in degrees) for each coordinate axis
-enum { Xaxis = 0, Yaxis = 1, Zaxis = 2, NumAxes = 3 };
-int Axis = Xaxis;
-GLfloat Theta[NumAxes] = { 0.0, 0.0, 0.0 };
-GLuint theta;  // The location of the "theta" shader uniform variable
-
-// quad generates two triangles for each face and assigns colors  to the vertices
-
 int Index = 0;
-
 void quad(int a, int b, int c, int d) {
     colors[Index] = vertex_colors[a]; points[Index] = vertices[a]; Index++;
     colors[Index] = vertex_colors[b]; points[Index] = vertices[b]; Index++;
@@ -66,11 +59,19 @@ void colorcube() {
     quad(5, 4, 0, 1);
 }
 
+GLuint  model_view;  // model-view matrix uniform shader variable location
+//GLuint  projection; // projection matrix uniform shader variable location
+
+Camera* camera;
+CameraMode viewMode = SIDE;
+float camTime = 0.0f;
+bool isCamMoving = false;
+
 void init() {
     colorcube();
 
     // Load shaders and use the resulting shader program
-    Shader* shader = new Shader("main.vert", "main.frag");
+    Shader* shader = new Shader("mvp.vert", "main.frag");
     GLuint program = shader->program;
     glUseProgram(program);
 
@@ -97,7 +98,9 @@ void init() {
     glEnableVertexAttribArray(vColor);
     glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(points)));
 
-    theta = glGetUniformLocation(program, "theta");
+    model_view = glGetUniformLocation(program, "model_view");
+    //projection = glGetUniformLocation(program, "projection");
+    camera = new Camera();
 
     glEnable(GL_DEPTH_TEST);
     glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -105,7 +108,10 @@ void init() {
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUniform3fv(theta, 1, Theta);
+
+    mat4  mv = camera->getViewMatrix();
+    glUniformMatrix4fv(model_view, 1, GL_TRUE, &mv[0][0]);
+    
     glDrawArrays(GL_TRIANGLES, 0, NumVertices);
     glutSwapBuffers();
 }
@@ -116,26 +122,53 @@ void keyboard(unsigned char key, int x, int y) {
     case 'q': case 'Q':
         exit(EXIT_SUCCESS);
         break;
-    }
-}
-
-void mouse(int button, int state, int x, int y) {
-    if (state == GLUT_DOWN) {
-        switch (button) {
-        case GLUT_LEFT_BUTTON:    Axis = Xaxis;  break;
-        case GLUT_MIDDLE_BUTTON:  Axis = Yaxis;  break;
-        case GLUT_RIGHT_BUTTON:   Axis = Zaxis;  break;
-        }
+    case '1':
+        viewMode = FRONT;
+        isCamMoving = true;
+        break;
+    case '2':
+        viewMode = SIDE;
+        isCamMoving = true;
+        break;
+    case '3':
+        viewMode = ORTHO;
+        isCamMoving = true;
+        break;
     }
 }
 
 void idle() {
-    Theta[Axis] += 0.01;
-    if (Theta[Axis] > 360.0) {
-        Theta[Axis] -= 360.0;
+    if (isCamMoving) {
+        camTime += 0.0005;
+
+        if (camTime >= 1) {
+            camera->setCameraMode(viewMode);
+            camTime = 0;
+            isCamMoving = false;
+        }
+        camera->changeEyePos(viewMode, camTime);
+
+        glutPostRedisplay();
     }
-    glutPostRedisplay();
 }
+
+//void mouse(int button, int state, int x, int y) {
+//    if (state == GLUT_DOWN) {
+//        switch (button) {
+//        case GLUT_LEFT_BUTTON:    Axis = Xaxis;  break;
+//        case GLUT_MIDDLE_BUTTON:  Axis = Yaxis;  break;
+//        case GLUT_RIGHT_BUTTON:   Axis = Zaxis;  break;
+//        }
+//    }
+//}
+//
+//void idle() {
+//    Theta[Axis] += 0.01;
+//    if (Theta[Axis] > 360.0) {
+//        Theta[Axis] -= 360.0;
+//    }
+//    glutPostRedisplay();
+//}
 
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
@@ -148,7 +181,7 @@ int main(int argc, char** argv) {
 
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
-    glutMouseFunc(mouse);
+    //glutMouseFunc(mouse);
     glutIdleFunc(idle);
 
     glutMainLoop();
