@@ -48,6 +48,9 @@
     <ClCompile Include="Materials.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Star.h">
@@ -80,5 +83,16 @@
     <ClInclude Include="Materials.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="main.vert">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="main.frag">
+      <Filter>소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

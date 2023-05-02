@@ -160,6 +160,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="mush.cpp" />
     <ClCompile Include="SceneNode.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Wind_runner.cpp" />
   </ItemGroup>
@@ -173,7 +174,12 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="mush.h" />
     <ClInclude Include="SceneNode.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Star.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="main.frag" />
+    <None Include="main.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
