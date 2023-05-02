@@ -1,6 +1,3 @@
-#include <windows.h> 
-#include <gl/gl.h> 
-#include <gl/glut.h>
 #include "Mush.h"
 
 Mush::Mush(Model* model)

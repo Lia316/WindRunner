@@ -10,6 +10,7 @@ Model::Model(string filename) {
     scale = 0.3;
 
     load(filename);
+    createMesh();
 }
 
 Model::~Model() {
@@ -19,6 +20,8 @@ Model::~Model() {
     facet_vrt.clear();
     facet_tex.clear();
     facet_nrm.clear();
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
 }
 
 void Model::load(string filename) {
@@ -93,17 +96,54 @@ void Model::load(string filename) {
     depth = maxZ - minZ;
 }
 
+void Model::createMesh() {
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    std::vector<float> meshData;
+    for (int i = 0; i < facet_vrt.size(); i++) {
+        meshData.push_back(verts[facet_vrt[i]].x);
+        meshData.push_back(verts[facet_vrt[i]].y);
+        meshData.push_back(verts[facet_vrt[i]].z);
+
+        meshData.push_back(tex_coord[facet_tex[i]].x);
+        meshData.push_back(tex_coord[facet_tex[i]].y);
+
+        meshData.push_back(norms[facet_nrm[i]].x);
+        meshData.push_back(norms[facet_nrm[i]].y);
+        meshData.push_back(norms[facet_nrm[i]].z);
+    }
+
+    glBufferData(GL_ARRAY_BUFFER, meshData.size() * sizeof(float), &meshData[0], GL_STATIC_DRAW);
+
+    // Vertex positions
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+
+    // Texture coordinates
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+
+    // Normals
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+
+    glBindVertexArray(0);
+}
+
+
 void Model::draw() {
     glPushMatrix();
-        glScalef(scale, scale, scale);
-        glTranslatef(-minX, -minY, -avgZ);
+    glScalef(scale, scale, scale);
+    glTranslatef(-minX, -minY, -avgZ);
 
-        glBegin(GL_TRIANGLES);
-        for (int i = 0; i < facet_vrt.size(); i++) {
-            //glNormal3f(norms[facet_nrm[i]].x, norms[facet_nrm[i]].y, norms[facet_nrm[i]].z);
-            //glTexCoord2f(tex_coord[facet_tex[i]].x, tex_coord[facet_tex[i]].y);
-            glVertex3f(verts[facet_vrt[i]].x, verts[facet_vrt[i]].y, verts[facet_vrt[i]].z);
-        }
-        glEnd();
+    glBindVertexArray(vao);
+    glDrawArrays(GL_TRIANGLES, 0, facet_vrt.size() * 3);
+
+    glBindVertexArray(0);
+
     glPopMatrix();
 }

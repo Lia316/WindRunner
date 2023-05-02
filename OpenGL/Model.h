@@ -1,8 +1,10 @@
 #pragma once
-#include <glm/glm.hpp>
 #include <windows.h> 
+#include <GL/glew.h>
 #include <gl/gl.h> 
 #include <gl/glut.h>
+#include <glm/glm.hpp>
+
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -35,11 +37,17 @@ protected:
 	float depth;
 	float scale;
 
+	void createMesh();
+
 public:
 	Model(string filename);
 	~Model();
 
+	GLuint vao;
+	GLuint vbo;
+
 	void load(string filename);
+	GLuint createMesh(const vector<vec3>& vertices, const vector<vec2>& uvs, const vector<vec3>& normals);
 	void draw();
 
 	float getmaxX() const { return maxX * scale; }

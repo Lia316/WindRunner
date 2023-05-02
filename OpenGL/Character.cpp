@@ -1,6 +1,3 @@
-#include <windows.h> 
-#include <gl/gl.h> 
-#include <gl/glut.h>
 #include <algorithm>
 #include "math.h"
 #include "Character.h"

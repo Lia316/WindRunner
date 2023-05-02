@@ -1,6 +1,3 @@
-#include <windows.h> 
-#include <gl/gl.h> 
-#include <gl/glut.h>
 #include "Fire.h"
 
 Fire::Fire(float x, float y, Model* model)

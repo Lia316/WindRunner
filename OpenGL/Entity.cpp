@@ -1,6 +1,3 @@
-#include <windows.h> 
-#include <gl/gl.h> 
-#include <gl/glut.h>
 #include "Entity.h"
 
 Entity::Entity(float x, float y, float z, float speed, Model* model)

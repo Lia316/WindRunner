@@ -1,6 +1,3 @@
-#include <windows.h> 
-#include <gl/gl.h> 
-#include <gl/glut.h>
 #include "Ground.h"
 
 Ground::Ground(float posX, int height, Model* model)

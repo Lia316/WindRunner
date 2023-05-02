@@ -1,7 +1,4 @@
 #pragma once
-#include <windows.h> 
-#include <gl/gl.h> 
-#include <gl/glut.h>
 #include <vector>
 
 #include "Materials.h"

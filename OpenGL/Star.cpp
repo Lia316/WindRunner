@@ -1,6 +1,3 @@
-#include <windows.h> 
-#include <gl/gl.h> 
-#include <gl/glut.h>
 #include "Star.h"
 
 Star::Star(float x, float y, Model* model)
