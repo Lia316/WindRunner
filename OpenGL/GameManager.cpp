@@ -25,15 +25,15 @@ void GameManager::draw() {
 	sceneGraph->draw();
 
 	string scoreText = "score: " + to_string(score);
-	showText(0, glutGet(GLUT_WINDOW_HEIGHT) - 30, scoreText);
+	showText(300, glutGet(GLUT_WINDOW_HEIGHT) - 300, scoreText);
 	if (isGameEnd) {
-		showText(0, glutGet(GLUT_WINDOW_HEIGHT) - 60, "The Game End");
+		showText(300, glutGet(GLUT_WINDOW_HEIGHT) - 300, "The Game End");
 	}
 }
 
 void GameManager::showText(float x, float y, std::string string) {
 	glColor3f(1.0, 1.0, 1.0);
-	glRasterPos2f(x, y);
+	glRasterPos3f(x, y, 0);
 	const char* str = string.c_str();
 
 	for (const char* c = str; *c != '\0'; c++) {

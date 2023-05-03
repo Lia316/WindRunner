@@ -158,5 +158,5 @@ mat4 Model::adjustMatrix() {
     mat4 resize = scale(mat4(1.0f), vec3(s, s, s));
     mat4 origin = translate(mat4(1.0f), vec3(-minX, -minY, -avgZ));
 
-    return origin * resize;
+    return resize * origin;
 }
