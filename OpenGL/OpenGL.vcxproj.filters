@@ -94,13 +94,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="main.vert">
+    <None Include="mvp.vert">
       <Filter>소스 파일</Filter>
     </None>
     <None Include="main.frag">
-      <Filter>소스 파일</Filter>
-    </None>
-    <None Include="mvp.vert">
       <Filter>소스 파일</Filter>
     </None>
   </ItemGroup>
