@@ -3,8 +3,7 @@
 #include "GameManager.h"
 
 GameManager* gameManager;
-GLuint  view; 
-GLuint  projection;
+GLuint  projection_view;
 
 Camera* camera;
 CameraMode viewMode = SIDE;
@@ -53,8 +52,7 @@ void init(void) {
     GLuint program = shader->program;
     glUseProgram(program);
 
-	view = glGetUniformLocation(program, "view");
-	projection = glGetUniformLocation(program, "projection");
+	projection_view = glGetUniformLocation(program, "projection_view");
 
 	camera = new Camera();
 	gameManager = new GameManager(program);
@@ -66,11 +64,8 @@ void draw() {
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	mat4 mv = camera->getViewMatrix();
-    mat4 pv = camera->getProjectionMatrix();
-
-    glUniformMatrix4fv(view, 1, GL_FALSE, &mv[0][0]);
-    glUniformMatrix4fv(projection, 1, GL_FALSE, &pv[0][0]);
+	mat4 vp = camera->getProjectionViewMatrix();
+    glUniformMatrix4fv(projection_view, 1, GL_FALSE, &vp[0][0]);
 	
 	gameManager->draw();
 	glutSwapBuffers();
@@ -78,18 +73,57 @@ void draw() {
 
 void idle() {
     if (isCamMoving) {
-        camTime += 0.0005;
+        camTime += 0.001;
 
         if (camTime >= 1) {
             camera->setCameraMode(viewMode);
             camTime = 0;
             isCamMoving = false;
         }
-        camera->changeEyePos(viewMode, camTime);
-        camera->changeProjection(viewMode, camTime);
+        camera->changeView(viewMode, camTime);
 
         glutPostRedisplay();
     }
+}
+
+void keyboard(unsigned char key, int x, int y) {
+	switch (key) {
+	case 033: // Escape Key
+	case 'q': case 'Q':
+		exit(EXIT_SUCCESS);
+		break;
+	case '1': // animate only when FRONT <-> SIDE
+		if (viewMode == ORTHO) {
+			viewMode = FRONT;
+			camera->changeView(viewMode, 1);
+			camera->setCameraMode(viewMode);
+			isCamMoving = false;
+		}
+		else {
+			viewMode = FRONT;
+			isCamMoving = true;
+		}
+		break;
+	case '2':
+		if (viewMode == ORTHO) {
+			viewMode = SIDE;
+			camera->changeView(viewMode, 1);
+			camera->setCameraMode(viewMode);
+			isCamMoving = false;
+		}
+		else {
+			viewMode = SIDE;
+			isCamMoving = true;
+		}
+		break;
+	case '3':
+		viewMode = ORTHO;
+		camera->changeView(viewMode, 1);
+		camera->setCameraMode(viewMode);
+		isCamMoving = false;
+		break;
+	}
+	gameManager->keyboard(key, x, y);
 }
 
 void moveTimer(int time) {
@@ -111,26 +145,4 @@ void groundTimer(int time) {
 
 void mushTimer(int time) {
 	gameManager->mushmaker(mushTimer);
-}
-
-void keyboard(unsigned char key, int x, int y) {
-	switch (key) {
-    case 033: // Escape Key
-    case 'q': case 'Q':
-        exit(EXIT_SUCCESS);
-        break;
-    case '1':
-        viewMode = FRONT;
-        isCamMoving = true;
-        break;
-    case '2':
-        viewMode = SIDE;
-        isCamMoving = true;
-        break;
-    case '3':
-        viewMode = ORTHO;
-        isCamMoving = true;
-        break;
-    }
-	gameManager->keyboard(key, x, y);
 }
