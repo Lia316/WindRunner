@@ -1,7 +1,7 @@
 #include "Entity.h"
 
-Entity::Entity(float x, float y, float z, float speed, Model* model)
-: x(x), y(y), z(z), speed(speed), model(model) { 
+Entity::Entity(float x, float y, float z, float speed, Model* model, GLuint shaderProgram)
+: x(x), y(y), z(z), speed(speed), model(model), shaderProgram(shaderProgram) {
 	UuidCreate(&uuid);
 	if (model == nullptr) return;
 
@@ -21,10 +21,15 @@ void Entity::move() {
 
 void Entity::draw() {
 	if (model == nullptr) return;
-	glPushMatrix();
-		glTranslatef(x, y, 0);
-		model->draw();
-	glPopMatrix();
+
+	mat4 adjust = model->adjustMatrix();
+	mat4 move = translate(mat4(1.0f), vec3(x, y, 0));
+	mat4 modelMatrix = move * adjust;
+
+	GLuint modelLoc = glGetUniformLocation(shaderProgram, "model");
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &modelMatrix[0][0]);
+
+	model->draw();
 }
 
 float Entity::getPositionX() {

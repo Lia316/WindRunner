@@ -5,6 +5,7 @@ Camera::Camera(vec3 eye, vec3 position, vec3 up) {
     this->position = position;
     this->up = up;
     currentMode = SIDE;
+    projection = perspective(60.0, 2.0, 1.0, 200.0);
 }
 
 mat4 Camera::getViewMatrix() {
@@ -13,7 +14,7 @@ mat4 Camera::getViewMatrix() {
 }
 
 mat4 Camera::getProjectionMatrix() {
-    return projection;
+    return projection; // translate(mat4(1.0f), vec3(20, -50, 0))
 }
 
 void Camera::setCameraMode(CameraMode mode) {
@@ -49,6 +50,7 @@ void Camera::changeProjection(CameraMode mode, float time) {
 }
 
 mat4 Camera::getProjection(CameraMode mode) {
+    //mat4 camMove = translate(mat4(1.0f), vec3(20, -50, 0));
     switch (mode)
     {
     case FRONT:

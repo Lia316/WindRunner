@@ -28,8 +28,10 @@ public:
 
 
 class SceneGraph {
+private:
+	GLuint shaderProgram;
 public:
-	SceneGraph();
+	SceneGraph(GLuint);
 	SceneNode* root;
 	Materials* materials;
 

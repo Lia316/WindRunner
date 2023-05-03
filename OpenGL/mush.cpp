@@ -1,7 +1,7 @@
 #include "Mush.h"
 
-Mush::Mush(Model* model)
-	: Entity(glutGet(GLUT_WINDOW_WIDTH), 400, 0, -4.5, model) { }
+Mush::Mush(Model* model, GLuint shaderProgram)
+	: Entity(glutGet(GLUT_WINDOW_WIDTH), 400, 0, -4.5, model, shaderProgram) { }
 
 void Mush::draw() {
 	glColor3f(2.0, 0.55, 0.0);

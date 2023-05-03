@@ -4,6 +4,7 @@
 #include <gl/gl.h> 
 #include <gl/glut.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
 #include <sstream>
@@ -23,6 +24,8 @@ protected:
 	vector<int> facet_vrt{};
 	vector<int> facet_tex{};
 	vector<int> facet_nrm{};
+	vec3 color;
+
 	float maxX;
 	float maxY;
 	float maxZ;
@@ -35,7 +38,7 @@ protected:
 	float width;
 	float height;
 	float depth;
-	float scale;
+	float s;
 
 	void createMesh();
 
@@ -48,15 +51,17 @@ public:
 
 	void load(string filename);
 	GLuint createMesh(const vector<vec3>& vertices, const vector<vec2>& uvs, const vector<vec3>& normals);
+	mat4 adjustMatrix();
 	void draw();
+	void setColor(vec3);
 
-	float getmaxX() const { return maxX * scale; }
-	float getmaxY() const { return maxY * scale; }
-	float getmaxZ() const { return maxZ * scale; }
-	float getminX() const { return minX * scale; }
-	float getminY() const { return minY * scale; }
-	float getminZ() const { return minZ * scale; }
-	float getWidth() const { return width * scale; }
-	float getHeight() const { return height * scale; }
-	float getDepth() const { return depth * scale; }
+	float getmaxX() const { return maxX * s; }
+	float getmaxY() const { return maxY * s; }
+	float getmaxZ() const { return maxZ * s; }
+	float getminX() const { return minX * s; }
+	float getminY() const { return minY * s; }
+	float getminZ() const { return minZ * s; }
+	float getWidth() const { return width * s; }
+	float getHeight() const { return height * s; }
+	float getDepth() const { return depth * s; }
 };

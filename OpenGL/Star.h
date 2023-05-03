@@ -5,7 +5,7 @@ class Star : public Entity {
 protected:
 	int point;
 public:
-	Star(float x, float y, Model* model);
+	Star(float x, float y, Model* model, GLuint shaderProgram);
 	~Star() {};
 	const type_info& getType() override { return typeid(Star); }
 

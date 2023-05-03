@@ -1,17 +1,20 @@
 #pragma once
 #include "Model.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <Rpc.h>
 #pragma comment(lib, "Rpcrt4.lib")
 
 class Entity {
 protected:
 	UUID uuid;
+	GLuint shaderProgram;
 	Model* model;
 	float x, y, z;
 	float width, height, depth;
 	float speed;
 public:
-	Entity(float, float, float, float, Model*);
+	Entity(float, float, float, float, Model*, GLuint);
 	virtual ~Entity();
 
 	virtual const type_info& getType() { return typeid(Entity); }

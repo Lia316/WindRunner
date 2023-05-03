@@ -7,7 +7,8 @@ Model::Model(string filename) {
     minX = 100000;
     minY = 100000;
     minZ = 100000;
-    scale = 0.3;
+    s = 0.3;
+    color = vec3(1, 1, 1);
 
     load(filename);
     createMesh();
@@ -109,6 +110,11 @@ void Model::createMesh() {
         meshData.push_back(verts[facet_vrt[i]].y);
         meshData.push_back(verts[facet_vrt[i]].z);
 
+        meshData.push_back(color.x);
+        meshData.push_back(color.y);
+        meshData.push_back(color.z);
+        meshData.push_back(1.0f);
+
         meshData.push_back(tex_coord[facet_tex[i]].x);
         meshData.push_back(tex_coord[facet_tex[i]].y);
 
@@ -120,30 +126,37 @@ void Model::createMesh() {
     glBufferData(GL_ARRAY_BUFFER, meshData.size() * sizeof(float), &meshData[0], GL_STATIC_DRAW);
 
     // Vertex positions
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+
+    // Color
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // Texture coordinates
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(7 * sizeof(float)));
 
     // Normals
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(9 * sizeof(float)));
 
     glBindVertexArray(0);
 }
 
+void Model::setColor(vec3 color) {
+    this->color = color;
+}
 
 void Model::draw() {
-    glPushMatrix();
-    glScalef(scale, scale, scale);
-    glTranslatef(-minX, -minY, -avgZ);
-
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, facet_vrt.size() * 3);
-
     glBindVertexArray(0);
+}
 
-    glPopMatrix();
+mat4 Model::adjustMatrix() {
+    mat4 resize = scale(mat4(1.0f), vec3(s, s, s));
+    mat4 origin = translate(mat4(1.0f), vec3(-minX, -minY, -avgZ));
+
+    return origin * resize;
 }

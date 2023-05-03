@@ -34,19 +34,17 @@ void SceneNode::deleteChild(SceneNode* node) {
 }
 
 void SceneNode::draw() {
-	glPushMatrix();
-	glTranslatef(translate.x, translate.y, translate.z);
 	if (entity != nullptr) 
 		entity->draw();
 	// glTranslatef(translate.x, translate.y, translate.z);
 	for (vector<SceneNode*>::iterator i = children.begin(); i != children.end(); ++i) {
 		(*i)->draw();
 	}
-	glPopMatrix();
 }
 
 
-SceneGraph::SceneGraph() {
+SceneGraph::SceneGraph(GLuint program) {
+	shaderProgram = program;
 	root = new SceneNode(NULL);
 	materials = new Materials();
 	initialStructure();
@@ -55,11 +53,11 @@ SceneGraph::SceneGraph() {
 void SceneGraph::initialStructure() {
 	Model* characterPoses[KEY_FRAME_NUM - 1] = { materials->getModel(CHARACTER1), materials->getModel(CHARACTER2), materials->getModel(CHARACTER3) };
 
-	SceneNode* groundGroup = new SceneNode(new Ground(0, 0, NULL));
-	SceneNode* starGroup = new SceneNode(new Star(0, 0, NULL));
-	SceneNode* fireGroup = new SceneNode(new Fire(0, 0, NULL));
-	SceneNode* mushGroup = new SceneNode(new Mush(NULL));
-	SceneNode* characterGroup = new SceneNode(new Character(NULL));
+	SceneNode* groundGroup = new SceneNode(new Ground(0, 0, NULL, shaderProgram));
+	SceneNode* starGroup = new SceneNode(new Star(0, 0, NULL, shaderProgram));
+	SceneNode* fireGroup = new SceneNode(new Fire(0, 0, NULL, shaderProgram));
+	SceneNode* mushGroup = new SceneNode(new Mush(NULL, shaderProgram));
+	SceneNode* characterGroup = new SceneNode(new Character(NULL, shaderProgram));
 
 	root->addChild(groundGroup);
 	root->addChild(starGroup);
@@ -67,12 +65,12 @@ void SceneGraph::initialStructure() {
 	root->addChild(mushGroup);
 	root->addChild(characterGroup);
 
-	characterGroup->addChild(new SceneNode(new Character(characterPoses)));
+	characterGroup->addChild(new SceneNode(new Character(characterPoses, shaderProgram)));
 
 	float groundWidth = materials->getModel(GROUND)->getWidth();
 
 	for (int i = 0; i < 20; i++) {
-		Ground* newGround = new Ground(i * groundWidth, 0, materials->getModel(GROUND));
+		Ground* newGround = new Ground(i * groundWidth, 0, materials->getModel(GROUND), shaderProgram);
 		SceneNode* groundNode = new SceneNode(newGround);
 
 		groundGroup->addChild(groundNode);

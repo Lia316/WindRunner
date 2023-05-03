@@ -24,7 +24,7 @@ private:
     mat4 getProjection(CameraMode mode);
 
 public:
-    Camera(vec3 eye = vec3(0, 0, 500), vec3 position = vec3(0.0f, 0.0f, 0.0f), vec3 up = vec3(0.0f, 1.0f, 0.0f));
+    Camera(vec3 eye = vec3(0, 0, 100), vec3 position = vec3(0.0f, 0.0f, 0.0f), vec3 up = vec3(0.0f, -1.0f, 0.0f));
     mat4 getViewMatrix();
     mat4 getProjectionMatrix();
     void changeEyePos(CameraMode direction, float time);

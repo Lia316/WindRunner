@@ -1,12 +1,13 @@
 #include "Star.h"
 
-Star::Star(float x, float y, Model* model)
-	: Entity(x, y, 0, -3.5, model) { 
+Star::Star(float x, float y, Model* model, GLuint shaderProgram)
+	: Entity(x, y, 0, -3.5, model, shaderProgram) { 
 	point = 5;
 }
 
 void Star::draw() {
-	glColor3f(1.0, 1.0, 0.0);
+	if (model)
+		model->setColor(vec3(1, 1, 0));
 	Entity::draw();
 }
 

@@ -1,7 +1,7 @@
 #include "Fire.h"
 
-Fire::Fire(float x, float y, Model* model)
-	: Entity(x, y, 0, -10, model) { }
+Fire::Fire(float x, float y, Model* model, GLuint shaderProgram)
+	: Entity(x, y, 0, -10, model, shaderProgram) { }
 
 void Fire::draw() {
 	if (model == nullptr)
