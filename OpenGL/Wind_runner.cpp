@@ -1,80 +1,3 @@
-
-//GLuint  model_view;  // model-view matrix uniform shader variable location
-//GLuint  projection; // projection matrix uniform shader variable location
-//
-//Camera* camera;
-//CameraMode viewMode = SIDE;
-//float camTime = 0.0f;
-//bool isCamMoving = false;
-//
-//void init() {
-//    colorcube();
-//
-//    // Load shaders and use the resulting shader program
-//    Shader* shader = new Shader("mvp.vert", "main.frag");
-//    GLuint program = shader->program;
-//    glUseProgram(program);
-//
-//
-//    model_view = glGetUniformLocation(program, "model_view");
-//    projection = glGetUniformLocation(program, "projection");
-//    camera = new Camera();
-//
-//    glEnable(GL_DEPTH_TEST);
-//    glClearColor(1.0, 1.0, 1.0, 1.0);
-//}
-//
-//void display() {
-//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//    mat4 mv = camera->getViewMatrix();
-//    mat4 pv = camera->getProjectionMatrix();
-//    mat4 sc = scale(mat4(1.0f), vec3(500, 500, 500));
-//    mv = mv * sc;
-//
-//    glUniformMatrix4fv(model_view, 1, GL_FALSE, &mv[0][0]);
-//    glUniformMatrix4fv(projection, 1, GL_FALSE, &pv[0][0]);
-//    
-//    glutSwapBuffers();
-//}
-//
-//void keyboard(unsigned char key, int x, int y) {
-//    switch (key) {
-//    case 033: // Escape Key
-//    case 'q': case 'Q':
-//        exit(EXIT_SUCCESS);
-//        break;
-//    case '1':
-//        viewMode = FRONT;
-//        isCamMoving = true;
-//        break;
-//    case '2':
-//        viewMode = SIDE;
-//        isCamMoving = true;
-//        break;
-//    case '3':
-//        viewMode = ORTHO;
-//        isCamMoving = true;
-//        break;
-//    }
-//}
-//
-//void idle() {
-//    if (isCamMoving) {
-//        camTime += 0.0005;
-//
-//        if (camTime >= 1) {
-//            camera->setCameraMode(viewMode);
-//            camTime = 0;
-//            isCamMoving = false;
-//        }
-//        camera->changeEyePos(viewMode, camTime);
-//        camera->changeProjection(viewMode, camTime);
-//
-//        glutPostRedisplay();
-//    }
-//}
-
 #include "Shader.h"
 #include "Camera.h"
 #include "GameManager.h"
@@ -90,6 +13,7 @@ bool isCamMoving = false;
 
 void init();
 void draw();
+void idle();
 void moveTimer(int time);
 void fireTimer(int time);
 void starTimer(int time);
@@ -109,7 +33,7 @@ int main(int argc, char** argv) {
 	glutTimerFunc(GROUNDTIME, groundTimer, 0);
 	glutTimerFunc(GROUNDTIME * 5, mushTimer, 0);
 	glutKeyboardFunc(keyboard);
-//    glutIdleFunc(idle);
+    glutIdleFunc(idle);
 
 	glutMainLoop();
 	return 0;
@@ -152,6 +76,22 @@ void draw() {
 	glutSwapBuffers();
 }
 
+void idle() {
+    if (isCamMoving) {
+        camTime += 0.0005;
+
+        if (camTime >= 1) {
+            camera->setCameraMode(viewMode);
+            camTime = 0;
+            isCamMoving = false;
+        }
+        camera->changeEyePos(viewMode, camTime);
+        camera->changeProjection(viewMode, camTime);
+
+        glutPostRedisplay();
+    }
+}
+
 void moveTimer(int time) {
 	gameManager->move(moveTimer);
 	gameManager->characterAnimation(moveTimer);
@@ -174,5 +114,23 @@ void mushTimer(int time) {
 }
 
 void keyboard(unsigned char key, int x, int y) {
+	switch (key) {
+    case 033: // Escape Key
+    case 'q': case 'Q':
+        exit(EXIT_SUCCESS);
+        break;
+    case '1':
+        viewMode = FRONT;
+        isCamMoving = true;
+        break;
+    case '2':
+        viewMode = SIDE;
+        isCamMoving = true;
+        break;
+    case '3':
+        viewMode = ORTHO;
+        isCamMoving = true;
+        break;
+    }
 	gameManager->keyboard(key, x, y);
 }
