@@ -160,6 +160,7 @@
     <ClCompile Include="Materials.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="mush.cpp" />
+    <ClCompile Include="RgbImage.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Star.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Materials.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="mush.h" />
+    <ClInclude Include="RgbImage.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Star.h" />
