@@ -27,6 +27,7 @@ public:
 		return UuidCompare(&uuid1, &uuid2, &s) == 0;
 	}
 
+	virtual void loadTexture(const char** filename, unsigned int filesize);
 	virtual void draw();
 	virtual void move();
 	virtual float getPositionX();	

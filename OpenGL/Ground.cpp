@@ -4,6 +4,9 @@ Ground::Ground(float posX, int height, Model* model, GLuint shaderProgram)
 	: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, 0, -3.5, model, shaderProgram) {
 	x = posX;
 	y = height * getHeight();
+
+	const char* file[] = { "C:/Users/light/source/repos/textured_mesh/cube/BasicShapeMaterial_D.bmp" };
+	loadTexture(file, 1);
 }
 
 void Ground::draw() {

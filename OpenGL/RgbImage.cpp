@@ -19,6 +19,8 @@
  *
  */
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "RgbImage.h"
 
 #ifndef RGBIMAGE_DONT_USE_OPENGL

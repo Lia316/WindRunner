@@ -19,6 +19,10 @@ void Entity::move() {
 	x += speed;
 }
 
+void Entity::loadTexture(const char** filename, unsigned int filesize) {
+	model->loadTexture(shaderProgram, filename, filesize);
+}
+
 void Entity::draw() {
 	if (model == nullptr) return;
 

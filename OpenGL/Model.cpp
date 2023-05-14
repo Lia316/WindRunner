@@ -1,4 +1,5 @@
 #include "Model.h"
+#include "RgbImage.h"
 
 Model::Model(string filename) {
     maxX = -100000;
@@ -142,6 +143,32 @@ void Model::createMesh() {
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(9 * sizeof(float)));
 
     glBindVertexArray(0);
+}
+
+void Model::loadTexture(GLuint shaderProgram, const char** filename, unsigned int filesize) {
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glShadeModel(GL_FLAT);
+    glEnable(GL_DEPTH_TEST);
+
+    for (unsigned int i = 0; i < filesize; i++) {
+        unsigned int texture;
+        glGenTextures(1, &texture);
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+        RgbImage theTexMap(filename[i]);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, theTexMap.GetNumCols(), theTexMap.GetNumRows(), 0, GL_RGB, GL_UNSIGNED_BYTE, theTexMap.ImageData());
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glUniform1i(glGetUniformLocation(shaderProgram, "texture_diffuse"), i);
+    }
+    glActiveTexture(GL_TEXTURE0);
 }
 
 void Model::setColor(vec3 color) {
