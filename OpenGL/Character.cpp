@@ -18,6 +18,9 @@ Character::Character(Model* models[KEY_FRAME_NUM - 1], GLuint shaderProgram)
 	}
 	time = 0;
 	currentKeyFrame = 0;
+
+	const char* file[] = { "C:/Users/light/source/repos/textured_mesh/white.bmp" };
+	loadTexture(file, 1);
 }
 
 Character::~Character() {

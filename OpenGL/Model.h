@@ -50,7 +50,6 @@ public:
 	GLuint vbo;
 
 	void load(string filename);
-	void loadTexture(GLuint shaderProgram, const char** filename, unsigned int filesize);
 	mat4 adjustMatrix();
 	void draw();
 	void setColor(vec3);

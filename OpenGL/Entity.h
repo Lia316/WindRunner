@@ -10,9 +10,13 @@ protected:
 	UUID uuid;
 	GLuint shaderProgram;
 	Model* model;
+	int filesize;
+	GLuint textureIds[5];
+
 	float x, y, z;
 	float width, height, depth;
 	float speed;
+
 public:
 	Entity(float, float, float, float, Model*, GLuint);
 	virtual ~Entity();
