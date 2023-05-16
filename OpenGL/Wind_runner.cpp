@@ -21,6 +21,7 @@ void starTimer(int time);
 void groundTimer(int time);
 void mushTimer(int time);
 void keyboard(unsigned char key, int x, int y);
+void setUpLightEffect(Shader* shader);
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
