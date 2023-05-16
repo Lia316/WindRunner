@@ -48,7 +48,7 @@ void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 
-    Shader* shader = new Shader("mvp.vert", "main.frag");
+    Shader* shader = new Shader("objects.vert", "objects.frag");
     GLuint program = shader->program;
     glUseProgram(program);
 

@@ -182,8 +182,8 @@
     <ClInclude Include="Star.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="main.frag" />
-    <None Include="mvp.vert" />
+    <None Include="objects.frag" />
+    <None Include="objects.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

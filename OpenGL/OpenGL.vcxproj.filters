@@ -100,10 +100,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="mvp.vert">
+    <None Include="objects.vert">
       <Filter>소스 파일</Filter>
     </None>
-    <None Include="main.frag">
+    <None Include="objects.frag">
       <Filter>소스 파일</Filter>
     </None>
   </ItemGroup>
