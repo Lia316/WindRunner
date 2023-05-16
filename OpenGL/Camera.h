@@ -26,6 +26,7 @@ private:
 public:
     Camera();
     mat4 getProjectionViewMatrix();
+    vec3 getPosition();
     void changeView(CameraMode mode, float time);
     void setCameraMode(CameraMode mode);
 };
