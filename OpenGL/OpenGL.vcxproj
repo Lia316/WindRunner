@@ -182,6 +182,8 @@
     <ClInclude Include="Star.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="light.frag" />
+    <None Include="light.vert" />
     <None Include="objects.frag" />
     <None Include="objects.vert" />
   </ItemGroup>

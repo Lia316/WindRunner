@@ -106,5 +106,11 @@
     <None Include="objects.frag">
       <Filter>소스 파일</Filter>
     </None>
+    <None Include="light.vert">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="light.frag">
+      <Filter>소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>
