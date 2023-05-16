@@ -12,6 +12,7 @@ protected:
 	Model* model;
 	int filesize;
 	GLuint textureIds[5];
+	const char* textureType[3] = {"texture_diffuse", "texture_normal", "texture_specular"};
 
 	float x, y, z;
 	float width, height, depth;

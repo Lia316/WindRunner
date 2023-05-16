@@ -28,14 +28,16 @@ uniform vec3 viewPos;
 uniform DirectionalLight directLight;
 uniform PointLight pointLight;
 uniform sampler2D texture_diffuse;
+uniform sampler2D texture_normal;
 uniform sampler2D texture_specular;
 uniform float shininess;
+uniform int hasTexture;
 
 vec3 calDirectLight(DirectionalLight light, vec3 normal, vec3 viewDir);
 vec3 calPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
-void main() {    
-    vec3 norm = normalize(normal);
+void main() {
+    vec3 norm = hasTexture ? normalize(vec3(texture(texture_normal, texCoord))) : normalize(normal);
     vec3 viewDir = normalize(viewPos - fragPos);
     
     vec3 result = calDirectLight(directLight, norm, viewDir) + calPointLight(pointLights[i], norm, fragPos, viewDir);     

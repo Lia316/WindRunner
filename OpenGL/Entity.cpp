@@ -56,7 +56,7 @@ void Entity::draw() {
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &modelMatrix[0][0]);
 
 	for (unsigned int i = 0; i < filesize; i++) {
-		GLuint textureLoc = glGetUniformLocation(shaderProgram, "texture_diffuse");
+		GLuint textureLoc = glGetUniformLocation(shaderProgram, textureType[i]);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, textureIds[i]);
 		glUniform1i(textureLoc, i);
