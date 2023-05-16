@@ -3,9 +3,9 @@
 
 using namespace std;
 
-GameManager::GameManager(GLuint program) {
-	shaderProgram = program;
-	sceneGraph = new SceneGraph(program);
+GameManager::GameManager(GLuint objectShader, GLuint lightShader) {
+	objectProgram = objectShader;
+	sceneGraph = new SceneGraph(objectShader, lightShader);
 	viewMode = 1;
 
 	isGameEnd = false;

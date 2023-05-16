@@ -48,14 +48,17 @@ void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 
-    Shader* shader = new Shader("objects.vert", "objects.frag");
-    GLuint program = shader->program;
-    glUseProgram(program);
+    Shader* objectShader = new Shader("objects.vert", "objects.frag");
+	Shader* lightShader = new Shader("light.vert", "light.frag");
+    GLuint objectProgram = objectShader->program;
+	GLuint lightProgram = lightShader->program;
+    glUseProgram(objectProgram);
+	glUseProgram(lightProgram);
 
-	projection_view = glGetUniformLocation(program, "projection_view");
+	projection_view = glGetUniformLocation(objectProgram, "projection_view");
 
 	camera = new Camera();
-	gameManager = new GameManager(program);
+	gameManager = new GameManager(objectProgram, lightProgram);
 }
 
 void draw() {
