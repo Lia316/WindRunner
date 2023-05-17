@@ -62,13 +62,13 @@ mat4 Camera::getProjection(CameraMode mode) {
 vec3 Camera::getTransform(CameraMode mode) {
     switch (mode) {
     case FRONT:
-        return vec3(-250, -100, 0);
+        return vec3(-200, -100, 0);
     case SIDE:
-        return vec3(-250, -200, 0);
+        return vec3(-200, -200, 0);
     case ORTHO:
-        return vec3(-250, -250, 0);
+        return vec3(-200, -250, 0);
     default:
-        return vec3(-250, -200, 0);
+        return vec3(-200, -200, 0);
     }
 }
 

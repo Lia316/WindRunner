@@ -1,3 +1,5 @@
+#version 330 core
+
 out vec4 fColor;
 
 struct DirectionalLight {
@@ -31,13 +33,12 @@ uniform sampler2D texture_diffuse;
 uniform sampler2D texture_normal;
 uniform sampler2D texture_specular;
 uniform float shininess;
-uniform int hasTexture = 1;
 
 vec3 calDirectLight(DirectionalLight light, vec3 normal, vec3 viewDir);
 vec3 calPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main() {
-    vec3 norm =normalize(vec3(texture(texture_normal, texCoord)));
+    vec3 norm =normalize(normal); // (vec3(texture(texture_normal, texCoord)));
     vec3 viewDir = normalize(viewPos - fragPos);
     
     vec3 result = calDirectLight(directLight, norm, viewDir) + calPointLight(pointLight, norm, fragPos, viewDir);     
@@ -53,7 +54,7 @@ vec3 calDirectLight(DirectionalLight light, vec3 normal, vec3 viewDir) {
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
 
     vec3 ambient = light.ambient * vec3(texture(texture_diffuse, texCoord));
-    vec3 diffuse = light.diffuse * diff * vec3(texture_diffuse, texCoord));
+    vec3 diffuse = light.diffuse * diff * vec3(texture(texture_diffuse, texCoord));
     vec3 specular = light.specular * spec * vec3(texture(texture_specular, texCoord));
 
     return (ambient + diffuse + specular);

@@ -51,12 +51,10 @@ void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 
-    Shader* objectShader = new Shader("objects.vert", "objects.frag");
 	Shader* lightShader = new Shader("light.vert", "light.frag");
-    GLuint objectProgram = objectShader->program;
+    Shader* objectShader = new Shader("objects.vert", "objects.frag");
 	GLuint lightProgram = lightShader->program;
-    glUseProgram(objectProgram);
-	glUseProgram(lightProgram);
+	GLuint objectProgram = objectShader->program;
 
 	object_projection_view = glGetUniformLocation(objectProgram, "projection_view");
 	light_projection_view = glGetUniformLocation(lightProgram, "projection_view");
@@ -164,7 +162,7 @@ void setUpLightEffect(Shader* shader) {
     shader->setFloat("material.shininess", 32.0f);
     // directional light
     shader->setVec3("directLight.direction", -0.2f, -1.0f, -0.3f);
-    shader->setVec3("directLight.ambient", 0.05f, 0.05f, 0.05f);
+    shader->setVec3("directLight.ambient", 0.5f, 0.5f, 0.5f); // 0.05f, 0.05f, 0.05f);
     shader->setVec3("directLight.diffuse", 0.4f, 0.4f, 0.4f);
     shader->setVec3("directLight.specular", 0.5f, 0.5f, 0.5f);
     // point light
