@@ -16,12 +16,13 @@ private:
     vec3 eye;
     vec3 position;
     vec3 up;
+    vec3 cameraPos;
     mat4 projectionViewMatrix;
     CameraMode currentMode;
 
     mat4 getCamera(CameraMode mode);
     mat4 getProjection(CameraMode mode);
-    mat4 getTransform(CameraMode mode);
+    vec3 getTransform(CameraMode mode);
 
 public:
     Camera();

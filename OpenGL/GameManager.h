@@ -15,7 +15,6 @@ class GameManager {
 private: 
 	SceneGraph* sceneGraph;
 	GLuint objectProgram;
-	GLuint shaderProgram;
 	int viewMode;
 public:
 	GameManager(GLuint, GLuint);

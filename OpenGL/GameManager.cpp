@@ -225,7 +225,7 @@ void GameManager::firemaker(void(*t)(int)) {
 		firenum--;
 	}
 	if (firenum < MAXFIRE) {
-		Fire* newFire = new Fire(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(FIRE), shaderProgram);
+		Fire* newFire = new Fire(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(FIRE), objectProgram);
 		SceneNode* fireNode = new SceneNode(newFire);
 		sceneGraph->addChild(fireGroup, fireNode);
 		firenum++;
@@ -248,7 +248,7 @@ void GameManager::starmaker(void(*t)(int)) {
 		starnum--;
 	}
 	if (starnum < MAXSTAR) {
-		Star* newStar = new Star(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(STAR), shaderProgram);
+		Star* newStar = new Star(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(STAR), objectProgram);
 		SceneNode* starNode = new SceneNode(newStar);
 		sceneGraph->addChild(starGroup, starNode);
 		starnum++;
@@ -273,7 +273,7 @@ void GameManager::groundmaker(void(*t)(int)) {
 	}
 	if (groundnum < MAXGROUND) {
 		for (int i = 0; i < height[random]; i++) {
-			Ground* newGround = new Ground(groundMaxX, i, sceneGraph->materials->getModel(GROUND), shaderProgram);
+			Ground* newGround = new Ground(groundMaxX, i, sceneGraph->materials->getModel(GROUND), objectProgram);
 			SceneNode* groundNode = new SceneNode(newGround);
 
 			sceneGraph->addChild(groundGroup, groundNode);
@@ -299,7 +299,7 @@ void GameManager::mushmaker(void(*t)(int)) {
 		mushnum--;
 	}
 	if (mushnum < MAXMUSH) {
-		Mush* newMush = new Mush(sceneGraph->materials->getModel(MUSHROOM), shaderProgram);
+		Mush* newMush = new Mush(sceneGraph->materials->getModel(MUSHROOM), objectProgram);
 		SceneNode* mushNode = new SceneNode(newMush);
 		sceneGraph->addChild(mushGroup, mushNode);
 

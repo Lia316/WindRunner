@@ -37,10 +37,10 @@ vec3 calDirectLight(DirectionalLight light, vec3 normal, vec3 viewDir);
 vec3 calPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main() {
-    vec3 norm = hasTexture ? normalize(vec3(texture(texture_normal, texCoord))) : normalize(normal);
+    vec3 norm =normalize(vec3(texture(texture_normal, texCoord)));
     vec3 viewDir = normalize(viewPos - fragPos);
     
-    vec3 result = calDirectLight(directLight, norm, viewDir) + calPointLight(pointLights[i], norm, fragPos, viewDir);     
+    vec3 result = calDirectLight(directLight, norm, viewDir) + calPointLight(pointLight, norm, fragPos, viewDir);     
     
     fColor = vec4(result, 1.0);
 }
