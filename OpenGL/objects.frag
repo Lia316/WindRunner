@@ -38,12 +38,22 @@ vec3 calDirectLight(DirectionalLight light, vec3 normal, vec3 viewDir);
 vec3 calPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main() {
-    vec3 norm =normalize(normal); // (vec3(texture(texture_normal, texCoord)));
+    vec3 T = dFdx(fragPos);
+    vec3 B = dFdy(fragPos);
+    vec3 N = normalize(normal);
+
+    mat3 TBN = transpose(mat3(T, B, N));
+    vec3 normMap = texture(texture_normal, texCoord).rgb;
+    normMap = normMap * 2.0 - 1.0;
+    vec3 norm = normalize(TBN * normMap);
+    vec3 norm2 = normalize(TBN * N);
+
     vec3 viewDir = normalize(viewPos - fragPos);
     
-    vec3 result = calDirectLight(directLight, norm, viewDir) + calPointLight(pointLight, norm, fragPos, viewDir);     
-    
-    fColor = vec4(result, 1.0);
+    vec3 result = calDirectLight(directLight, norm2, viewDir);
+    result += calPointLight(pointLight, norm2, fragPos, viewDir);
+
+   fColor = vec4(result, 1.0);
 }
 
 vec3 calDirectLight(DirectionalLight light, vec3 normal, vec3 viewDir) {

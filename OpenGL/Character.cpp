@@ -19,8 +19,10 @@ Character::Character(Model* models[KEY_FRAME_NUM - 1], GLuint shaderProgram)
 	time = 0;
 	currentKeyFrame = 0;
 
-	const char* file[] = { "C:/Users/light/source/repos/textured_mesh/white.bmp" };
-	loadTexture(file, 1);
+	const char* file[] = { "C:/Users/light/source/repos/textured_mesh/white.bmp" ,
+		 "C:/Users/light/source/repos/textured_mesh/fire_ball/M_ContentWindow_N.bmp" ,
+		 "C:/Users/light/source/repos/textured_mesh/fire_ball/M_ContentWindow_S.bmp" };
+	loadTexture(file, 3);
 }
 
 Character::~Character() {
@@ -84,6 +86,10 @@ float Character::getPositionX() {
 
 float Character::getPositionY() {
     return y;
+}
+
+vec3 Character::getPosition() {
+	return vec3(x, y, z);
 }
 
 void Character::animation(void(*t)(int))

@@ -49,4 +49,5 @@ public:
 	int mushnum;
 	float groundMaxX;
 	bool isHole;
+	float lightAngle;
 };

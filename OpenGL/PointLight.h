@@ -10,4 +10,6 @@ public:
 	const type_info& getType() override { return typeid(PointLight); }
 
 	void draw();
+	void rotate(vec3 base, float angle);
+	vec3 getPosition();
 };

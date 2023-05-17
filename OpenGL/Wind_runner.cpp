@@ -67,7 +67,7 @@ void init(void) {
 }
 
 void draw() {
-	glClearColor(0.5, 0.5, 0.5, 0.0);
+	glClearColor(0.1, 0.1, 0.1, 0.0);
 
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -76,7 +76,7 @@ void draw() {
 	vec3 cp = camera->getPosition();
     glUniformMatrix4fv(object_projection_view, 1, GL_FALSE, &vp[0][0]);
 	glUniformMatrix4fv(light_projection_view, 1, GL_FALSE, &vp[0][0]);
-	glUniformMatrix4fv(camera_pos, 1, GL_FALSE, &cp[0]);
+	glUniform3fv(camera_pos, 1, &cp[0]);
 	
 	gameManager->draw();
 	glutSwapBuffers();
@@ -162,15 +162,14 @@ void setUpLightEffect(Shader* shader) {
     shader->setFloat("material.shininess", 32.0f);
     // directional light
     shader->setVec3("directLight.direction", -0.2f, -1.0f, -0.3f);
-    shader->setVec3("directLight.ambient", 0.5f, 0.5f, 0.5f); // 0.05f, 0.05f, 0.05f);
-    shader->setVec3("directLight.diffuse", 0.4f, 0.4f, 0.4f);
+    shader->setVec3("directLight.ambient", 0.2f, 0.2f, 0.2f);
+    shader->setVec3("directLight.diffuse", 0.4f, 0.4f, 0.4f); 
     shader->setVec3("directLight.specular", 0.5f, 0.5f, 0.5f);
     // point light
-    shader->setVec3("pointLight.position", 0.7f, 0.2f, 2.0f);
-    shader->setVec3("pointLight.ambient", 0.05f, 0.05f, 0.05f);
-    shader->setVec3("pointLight.diffuse", 0.8f, 0.8f, 0.8f);
+    shader->setVec3("pointLight.ambient", 0.8f, 0.8f, 0.8f);
+    shader->setVec3("pointLight.diffuse", 0.3f, 0.3f, 0.3f);
     shader->setVec3("pointLight.specular", 1.0f, 1.0f, 1.0f);
     shader->setFloat("pointLight.constant", 1.0f);
-    shader->setFloat("pointLight.linear", 0.09f);
-    shader->setFloat("pointLight.quadratic", 0.032f);
+    shader->setFloat("pointLight.linear", 0.0003f); 
+    shader->setFloat("pointLight.quadratic", 0.0001f); 
 }

@@ -32,5 +32,6 @@ public:
 	bool isJumping();
 	float getPositionX();
 	float getPositionY();
+	vec3 getPosition();
 	void animation(void(*t)(int));
 };

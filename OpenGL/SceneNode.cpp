@@ -69,7 +69,7 @@ void SceneGraph::initialStructure() {
 	root->addChild(lightGroup);
 
 	characterGroup->addChild(new SceneNode(new Character(characterPoses, objectShader)));
-	lightGroup->addChild(new SceneNode(new PointLight(10, 10, materials->getModel(FIRE), lightShader)));
+	lightGroup->addChild(new SceneNode(new PointLight(140, 90, materials->getModel(FIRE), lightShader)));
 
 	float groundWidth = materials->getModel(GROUND)->getWidth();
 

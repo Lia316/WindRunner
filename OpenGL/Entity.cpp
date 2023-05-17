@@ -61,7 +61,8 @@ void Entity::draw() {
 		glBindTexture(GL_TEXTURE_2D, textureIds[i]);
 		glUniform1i(textureLoc, i);
 	}
-	glActiveTexture(GL_TEXTURE0);
+	if (filesize)
+		glActiveTexture(GL_TEXTURE0);
 
 	model->draw();
 }

@@ -17,6 +17,7 @@ GameManager::GameManager(GLuint objectShader, GLuint lightShader) {
 
 	groundMaxX = 1000;
 	isHole = false;
+	lightAngle = 0;
 }
 
 // ###### Draw ######
@@ -48,6 +49,7 @@ void GameManager::move(void(*t)(int)) {
 	SceneNode* fireGroup = sceneGraph->findGroup(typeid(Fire));
 	SceneNode* starGroup = sceneGraph->findGroup(typeid(Star));
 	SceneNode* mushGroup = sceneGraph->findGroup(typeid(Mush));
+	SceneNode* lightGroup = sceneGraph->findGroup(typeid(PointLight));
 
 	// 1. Character move
 	Character* character = dynamic_cast<Character*>(sceneGraph->findNode(typeid(Character))->getEntity());
@@ -141,6 +143,20 @@ void GameManager::move(void(*t)(int)) {
 			break;
 		}
 	}
+
+	// 6. Point Light
+	PointLight* light = dynamic_cast<PointLight*>(sceneGraph->findNode(typeid(PointLight))->getEntity());
+
+	lightAngle += 0.05;
+	if (lightAngle >= 360) 
+		lightAngle -= 360;
+
+	vec3 characterPos = character->getPosition();
+	light->rotate(characterPos, lightAngle);
+	vec3 lightPos = light->getPosition();
+
+	GLuint pointLightLoc = glGetUniformLocation(objectProgram, "pointLight.position");
+	glUniform3fv(pointLightLoc, 1, &lightPos[0]);
 
 	if (isGameEnd) {
 		character->sink();
