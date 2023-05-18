@@ -12,6 +12,7 @@ uniform mat4 view;
 uniform mat4 projection;
 uniform vec4 lightPosition;   // point light
 uniform vec4 lightDirection;  // directional light
+uniform vec3 viewPos;
 
 uniform float shininess;
 uniform sampler2D texture_diffuse;
@@ -22,22 +23,24 @@ vec4 calDirectLight();
 vec4 calPointLight();
 
 void main() {
-    vec4 result = calDirectLight() + calPointLight();
+    //vec4 result = calDirectLight() + calPointLight();
+    vec4 result = calDirectLight();
+    //vec4 result = calPointLight();
 
     color = vec4(result.xyz, 1.0);
     gl_Position = projection * view * model * vec4(vPosition, 1.0f);
 }
 
 vec4 calDirectLight() {
-    vec4 light_ambient = vec4(0.2f, 0.2f, 0.2f, 1.0f);
-    vec4 light_diffuse = vec4(0.4f, 0.4f, 0.4f, 1.0f);
+    vec4 light_ambient = vec4(0.05f, 0.05f, 0.05f, 1.0f);
+    vec4 light_diffuse = vec4(0.2f, 0.2f, 0.2f, 1.0f);
     vec4 light_specular = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 
     vec3 pos = (view * model * vec4(vPosition, 1.0f)).xyz;
-    vec3 L = normalize(-lightDirection).xyz;
-    vec3 E = normalize(-pos);
+    vec3 L = normalize(-(view * lightDirection)).xyz;
+    vec3 E = normalize(viewPos - pos);
     vec3 H = normalize(L + E);
-    vec3 N = normalize(view * model * vec4(vNormal, 0.0)).xyz;
+    vec3 N = normalize((transpose(inverse(view * model)) * vec4(vNormal, 0.0f)).xyz);
 
     float kd = max(dot(L, N), 0.0);
     float ks = pow(max(dot(N, H), 0.0), shininess);
@@ -55,15 +58,15 @@ vec4 calDirectLight() {
 }
 
 vec4 calPointLight() {
-    vec4 light_ambient = vec4(0.8f, 0.8f, 0.8f, 1.0f);
-    vec4 light_diffuse = vec4(0.3f, 0.3f, 0.3f, 1.0f);
+    vec4 light_ambient = vec4(0.9f, 0.9f, 0.9f, 1.0f);
+    vec4 light_diffuse = vec4(0.7f, 0.7f, 0.7f, 1.0f);
     vec4 light_specular = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     vec3 pos = (view * model * vec4(vPosition, 1.0f)).xyz;
     vec3 L = normalize(lightPosition.xyz - pos);
-    vec3 E = normalize(-pos);
+    vec3 E = normalize(viewPos - pos);
     vec3 H = normalize(L + E);
-    vec3 N = normalize(view * model * vec4(vNormal, 0.0)).xyz;
+    vec3 N = normalize((transpose(inverse(view * model)) * vec4(vNormal, 0.0f)).xyz);
 
     float kd = max(dot(L, N), 0.0);
     float ks = pow(max(dot(N, H), 0.0), shininess);

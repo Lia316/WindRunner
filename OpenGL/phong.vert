@@ -18,7 +18,6 @@ uniform vec3 viewPos;
 
 void main() {
     vec3 fragPos = vec3(model * vec4(vPosition, 1.0));
-    //vec3 lightPos = vec3(model * lightPosition);
 
     fN = transpose(inverse(mat3(model))) * vNormal; // vNormal;
     fE = viewPos - fragPos;
