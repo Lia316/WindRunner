@@ -13,18 +13,20 @@ uniform sampler2D texture_specular;
 
 out vec4 fColor;
 
-vec3 calDirectLight();
-vec3 calPointLight();
+vec4 calDirectLight();
+vec4 calPointLight();
 
 void main() {
-    vec4 result = calDirectLight() + calPointLight();
+    //vec4 result = calDirectLight() + calPointLight();
+    vec4 result = calDirectLight();
+    //vec4 result = calPointLight();
 
-    fColor = vec4(result.xyz, 1.0);
+    fColor = vec4(result.xyz, 1.0f);
 }
 
 vec4 calDirectLight() {
-    vec4 light_ambient = vec4(0.2f, 0.2f, 0.2f, 1.0f);
-    vec4 light_diffuse = vec4(0.4f, 0.4f, 0.4f, 1.0f);
+    vec4 light_ambient = vec4(0.05f, 0.05f, 0.05f, 1.0f);
+    vec4 light_diffuse = vec4(0.3f, 0.3f, 0.3f, 1.0f);
     vec4 light_specular = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 
     vec3 N = normalize(fN);
@@ -35,16 +37,18 @@ vec4 calDirectLight() {
     float kd = max(dot(L, N), 0.0);
     float ks = pow(max(dot(N, H), 0.0), shininess);
 
-    vec4 ambient = light_ambient * texture(texture_diffuse, texCoord);
+    vec4 ambient = vec4(0.0);// light_ambient * texture(texture_diffuse, texCoord);
     vec4 diffuse = light_diffuse * kd * texture(texture_diffuse, texCoord);
-    vec4 specular = light_specular * ks * texture(texture_specular, texCoord);
-
+    vec4 specular = vec4(0.0);// light_specular * ks * texture(texture_specular, texCoord);
+    
+    //return vec4(N.xyz, 1.0);
+    
     if(dot(L, N) < 0.0) {
         specular = vec4(0.0, 0.0, 0.0, 1.0);
     }
 
     vec4 result = ambient + diffuse + specular;
-    return result;
+    return vec4(result.xyz, 1.0);
 }
 
 vec4 calPointLight() {
@@ -71,7 +75,6 @@ vec4 calPointLight() {
     float constant = 1.0f;
     float linear = 0.0003f;
     float quadratic = 0.0001f;
-
     float distance = length(fL_p);
     float attenuation = 1.0 / (constant + linear * distance + quadratic * (distance * distance));    
 

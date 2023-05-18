@@ -4,9 +4,11 @@ Camera::Camera() {
     eye = vec3(0, 0, 400);
     position = vec3(0.0f, 0.0f, 0.0f);
     up = vec3(0.0f, 1.0f, 0.0f);
-    cameraPos = vec3(0.0f);
+    //cameraPos = vec3(0.0f);
 
     currentMode = SIDE;
+    projectionMatrix = mat4(1.0f);
+    viewMatrix = mat4(1.0f);
     projectionViewMatrix = mat4(1.0f);
     changeView(SIDE, 1);
 }
@@ -59,16 +61,16 @@ mat4 Camera::getProjection(CameraMode mode) {
     }
 }
 
-vec3 Camera::getTransform(CameraMode mode) {
+mat4 Camera::getTransform(CameraMode mode) {
     switch (mode) {
     case FRONT:
-        return vec3(0, -100, 0);
+        return  translate(mat4(1.0f), vec3(0, -100, 0));
     case SIDE:
-        return vec3(-250, -200, 0);
+        return  translate(mat4(1.0f), vec3(-250, -200, 0));
     case ORTHO:
-        return vec3(-250, -250, 0);
+        return  translate(mat4(1.0f), vec3(-250, -250, 0));
     default:
-        return vec3(-250, -200, 0);
+        return  translate(mat4(1.0f), vec3(-250, -200, 0));
     }
 }
 
@@ -77,9 +79,11 @@ void Camera::changeView(CameraMode mode, float time) {
     if (time > 1 || time <= 0) return;
        
     mat4 view = getCamera(currentMode) + time * (getCamera(mode) - getCamera(currentMode));
-    mat4 transform = time * translate(mat4(1.0f), getTransform(mode));
+    mat4 transform = getTransform(currentMode) + time * (getTransform(mode) - getTransform(currentMode));
     mat4 projection = getProjection(currentMode) + time * (getProjection(mode) - getProjection(currentMode));
     
-    cameraPos = eye - getTransform(mode);
+    viewMatrix = transform * view;
+    projectionMatrix = projection;
+    //cameraPos = eye - getTransform(mode);
     projectionViewMatrix = projection * transform * view;
 }

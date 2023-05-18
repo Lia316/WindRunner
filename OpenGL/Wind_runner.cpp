@@ -3,9 +3,13 @@
 #include "GameManager.h"
 
 GameManager* gameManager;
-GLuint  object_projection_view;
-GLuint  light_projection_view;
-GLuint  camera_pos;
+GLuint  object_view;
+GLuint  object_projection;
+GLuint  light_view;
+GLuint  light_projection;
+//GLuint  light_projection_view;
+//GLuint  object_projection_view;
+//GLuint  camera_pos;
 
 Camera* camera;
 CameraMode viewMode = SIDE;
@@ -51,17 +55,20 @@ void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 
-	Shader* lightShader = new Shader("light.vert", "light.frag");
-    Shader* objectShader = new Shader("objects.vert", "objects.frag");
-	GLuint lightProgram = lightShader->program;
+	//Shader* lightShader = new Shader("light.vert", "light.frag");
+    Shader* objectShader = new Shader("phong.vert", "phong.frag");
+	//GLuint lightProgram = lightShader->program;
 	GLuint objectProgram = objectShader->program;
 
-	object_projection_view = glGetUniformLocation(objectProgram, "projection_view");
-	light_projection_view = glGetUniformLocation(lightProgram, "projection_view");
-	camera_pos = glGetUniformLocation(objectProgram, "viewPos");
+	//object_projection_view = glGetUniformLocation(objectProgram, "projection_view");
+	object_view = glGetUniformLocation(objectProgram, "view");
+	object_projection = glGetUniformLocation(objectProgram, "projection");
+	//light_view = glGetUniformLocation(lightProgram, "view");
+	//light_projection = glGetUniformLocation(lightProgram, "projection");
+	//camera_pos = glGetUniformLocation(objectProgram, "viewPos");
 
 	camera = new Camera();
-	gameManager = new GameManager(objectProgram, lightProgram);
+	gameManager = new GameManager(objectProgram, objectProgram);
 
 	setUpLightEffect(objectShader);
 }
@@ -73,10 +80,16 @@ void draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	mat4 vp = camera->getProjectionViewMatrix();
-	vec3 cp = camera->getPosition();
-    glUniformMatrix4fv(object_projection_view, 1, GL_FALSE, &vp[0][0]);
-	glUniformMatrix4fv(light_projection_view, 1, GL_FALSE, &vp[0][0]);
-	glUniform3fv(camera_pos, 1, &cp[0]);
+	mat4 vm = camera->getViewMatrix();
+	mat4 pm = camera->getProjectionMatrix();
+	//vec3 cp = camera->getPosition();
+	//glUniform3fv(camera_pos, 1, &cp[0]);
+    //glUniformMatrix4fv(object_projection_view, 1, GL_FALSE, &vp[0][0]);
+	//glUniformMatrix4fv(light_projection_view, 1, GL_FALSE, &vp[0][0]);
+	glUniformMatrix4fv(object_view, 1, GL_FALSE, &vm[0][0]);
+	glUniformMatrix4fv(object_projection, 1, GL_FALSE, &pm[0][0]);
+	glUniformMatrix4fv(light_view, 1, GL_FALSE, &vm[0][0]);
+	glUniformMatrix4fv(light_projection, 1, GL_FALSE, &pm[0][0]);
 	
 	gameManager->draw();
 	glutSwapBuffers();
@@ -159,17 +172,20 @@ void mushTimer(int time) {
 }
 
 void setUpLightEffect(Shader* shader) {
-    shader->setFloat("material.shininess", 32.0f);
-    // directional light
-    shader->setVec3("directLight.direction", -0.2f, -1.0f, -0.3f);
-    shader->setVec3("directLight.ambient", 0.2f, 0.2f, 0.2f);
-    shader->setVec3("directLight.diffuse", 0.4f, 0.4f, 0.4f); 
-    shader->setVec3("directLight.specular", 0.5f, 0.5f, 0.5f);
-    // point light
-    shader->setVec3("pointLight.ambient", 0.8f, 0.8f, 0.8f);
-    shader->setVec3("pointLight.diffuse", 0.3f, 0.3f, 0.3f);
-    shader->setVec3("pointLight.specular", 1.0f, 1.0f, 1.0f);
-    shader->setFloat("pointLight.constant", 1.0f);
-    shader->setFloat("pointLight.linear", 0.0003f); 
-    shader->setFloat("pointLight.quadratic", 0.0001f); 
+	shader->setVec4("lightDirection", vec4(-0.2f, -1.0f, -0.3f, 0.0f));
+	shader->setFloat("shininess", 32.0f);
+
+    //shader->setFloat("material.shininess", 32.0f);
+    //// directional light
+    //shader->setVec3("directLight.direction", -0.2f, -1.0f, -0.3f);
+    //shader->setVec3("directLight.ambient", 0.2f, 0.2f, 0.2f);
+    //shader->setVec3("directLight.diffuse", 0.4f, 0.4f, 0.4f); 
+    //shader->setVec3("directLight.specular", 0.5f, 0.5f, 0.5f);
+    //// point light
+    //shader->setVec3("pointLight.ambient", 0.8f, 0.8f, 0.8f);
+    //shader->setVec3("pointLight.diffuse", 0.3f, 0.3f, 0.3f);
+    //shader->setVec3("pointLight.specular", 1.0f, 1.0f, 1.0f);
+    //shader->setFloat("pointLight.constant", 1.0f);
+    //shader->setFloat("pointLight.linear", 0.0003f); 
+    //shader->setFloat("pointLight.quadratic", 0.0001f); 
 }

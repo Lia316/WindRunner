@@ -153,10 +153,10 @@ void GameManager::move(void(*t)(int)) {
 
 	vec3 characterPos = character->getPosition();
 	light->rotate(characterPos, lightAngle);
-	vec3 lightPos = light->getPosition();
+	vec4 lightPos = vec4(light->getPosition(), 1.0f);
 
-	GLuint pointLightLoc = glGetUniformLocation(objectProgram, "pointLight.position");
-	glUniform3fv(pointLightLoc, 1, &lightPos[0]);
+	GLuint pointLightLoc = glGetUniformLocation(objectProgram, "lightPosition");
+	glUniform4fv(pointLightLoc, 1, &lightPos[0]);
 
 	if (isGameEnd) {
 		character->sink();
