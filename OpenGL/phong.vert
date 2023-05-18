@@ -14,12 +14,16 @@ uniform mat4 view;
 uniform mat4 projection;
 uniform vec4 lightPosition;   // point light
 uniform vec4 lightDirection;  // directional light
+uniform vec3 viewPos;
 
 void main() {
-    fN = vNormal;// transpose(inverse(mat3(model))) * vNormal; // vNormal;
-    fE = -vPosition;
+    vec3 fragPos = vec3(model * vec4(vPosition, 1.0));
+    //vec3 lightPos = vec3(model * lightPosition);
+
+    fN = transpose(inverse(mat3(model))) * vNormal; // vNormal;
+    fE = viewPos - fragPos;
     fL_d = -lightDirection.xyz;
-    fL_p = lightPosition.xyz - vPosition;
+    fL_p = lightPosition.xyz - fragPos;
 
     texCoord = vTexCoord;
     gl_Position =  projection * view * model * vec4(vPosition, 1.0f);

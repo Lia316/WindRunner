@@ -7,9 +7,7 @@ GLuint  object_view;
 GLuint  object_projection;
 GLuint  light_view;
 GLuint  light_projection;
-//GLuint  light_projection_view;
-//GLuint  object_projection_view;
-//GLuint  camera_pos;
+GLuint  camera_pos;
 
 Camera* camera;
 CameraMode viewMode = SIDE;
@@ -60,12 +58,11 @@ void init(void) {
 	//GLuint lightProgram = lightShader->program;
 	GLuint objectProgram = objectShader->program;
 
-	//object_projection_view = glGetUniformLocation(objectProgram, "projection_view");
 	object_view = glGetUniformLocation(objectProgram, "view");
 	object_projection = glGetUniformLocation(objectProgram, "projection");
 	//light_view = glGetUniformLocation(lightProgram, "view");
 	//light_projection = glGetUniformLocation(lightProgram, "projection");
-	//camera_pos = glGetUniformLocation(objectProgram, "viewPos");
+	camera_pos = glGetUniformLocation(objectProgram, "viewPos");
 
 	camera = new Camera();
 	gameManager = new GameManager(objectProgram, objectProgram);
@@ -82,8 +79,8 @@ void draw() {
 	mat4 vp = camera->getProjectionViewMatrix();
 	mat4 vm = camera->getViewMatrix();
 	mat4 pm = camera->getProjectionMatrix();
-	//vec3 cp = camera->getPosition();
-	//glUniform3fv(camera_pos, 1, &cp[0]);
+	vec3 cp = camera->getPosition();
+	glUniform3fv(camera_pos, 1, &cp[0]);
     //glUniformMatrix4fv(object_projection_view, 1, GL_FALSE, &vp[0][0]);
 	//glUniformMatrix4fv(light_projection_view, 1, GL_FALSE, &vp[0][0]);
 	glUniformMatrix4fv(object_view, 1, GL_FALSE, &vm[0][0]);
