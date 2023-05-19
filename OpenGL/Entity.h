@@ -1,5 +1,7 @@
 #pragma once
 #include "Model.h"
+#include "Textures.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Rpc.h>
@@ -32,7 +34,7 @@ public:
 		return UuidCompare(&uuid1, &uuid2, &s) == 0;
 	}
 
-	virtual void loadTexture(const char** filename, unsigned int filesize);
+	virtual void loadTexture(vector<RgbImage*> theTexMaps, unsigned int filesize);
 	virtual void draw();
 	virtual void move();
 	virtual float getPositionX();	

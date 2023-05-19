@@ -19,10 +19,7 @@ Character::Character(Model* models[KEY_FRAME_NUM - 1], GLuint* shaderProgram)
 	time = 0;
 	currentKeyFrame = 0;
 
-	const char* file[] = { "textured_mesh/white.bmp" ,
-		 "textured_mesh/fire_ball/M_ContentWindow_N.bmp" ,
-		 "textured_mesh/fire_ball/M_ContentWindow_S.bmp" };
-	loadTexture(file, 3);
+	loadTexture(textures->getTextures(TEXTYPE::CHARACTER), 3);
 }
 
 Character::~Character() {

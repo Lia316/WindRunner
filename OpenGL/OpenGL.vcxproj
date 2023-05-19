@@ -166,6 +166,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Text2D.cpp" />
+    <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Wind_runner.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +185,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="Text2D.h" />
+    <ClInclude Include="Textures.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="gouraud.frag" />

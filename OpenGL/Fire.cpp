@@ -2,11 +2,7 @@
 
 Fire::Fire(float x, float y, Model* model, GLuint* shaderProgram)
 	: Entity(x, y, 0, -10, model, shaderProgram) {
-
-	const char* file[] = { "textured_mesh/fire_ball/M_ContentWindow_D.bmp",
-		 "textured_mesh/fire_ball/M_ContentWindow_N.bmp" ,
-		 "textured_mesh/fire_ball/M_ContentWindow_S.bmp" };
-	loadTexture(file, 3);
+	loadTexture(textures->getTextures(TEXTYPE::FIRE), 3);
 }
 
 void Fire::draw() {

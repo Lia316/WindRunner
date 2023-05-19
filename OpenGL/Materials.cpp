@@ -10,21 +10,21 @@ Materials::Materials() {
 	mushroom = new Model("resource/Mushroom.obj");
 }
 
-Model* Materials::getModel(int FILENAME) {
-	switch (FILENAME) {
-	case CHARACTER1:
+Model* Materials::getModel(FILENAME filename) {
+	switch (filename) {
+	case FILENAME::CHARACTER1:
 		return character1;
-	case CHARACTER2:
+	case FILENAME::CHARACTER2:
 		return character2;
-	case CHARACTER3:
+	case FILENAME::CHARACTER3:
 		return character3;
-	case GROUND:
+	case FILENAME::GROUND:
 		return ground;
-	case FIRE:
+	case FILENAME::FIRE:
 		return fire;
-	case STAR:
+	case FILENAME::STAR:
 		return star;
-	case MUSHROOM:
+	case FILENAME::MUSHROOM:
 		return mushroom;
 	}
 }

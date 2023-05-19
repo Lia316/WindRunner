@@ -3,10 +3,7 @@
 Star::Star(float x, float y, Model* model, GLuint* shaderProgram)
 	: Entity(x, y, 0, -3.5, model, shaderProgram) { 
 	point = 5;
-	const char* file[] = { "textured_mesh/orange.bmp",
-		 "textured_mesh/fire_ball/M_ContentWindow_N.bmp" ,
-		 "textured_mesh/fire_ball/M_ContentWindow_S.bmp" };
-	loadTexture(file, 3);
+	loadTexture(textures->getTextures(TEXTYPE::STAR), 3);
 }
 
 void Star::draw() {

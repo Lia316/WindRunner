@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "SceneNode.h"
+#include "Textures.h"
 #include "Text2D.h"
 
 #define MAXFIRE 4

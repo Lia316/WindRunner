@@ -5,10 +5,7 @@ Ground::Ground(float posX, int height, Model* model, GLuint* shaderProgram)
 	x = posX;
 	y = height * getHeight();
 
-	const char* file[] = { "textured_mesh/cube/BasicShapeMaterial_D.bmp" ,
-		 "textured_mesh/fire_ball/M_ContentWindow_N.bmp" ,
-		 "textured_mesh/fire_ball/M_ContentWindow_S.bmp" };
-	loadTexture(file, 3);
+	loadTexture(textures->getTextures(TEXTYPE::GROUND), 3);
 }
 
 void Ground::draw() {

@@ -22,7 +22,7 @@ void Entity::move() {
 	x += speed;
 }
 
-void Entity::loadTexture(const char** filename, unsigned int filesize) {
+void Entity::loadTexture(vector<RgbImage*> theTexMaps, unsigned int filesize) {
 	this->filesize = filesize;
 
 	for (unsigned int i = 0; i < filesize; i++) {
@@ -36,9 +36,7 @@ void Entity::loadTexture(const char** filename, unsigned int filesize) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-		RgbImage theTexMap(filename[i]);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, theTexMap.GetNumCols(), theTexMap.GetNumRows(), 0, GL_RGB, GL_UNSIGNED_BYTE, theTexMap.ImageData());
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, theTexMaps[i]->GetNumCols(), theTexMaps[i]->GetNumRows(), 0, GL_RGB, GL_UNSIGNED_BYTE, theTexMaps[i]->ImageData());
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		textureIds[i] = texture;

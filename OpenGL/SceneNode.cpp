@@ -52,7 +52,7 @@ SceneGraph::SceneGraph(GLuint* objectProgram, GLuint* lightProgram) {
 }
 
 void SceneGraph::initialStructure() {
-	Model* characterPoses[KEY_FRAME_NUM - 1] = { materials->getModel(CHARACTER1), materials->getModel(CHARACTER2), materials->getModel(CHARACTER3) };
+	Model* characterPoses[KEY_FRAME_NUM - 1] = { materials->getModel(FILENAME::CHARACTER1), materials->getModel(FILENAME::CHARACTER2), materials->getModel(FILENAME::CHARACTER3) };
 
 	SceneNode* groundGroup = new SceneNode(new Ground(0, 0, NULL, objectShader));
 	SceneNode* starGroup = new SceneNode(new Star(0, 0, NULL, objectShader));
@@ -71,10 +71,10 @@ void SceneGraph::initialStructure() {
 	characterGroup->addChild(new SceneNode(new Character(characterPoses, objectShader)));
 	lightGroup->addChild(new SceneNode(new PointLight(140, 90, NULL, lightShader)));
 
-	float groundWidth = materials->getModel(GROUND)->getWidth();
+	float groundWidth = materials->getModel(FILENAME::GROUND)->getWidth();
 
 	for (int i = 0; i < 20; i++) {
-		Ground* newGround = new Ground(i * groundWidth, 0, materials->getModel(GROUND), objectShader);
+		Ground* newGround = new Ground(i * groundWidth, 0, materials->getModel(FILENAME::GROUND), objectShader);
 		SceneNode* groundNode = new SceneNode(newGround);
 
 		groundGroup->addChild(groundNode);
