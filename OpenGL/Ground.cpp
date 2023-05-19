@@ -1,6 +1,6 @@
 #include "Ground.h"
 
-Ground::Ground(float posX, int height, Model* model, GLuint shaderProgram)
+Ground::Ground(float posX, int height, Model* model, GLuint* shaderProgram)
 	: Entity(glutGet(GLUT_WINDOW_WIDTH), 0, 0, -3.5, model, shaderProgram) {
 	x = posX;
 	y = height * getHeight();

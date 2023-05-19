@@ -14,10 +14,10 @@
 class GameManager {
 private: 
 	SceneGraph* sceneGraph;
-	GLuint objectProgram;
+	GLuint* objectProgram;
 	int viewMode;
 public:
-	GameManager(GLuint, GLuint);
+	GameManager(GLuint*, GLuint*);
 	void draw();
 	void move(void(*t)(int));
 	void characterAnimation(void(*t)(int));

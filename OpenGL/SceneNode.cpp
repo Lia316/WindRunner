@@ -43,7 +43,7 @@ void SceneNode::draw() {
 }
 
 
-SceneGraph::SceneGraph(GLuint objectProgram, GLuint lightProgram) {
+SceneGraph::SceneGraph(GLuint* objectProgram, GLuint* lightProgram) {
 	objectShader = objectProgram;
 	lightShader = lightProgram;
 	root = new SceneNode(NULL);

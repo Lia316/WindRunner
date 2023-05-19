@@ -1,7 +1,7 @@
 #include "Entity.h"
 #include "RgbImage.h"
 
-Entity::Entity(float x, float y, float z, float speed, Model* model, GLuint shaderProgram)
+Entity::Entity(float x, float y, float z, float speed, Model* model, GLuint* shaderProgram)
 : x(x), y(y), z(z), speed(speed), model(model), shaderProgram(shaderProgram) {
 	UuidCreate(&uuid);
 	if (model == nullptr) return;
@@ -52,11 +52,11 @@ void Entity::draw() {
 	mat4 move = translate(mat4(1.0f), vec3(x, y, 0));
 	mat4 modelMatrix = move * adjust;
 
-	GLuint modelLoc = glGetUniformLocation(shaderProgram, "model");
+	GLuint modelLoc = glGetUniformLocation(*shaderProgram, "model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &modelMatrix[0][0]);
 
 	for (unsigned int i = 0; i < filesize; i++) {
-		GLuint textureLoc = glGetUniformLocation(shaderProgram, textureType[i]);
+		GLuint textureLoc = glGetUniformLocation(*shaderProgram, textureType[i]);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, textureIds[i]);
 		glUniform1i(textureLoc, i);

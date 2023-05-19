@@ -30,10 +30,10 @@ public:
 
 class SceneGraph {
 private:
-	GLuint objectShader;
-	GLuint lightShader;
+	GLuint* objectShader;
+	GLuint* lightShader;
 public:
-	SceneGraph(GLuint, GLuint);
+	SceneGraph(GLuint*, GLuint*);
 	SceneNode* root;
 	Materials* materials;
 

@@ -3,7 +3,9 @@
 #include "GameManager.h"
 
 GameManager* gameManager;
-Shader* objectShader;
+Shader* phongShader;
+Shader* gouraudShader;
+GLuint objectProgram;
 Camera* camera;
 
 CameraMode viewMode = SIDE;
@@ -19,7 +21,7 @@ void starTimer(int time);
 void groundTimer(int time);
 void mushTimer(int time);
 void keyboard(unsigned char key, int x, int y);
-void setUpLightEffect(Shader* shader);
+void changeShading(GLuint program);
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -49,13 +51,16 @@ void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 
-    objectShader = new Shader("gouraud.vert", "gouraud.frag");
+	gouraudShader = new Shader("gouraud.vert", "gouraud.frag");
+	phongShader = new Shader("phong.vert", "phong.frag");
+
+	objectProgram = phongShader->program;
 
 	camera = new Camera();
-	gameManager = new GameManager(objectShader->program, objectShader->program);
+	gameManager = new GameManager(&objectProgram, &objectProgram);
 
-	glUniform4f(glGetUniformLocation(objectShader->program, "lightDirection"), -0.2f, -1.0f, -0.3f, 0.0f);
-	glUniform1f(glGetUniformLocation(objectShader->program, "shininess"), 32.0f);
+	glUniform4f(glGetUniformLocation(objectProgram, "lightDirection"), -0.2f, -1.0f, -0.3f, 0.0f);
+	glUniform1f(glGetUniformLocation(objectProgram, "shininess"), 32.0f);
 }
 
 void draw() {
@@ -69,7 +74,6 @@ void draw() {
 	mat4 pm = camera->getProjectionMatrix();
 	vec3 cp = camera->getPosition();
 
-	GLuint objectProgram = objectShader->program;
 	GLuint object_view = glGetUniformLocation(objectProgram, "view");
 	GLuint object_projection = glGetUniformLocation(objectProgram, "projection");
 	GLuint camera_pos = glGetUniformLocation(objectProgram, "viewPos");
@@ -103,6 +107,12 @@ void keyboard(unsigned char key, int x, int y) {
 	case 'q': case 'Q':
 		exit(EXIT_SUCCESS);
 		break;
+	case 'p':
+		changeShading(phongShader->program);
+		break;
+	case 'g':
+		changeShading(gouraudShader->program);
+		break;
 	case '1': // animate only when FRONT <-> SIDE
 		if (viewMode == ORTHO) {
 			viewMode = FRONT;
@@ -135,6 +145,13 @@ void keyboard(unsigned char key, int x, int y) {
 		break;
 	}
 	gameManager->keyboard(key, x, y);
+}
+
+void changeShading(GLuint program) {
+	objectProgram = program;
+	glUseProgram(objectProgram);
+	glUniform4f(glGetUniformLocation(objectProgram, "lightDirection"), -0.2f, -1.0f, -0.3f, 0.0f);
+	glUniform1f(glGetUniformLocation(objectProgram, "shininess"), 32.0f);
 }
 
 void moveTimer(int time) {

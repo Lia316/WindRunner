@@ -3,7 +3,7 @@
 
 using namespace std;
 
-GameManager::GameManager(GLuint objectShader, GLuint lightShader) {
+GameManager::GameManager(GLuint* objectShader, GLuint* lightShader) {
 	objectProgram = objectShader;
 	sceneGraph = new SceneGraph(objectShader, lightShader);
 	viewMode = 1;
@@ -155,7 +155,7 @@ void GameManager::move(void(*t)(int)) {
 	light->rotate(characterPos, lightAngle);
 	vec4 lightPos = vec4(light->getPosition(), 1.0f);
 
-	GLuint pointLightLoc = glGetUniformLocation(objectProgram, "lightPosition");
+	GLuint pointLightLoc = glGetUniformLocation(*objectProgram, "lightPosition");
 	glUniform4fv(pointLightLoc, 1, &lightPos[0]);
 
 	if (isGameEnd) {

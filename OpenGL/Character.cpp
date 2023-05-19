@@ -4,7 +4,7 @@
 
 #define KEY_FRAME_NUM 4
 
-Character::Character(Model* models[KEY_FRAME_NUM - 1], GLuint shaderProgram)
+Character::Character(Model* models[KEY_FRAME_NUM - 1], GLuint* shaderProgram)
     : Entity(glutGet(GLUT_WINDOW_WIDTH) / 10, glutGet(GLUT_WINDOW_HEIGHT) / 4, 0, 0, NULL, shaderProgram) {
 	jumpSpeed = 14;
     lowjumpSpeed = 10;

@@ -8,7 +8,7 @@
 class Entity {
 protected:
 	UUID uuid;
-	GLuint shaderProgram;
+	GLuint* shaderProgram;
 	Model* model;
 	int filesize;
 	GLuint textureIds[5];
@@ -19,7 +19,7 @@ protected:
 	float speed;
 
 public:
-	Entity(float, float, float, float, Model*, GLuint);
+	Entity(float, float, float, float, Model*, GLuint*);
 	virtual ~Entity();
 
 	virtual const type_info& getType() { return typeid(Entity); }
