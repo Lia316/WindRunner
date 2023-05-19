@@ -7,6 +7,7 @@ out vec3 fN;
 out vec3 fE;
 out vec3 fL_d;
 out vec3 fL_p;
+out vec3 fragPos;
 out vec2 texCoord;
 
 uniform mat4 model;
@@ -17,7 +18,7 @@ uniform vec4 lightDirection;  // directional light
 uniform vec3 viewPos;
 
 void main() {
-    vec3 fragPos = vec3(model * vec4(vPosition, 1.0));
+    fragPos = vec3(model * vec4(vPosition, 1.0));
 
     fN = transpose(inverse(mat3(model))) * vNormal;
     fE = viewPos - fragPos;

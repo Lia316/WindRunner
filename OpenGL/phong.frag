@@ -4,6 +4,7 @@ in vec3 fN;
 in vec3 fE;
 in vec3 fL_d;
 in vec3 fL_p;
+in vec3 fragPos;
 in vec2 texCoord;
 
 uniform float shininess;
@@ -30,12 +31,19 @@ vec4 calDirectLight() {
     vec4 light_specular = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 
     vec3 N = normalize(fN);
+    vec3 T = dFdx(fragPos);
+    vec3 B = dFdy(fragPos);
     vec3 E = normalize(fE);
     vec3 L = normalize(fL_d);
     vec3 H = normalize(L + E);
 
-    float kd = max(dot(L, N), 0.0);
-    float ks = pow(max(dot(N, H), 0.0), shininess);
+    mat3 TBN = transpose(mat3(T, B, N)); 
+    vec3 normMap = texture(texture_normal, texCoord).rgb; 
+    normMap = normMap * 2.0 - 1.0;
+    vec3 N_mapped = normalize(TBN * normMap);
+
+    float kd = max(dot(L, N_mapped), 0.0);
+    float ks = pow(max(dot(N_mapped, H), 0.0), shininess);
 
     vec4 ambient = light_ambient * texture(texture_diffuse, texCoord);
     vec4 diffuse = light_diffuse * kd * texture(texture_diffuse, texCoord);
@@ -55,12 +63,19 @@ vec4 calPointLight() {
     vec4 light_specular = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     vec3 N = normalize(fN);
+    vec3 T = dFdx(fragPos);
+    vec3 B = dFdy(fragPos);
     vec3 E = normalize(fE);
     vec3 L = normalize(fL_p);
     vec3 H = normalize(L + E);
 
-    float kd = max(dot(L, N), 0.0);
-    float ks = pow(max(dot(N, H), 0.0), shininess);
+    mat3 TBN = transpose(mat3(T, B, N)); 
+    vec3 normMap = texture(texture_normal, texCoord).rgb; 
+    normMap = normMap * 2.0 - 1.0;
+    vec3 N_mapped = normalize(TBN * normMap);
+
+    float kd = max(dot(L, N_mapped), 0.0);
+    float ks = pow(max(dot(N_mapped, H), 0.0), shininess);
 
     vec4 ambient = light_ambient * texture(texture_diffuse, texCoord);
     vec4 diffuse = light_diffuse * kd * texture(texture_diffuse, texCoord);
