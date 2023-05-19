@@ -54,7 +54,7 @@ void init(void) {
 	glShadeModel(GL_FLAT);
 
 	//Shader* lightShader = new Shader("light.vert", "light.frag");
-    Shader* objectShader = new Shader("phong.vert", "phong.frag");
+    Shader* objectShader = new Shader("gouraud.vert", "gouraud.frag");
 	//GLuint lightProgram = lightShader->program;
 	GLuint objectProgram = objectShader->program;
 
