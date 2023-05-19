@@ -37,8 +37,8 @@ vec4 calDirectLight() {
     float kd = max(dot(L, N), 0.0);
     float ks = pow(max(dot(N, H), 0.0), shininess);
 
-    vec4 ambient = light_ambient * texture(texture_diffuse, texCoord); //vec4(0.0);//
-    vec4 diffuse = light_diffuse * kd * texture(texture_diffuse, texCoord); //vec4(0.0);//
+    vec4 ambient = light_ambient * texture(texture_diffuse, texCoord);
+    vec4 diffuse = light_diffuse * kd * texture(texture_diffuse, texCoord);
     vec4 specular = light_specular * ks * texture(texture_specular, texCoord);
     
     if(dot(L, N) < 0.0) {
