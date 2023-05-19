@@ -6,8 +6,9 @@ using namespace std;
 GameManager::GameManager(GLuint* objectShader, GLuint* lightShader) {
 	objectProgram = objectShader;
 	sceneGraph = new SceneGraph(objectShader, lightShader);
-	viewMode = 1;
+	text = new Text2D("Holstein.DDS");
 
+	viewMode = 1;
 	isGameEnd = false;
 	score = 0;
 	firenum = 0;
@@ -23,23 +24,16 @@ GameManager::GameManager(GLuint* objectShader, GLuint* lightShader) {
 // ###### Draw ######
 
 void GameManager::draw() {
+	glUseProgram(*objectProgram);
 	sceneGraph->draw();
-
-	string scoreText = "score: " + to_string(score);
-	showText(300, glutGet(GLUT_WINDOW_HEIGHT) - 300, scoreText);
-	if (isGameEnd) {
-		showText(300, glutGet(GLUT_WINDOW_HEIGHT) - 300, "The Game End");
-	}
 }
 
-void GameManager::showText(float x, float y, std::string string) {
-	glColor3f(1.0, 1.0, 1.0);
-	glRasterPos3f(x, y, 0);
-	const char* str = string.c_str();
+void GameManager::drawText() {
+	glUseProgram(text->getProgramID());
+	string scoreText = isGameEnd ? "Game Over" : "score: " + to_string(score);
+	text->printText2D(scoreText.c_str(), 20, 50, 20);
 
-	for (const char* c = str; *c != '\0'; c++) {
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
-	}
+	glUseProgram(0);
 }
 
 // ###### Update ######

@@ -14,6 +14,7 @@ bool isCamMoving = false;
 
 void init();
 void draw();
+void setObjectUniform();
 void idle();
 void moveTimer(int time);
 void fireTimer(int time);
@@ -69,6 +70,14 @@ void draw() {
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	gameManager->draw();
+	setObjectUniform();
+	gameManager->drawText();
+
+	glutSwapBuffers();
+}
+
+void setObjectUniform() {
 	mat4 vp = camera->getProjectionViewMatrix();
 	mat4 vm = camera->getViewMatrix();
 	mat4 pm = camera->getProjectionMatrix();
@@ -77,13 +86,14 @@ void draw() {
 	GLuint object_view = glGetUniformLocation(objectProgram, "view");
 	GLuint object_projection = glGetUniformLocation(objectProgram, "projection");
 	GLuint camera_pos = glGetUniformLocation(objectProgram, "viewPos");
+	GLuint light_direction = glGetUniformLocation(objectProgram, "lightDirection");
+	GLuint shininess = glGetUniformLocation(objectProgram, "shininess");
 
-	glUniform3fv(camera_pos, 1, &cp[0]);
 	glUniformMatrix4fv(object_view, 1, GL_FALSE, &vm[0][0]);
 	glUniformMatrix4fv(object_projection, 1, GL_FALSE, &pm[0][0]);
-	
-	gameManager->draw();
-	glutSwapBuffers();
+	glUniform3fv(camera_pos, 1, &cp[0]);
+	glUniform4f(light_direction, -0.2f, -1.0f, -0.3f, 0.0f);
+	glUniform1f(shininess, 32.0f);
 }
 
 void idle() {

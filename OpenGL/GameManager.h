@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "SceneNode.h"
+#include "Text2D.h"
 
 #define MAXFIRE 4
 #define MAXSTAR 10
@@ -15,10 +16,12 @@ class GameManager {
 private: 
 	SceneGraph* sceneGraph;
 	GLuint* objectProgram;
+	Text2D* text;
 	int viewMode;
 public:
 	GameManager(GLuint*, GLuint*);
 	void draw();
+	void drawText();
 	void move(void(*t)(int));
 	void characterAnimation(void(*t)(int));
 	void firemaker(void(*t)(int));
@@ -39,7 +42,6 @@ public:
 	bool detectWindowOut(Entity* object);
 
 	bool detectUnderobject(Entity* character, Entity* ground);
-	void showText(float x, float y, std::string string);
 
 	bool isGameEnd;
 	int score;
