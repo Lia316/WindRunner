@@ -2,9 +2,9 @@
 
 Mush::Mush(Model* model, GLuint* shaderProgram)
 	: Entity(glutGet(GLUT_WINDOW_WIDTH), 400, 0, -4.5, model, shaderProgram) { 
-	const char* file[] = { "C:/Users/light/source/repos/textured_mesh/mushroom.bmp" ,
-		 "C:/Users/light/source/repos/textured_mesh/fire_ball/M_ContentWindow_N.bmp" ,
-		 "C:/Users/light/source/repos/textured_mesh/fire_ball/M_ContentWindow_S.bmp" };
+	const char* file[] = { "textured_mesh/mushroom.bmp" ,
+		 "textured_mesh/fire_ball/M_ContentWindow_N.bmp" ,
+		 "textured_mesh/fire_ball/M_ContentWindow_S.bmp" };
 	loadTexture(file, 3);
 }
 
