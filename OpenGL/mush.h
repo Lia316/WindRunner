@@ -5,7 +5,7 @@ class Mush : public Entity {
 protected:
 
 public:
-	Mush(Model* model, GLuint shaderProgram);
+	Mush(Model* model, GLuint* shaderProgram);
 	~Mush() {};
 	const type_info& getType() override { return typeid(Mush); }
 

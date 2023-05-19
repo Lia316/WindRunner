@@ -54,6 +54,18 @@
     <ClCompile Include="Camera.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="RgbImage.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Text2D.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Star.h">
@@ -92,12 +104,48 @@
     <ClInclude Include="Camera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="RgbImage.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Text2D.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="mvp.vert">
+    <None Include="light.vert">
       <Filter>소스 파일</Filter>
     </None>
-    <None Include="main.frag">
+    <None Include="light.frag">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="objects.vert">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="objects.frag">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="gouraud.vert">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="gouraud.frag">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="phong.vert">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="phong.frag">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="text.frag">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="text.vert">
       <Filter>소스 파일</Filter>
     </None>
   </ItemGroup>

@@ -1,9 +1,12 @@
 #include "Entity.h"
+#include "RgbImage.h"
 
-Entity::Entity(float x, float y, float z, float speed, Model* model, GLuint shaderProgram)
+Entity::Entity(float x, float y, float z, float speed, Model* model, GLuint* shaderProgram)
 : x(x), y(y), z(z), speed(speed), model(model), shaderProgram(shaderProgram) {
 	UuidCreate(&uuid);
 	if (model == nullptr) return;
+
+	filesize = 0;
 
 	this->z = model->getminZ() + z;
 	width = model->getWidth();
@@ -19,6 +22,27 @@ void Entity::move() {
 	x += speed;
 }
 
+void Entity::loadTexture(vector<RgbImage*> theTexMaps, unsigned int filesize) {
+	this->filesize = filesize;
+
+	for (unsigned int i = 0; i < filesize; i++) {
+		GLuint texture;
+
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, theTexMaps[i]->GetNumCols(), theTexMaps[i]->GetNumRows(), 0, GL_RGB, GL_UNSIGNED_BYTE, theTexMaps[i]->ImageData());
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		textureIds[i] = texture;
+	}
+}
+
 void Entity::draw() {
 	if (model == nullptr) return;
 
@@ -26,8 +50,17 @@ void Entity::draw() {
 	mat4 move = translate(mat4(1.0f), vec3(x, y, 0));
 	mat4 modelMatrix = move * adjust;
 
-	GLuint modelLoc = glGetUniformLocation(shaderProgram, "model");
+	GLuint modelLoc = glGetUniformLocation(*shaderProgram, "model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &modelMatrix[0][0]);
+
+	for (unsigned int i = 0; i < filesize; i++) {
+		GLuint textureLoc = glGetUniformLocation(*shaderProgram, textureType[i]);
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, textureIds[i]);
+		glUniform1i(textureLoc, i);
+	}
+	if (filesize)
+		glActiveTexture(GL_TEXTURE0);
 
 	model->draw();
 }

@@ -1,8 +1,9 @@
 #include "Star.h"
 
-Star::Star(float x, float y, Model* model, GLuint shaderProgram)
+Star::Star(float x, float y, Model* model, GLuint* shaderProgram)
 	: Entity(x, y, 0, -3.5, model, shaderProgram) { 
 	point = 5;
+	loadTexture(textures->getTextures(TEXTYPE::STAR), 3);
 }
 
 void Star::draw() {

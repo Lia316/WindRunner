@@ -4,7 +4,7 @@
 
 #define KEY_FRAME_NUM 4
 
-Character::Character(Model* models[KEY_FRAME_NUM - 1], GLuint shaderProgram)
+Character::Character(Model* models[KEY_FRAME_NUM - 1], GLuint* shaderProgram)
     : Entity(glutGet(GLUT_WINDOW_WIDTH) / 10, glutGet(GLUT_WINDOW_HEIGHT) / 4, 0, 0, NULL, shaderProgram) {
 	jumpSpeed = 14;
     lowjumpSpeed = 10;
@@ -18,6 +18,8 @@ Character::Character(Model* models[KEY_FRAME_NUM - 1], GLuint shaderProgram)
 	}
 	time = 0;
 	currentKeyFrame = 0;
+
+	loadTexture(textures->getTextures(TEXTYPE::CHARACTER), 3);
 }
 
 Character::~Character() {
@@ -81,6 +83,10 @@ float Character::getPositionX() {
 
 float Character::getPositionY() {
     return y;
+}
+
+vec3 Character::getPosition() {
+	return vec3(x, y, z);
 }
 
 void Character::animation(void(*t)(int))

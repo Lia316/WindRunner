@@ -16,7 +16,7 @@ protected:
 	const float keyFrameTimes[KEY_FRAME_NUM] = { 0.0f, 1.0f, 2.0f, 3.0f };
 
 public:
-	Character(Model* models[KEY_FRAME_NUM - 1], GLuint shaderProgram);
+	Character(Model* models[KEY_FRAME_NUM - 1], GLuint* shaderProgram);
 	~Character();
 	const type_info& getType() override { return typeid(Character); }
 
@@ -32,5 +32,6 @@ public:
 	bool isJumping();
 	float getPositionX();
 	float getPositionY();
+	vec3 getPosition();
 	void animation(void(*t)(int));
 };

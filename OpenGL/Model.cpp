@@ -59,10 +59,10 @@ void Model::load(string filename) {
             sumZ += v.z;
         }
         else if (!line.compare(0, 3, "vn ")) {
-            iss >> trash;
+            iss >> trash >> trash;
             vec3 n;
             for (int i = 0; i < 3; i++) iss >> n[i];
-            norms.push_back(normalize(n));
+            norms.push_back(n);
         }
         else if (!line.compare(0, 3, "vt ")) {
             iss >> trash >> trash;

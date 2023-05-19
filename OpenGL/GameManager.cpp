@@ -3,11 +3,12 @@
 
 using namespace std;
 
-GameManager::GameManager(GLuint program) {
-	shaderProgram = program;
-	sceneGraph = new SceneGraph(program);
-	viewMode = 1;
+GameManager::GameManager(GLuint* objectShader, GLuint* lightShader) {
+	objectProgram = objectShader;
+	sceneGraph = new SceneGraph(objectShader, lightShader);
+	text = new Text2D("Holstein.DDS");
 
+	viewMode = 1;
 	isGameEnd = false;
 	score = 0;
 	firenum = 0;
@@ -17,28 +18,24 @@ GameManager::GameManager(GLuint program) {
 
 	groundMaxX = 1000;
 	isHole = false;
+	lightAngle = 0;
 }
 
 // ###### Draw ######
 
 void GameManager::draw() {
+	glUseProgram(*objectProgram);
 	sceneGraph->draw();
-
-	string scoreText = "score: " + to_string(score);
-	showText(300, glutGet(GLUT_WINDOW_HEIGHT) - 300, scoreText);
-	if (isGameEnd) {
-		showText(300, glutGet(GLUT_WINDOW_HEIGHT) - 300, "The Game End");
-	}
 }
 
-void GameManager::showText(float x, float y, std::string string) {
-	glColor3f(1.0, 1.0, 1.0);
-	glRasterPos3f(x, y, 0);
-	const char* str = string.c_str();
+void GameManager::drawText() {
+	glUseProgram(text->getProgramID());
+	string scoreText = "score: " + to_string(score);
+	text->printText2D(scoreText.c_str(), 20, 60, 20);
+	if (isGameEnd)
+		text->printText2D("Game Over", 20, 20, 20);
 
-	for (const char* c = str; *c != '\0'; c++) {
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
-	}
+	glUseProgram(0);
 }
 
 // ###### Update ######
@@ -48,6 +45,7 @@ void GameManager::move(void(*t)(int)) {
 	SceneNode* fireGroup = sceneGraph->findGroup(typeid(Fire));
 	SceneNode* starGroup = sceneGraph->findGroup(typeid(Star));
 	SceneNode* mushGroup = sceneGraph->findGroup(typeid(Mush));
+	SceneNode* lightGroup = sceneGraph->findGroup(typeid(PointLight));
 
 	// 1. Character move
 	Character* character = dynamic_cast<Character*>(sceneGraph->findNode(typeid(Character))->getEntity());
@@ -142,6 +140,20 @@ void GameManager::move(void(*t)(int)) {
 		}
 	}
 
+	// 6. Point Light
+	PointLight* light = dynamic_cast<PointLight*>(sceneGraph->findNode(typeid(PointLight))->getEntity());
+
+	lightAngle += 0.05;
+	if (lightAngle >= 360) 
+		lightAngle -= 360;
+
+	vec3 characterPos = character->getPosition();
+	light->rotate(characterPos, lightAngle);
+	vec4 lightPos = vec4(light->getPosition(), 1.0f);
+
+	GLuint pointLightLoc = glGetUniformLocation(*objectProgram, "lightPosition");
+	glUniform4fv(pointLightLoc, 1, &lightPos[0]);
+
 	if (isGameEnd) {
 		character->sink();
 		glutPostRedisplay();
@@ -225,7 +237,7 @@ void GameManager::firemaker(void(*t)(int)) {
 		firenum--;
 	}
 	if (firenum < MAXFIRE) {
-		Fire* newFire = new Fire(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(FIRE), shaderProgram);
+		Fire* newFire = new Fire(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(FILENAME::FIRE), objectProgram);
 		SceneNode* fireNode = new SceneNode(newFire);
 		sceneGraph->addChild(fireGroup, fireNode);
 		firenum++;
@@ -248,7 +260,7 @@ void GameManager::starmaker(void(*t)(int)) {
 		starnum--;
 	}
 	if (starnum < MAXSTAR) {
-		Star* newStar = new Star(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(STAR), shaderProgram);
+		Star* newStar = new Star(glutGet(GLUT_WINDOW_WIDTH), pos, sceneGraph->materials->getModel(FILENAME::STAR), objectProgram);
 		SceneNode* starNode = new SceneNode(newStar);
 		sceneGraph->addChild(starGroup, starNode);
 		starnum++;
@@ -273,7 +285,7 @@ void GameManager::groundmaker(void(*t)(int)) {
 	}
 	if (groundnum < MAXGROUND) {
 		for (int i = 0; i < height[random]; i++) {
-			Ground* newGround = new Ground(groundMaxX, i, sceneGraph->materials->getModel(GROUND), shaderProgram);
+			Ground* newGround = new Ground(groundMaxX, i, sceneGraph->materials->getModel(FILENAME::GROUND), objectProgram);
 			SceneNode* groundNode = new SceneNode(newGround);
 
 			sceneGraph->addChild(groundGroup, groundNode);
@@ -299,7 +311,7 @@ void GameManager::mushmaker(void(*t)(int)) {
 		mushnum--;
 	}
 	if (mushnum < MAXMUSH) {
-		Mush* newMush = new Mush(sceneGraph->materials->getModel(MUSHROOM), shaderProgram);
+		Mush* newMush = new Mush(sceneGraph->materials->getModel(FILENAME::MUSHROOM), objectProgram);
 		SceneNode* mushNode = new SceneNode(newMush);
 		sceneGraph->addChild(mushGroup, mushNode);
 

@@ -1,5 +1,7 @@
 #pragma once
 #include "Model.h"
+#include "Textures.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Rpc.h>
@@ -8,13 +10,18 @@
 class Entity {
 protected:
 	UUID uuid;
-	GLuint shaderProgram;
+	GLuint* shaderProgram;
 	Model* model;
+	int filesize;
+	GLuint textureIds[5];
+	const char* textureType[3] = {"texture_diffuse", "texture_normal", "texture_specular"};
+
 	float x, y, z;
 	float width, height, depth;
 	float speed;
+
 public:
-	Entity(float, float, float, float, Model*, GLuint);
+	Entity(float, float, float, float, Model*, GLuint*);
 	virtual ~Entity();
 
 	virtual const type_info& getType() { return typeid(Entity); }
@@ -27,6 +34,7 @@ public:
 		return UuidCompare(&uuid1, &uuid2, &s) == 0;
 	}
 
+	virtual void loadTexture(vector<RgbImage*> theTexMaps, unsigned int filesize);
 	virtual void draw();
 	virtual void move();
 	virtual float getPositionX();	

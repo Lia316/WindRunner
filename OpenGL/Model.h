@@ -50,7 +50,6 @@ public:
 	GLuint vbo;
 
 	void load(string filename);
-	GLuint createMesh(const vector<vec3>& vertices, const vector<vec2>& uvs, const vector<vec3>& normals);
 	mat4 adjustMatrix();
 	void draw();
 	void setColor(vec3);

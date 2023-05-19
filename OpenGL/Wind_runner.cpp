@@ -3,15 +3,18 @@
 #include "GameManager.h"
 
 GameManager* gameManager;
-GLuint  projection_view;
-
+Shader* phongShader;
+Shader* gouraudShader;
+GLuint objectProgram;
 Camera* camera;
+
 CameraMode viewMode = SIDE;
 float camTime = 0.0f;
 bool isCamMoving = false;
 
 void init();
 void draw();
+void setObjectUniform();
 void idle();
 void moveTimer(int time);
 void fireTimer(int time);
@@ -19,6 +22,7 @@ void starTimer(int time);
 void groundTimer(int time);
 void mushTimer(int time);
 void keyboard(unsigned char key, int x, int y);
+void changeShading(GLuint program);
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -48,27 +52,48 @@ void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 
-    Shader* shader = new Shader("mvp.vert", "main.frag");
-    GLuint program = shader->program;
-    glUseProgram(program);
+	gouraudShader = new Shader("gouraud.vert", "gouraud.frag");
+	phongShader = new Shader("phong.vert", "phong.frag");
 
-	projection_view = glGetUniformLocation(program, "projection_view");
+	objectProgram = phongShader->program;
 
 	camera = new Camera();
-	gameManager = new GameManager(program);
+	gameManager = new GameManager(&objectProgram, &objectProgram);
+
+	glUniform4f(glGetUniformLocation(objectProgram, "lightDirection"), -0.2f, -1.0f, -0.3f, 0.0f);
+	glUniform1f(glGetUniformLocation(objectProgram, "shininess"), 32.0f);
 }
 
 void draw() {
-	glClearColor(0.5, 0.5, 0.5, 0.0);
+	glClearColor(0.1, 0.1, 0.1, 0.0);
 
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	mat4 vp = camera->getProjectionViewMatrix();
-    glUniformMatrix4fv(projection_view, 1, GL_FALSE, &vp[0][0]);
-	
 	gameManager->draw();
+	setObjectUniform();
+	gameManager->drawText();
+
 	glutSwapBuffers();
+}
+
+void setObjectUniform() {
+	mat4 vp = camera->getProjectionViewMatrix();
+	mat4 vm = camera->getViewMatrix();
+	mat4 pm = camera->getProjectionMatrix();
+	vec3 cp = camera->getPosition();
+
+	GLuint object_view = glGetUniformLocation(objectProgram, "view");
+	GLuint object_projection = glGetUniformLocation(objectProgram, "projection");
+	GLuint camera_pos = glGetUniformLocation(objectProgram, "viewPos");
+	GLuint light_direction = glGetUniformLocation(objectProgram, "lightDirection");
+	GLuint shininess = glGetUniformLocation(objectProgram, "shininess");
+
+	glUniformMatrix4fv(object_view, 1, GL_FALSE, &vm[0][0]);
+	glUniformMatrix4fv(object_projection, 1, GL_FALSE, &pm[0][0]);
+	glUniform3fv(camera_pos, 1, &cp[0]);
+	glUniform4f(light_direction, -0.2f, -1.0f, -0.3f, 0.0f);
+	glUniform1f(shininess, 32.0f);
 }
 
 void idle() {
@@ -91,6 +116,12 @@ void keyboard(unsigned char key, int x, int y) {
 	case 033: // Escape Key
 	case 'q': case 'Q':
 		exit(EXIT_SUCCESS);
+		break;
+	case 'p':
+		changeShading(phongShader->program);
+		break;
+	case 'g':
+		changeShading(gouraudShader->program);
 		break;
 	case '1': // animate only when FRONT <-> SIDE
 		if (viewMode == ORTHO) {
@@ -124,6 +155,13 @@ void keyboard(unsigned char key, int x, int y) {
 		break;
 	}
 	gameManager->keyboard(key, x, y);
+}
+
+void changeShading(GLuint program) {
+	objectProgram = program;
+	glUseProgram(objectProgram);
+	glUniform4f(glGetUniformLocation(objectProgram, "lightDirection"), -0.2f, -1.0f, -0.3f, 0.0f);
+	glUniform1f(glGetUniformLocation(objectProgram, "shininess"), 32.0f);
 }
 
 void moveTimer(int time) {

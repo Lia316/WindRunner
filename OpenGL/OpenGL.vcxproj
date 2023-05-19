@@ -160,9 +160,13 @@
     <ClCompile Include="Materials.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="mush.cpp" />
+    <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="RgbImage.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Star.cpp" />
+    <ClCompile Include="Text2D.cpp" />
+    <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Wind_runner.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,13 +179,25 @@
     <ClInclude Include="Materials.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="mush.h" />
+    <ClInclude Include="PointLight.h" />
+    <ClInclude Include="RgbImage.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Star.h" />
+    <ClInclude Include="Text2D.h" />
+    <ClInclude Include="Textures.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="main.frag" />
-    <None Include="mvp.vert" />
+    <None Include="gouraud.frag" />
+    <None Include="gouraud.vert" />
+    <None Include="light.frag" />
+    <None Include="light.vert" />
+    <None Include="objects.frag" />
+    <None Include="objects.vert" />
+    <None Include="phong.frag" />
+    <None Include="phong.vert" />
+    <None Include="text.frag" />
+    <None Include="text.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

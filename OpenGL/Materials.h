@@ -1,7 +1,7 @@
 #pragma once
 #include "Model.h"
 
-enum FILENAME {
+enum class FILENAME {
 	CHARACTER1 = 1,
 	CHARACTER2,
 	CHARACTER3,
@@ -23,5 +23,5 @@ private:
 
 public:
 	Materials();
-	Model* getModel(int FILENAME);
+	Model* getModel(FILENAME filename);
 };

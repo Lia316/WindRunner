@@ -8,6 +8,7 @@
 #include "Fire.h"
 #include "Star.h"
 #include "Mush.h"
+#include "PointLight.h"
 
 class SceneNode {
 private:
@@ -29,9 +30,10 @@ public:
 
 class SceneGraph {
 private:
-	GLuint shaderProgram;
+	GLuint* objectShader;
+	GLuint* lightShader;
 public:
-	SceneGraph(GLuint);
+	SceneGraph(GLuint*, GLuint*);
 	SceneNode* root;
 	Materials* materials;
 
