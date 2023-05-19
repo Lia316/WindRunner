@@ -3,11 +3,9 @@
 #include "GameManager.h"
 
 GameManager* gameManager;
-GLuint  object_view;
-GLuint  object_projection;
-GLuint  camera_pos;
-
+Shader* objectShader;
 Camera* camera;
+
 CameraMode viewMode = SIDE;
 float camTime = 0.0f;
 bool isCamMoving = false;
@@ -51,17 +49,13 @@ void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 
-    Shader* objectShader = new Shader("gouraud.vert", "gouraud.frag");
-	GLuint objectProgram = objectShader->program;
-
-	object_view = glGetUniformLocation(objectProgram, "view");
-	object_projection = glGetUniformLocation(objectProgram, "projection");
-	camera_pos = glGetUniformLocation(objectProgram, "viewPos");
+    objectShader = new Shader("gouraud.vert", "gouraud.frag");
 
 	camera = new Camera();
-	gameManager = new GameManager(objectProgram, objectProgram);
+	gameManager = new GameManager(objectShader->program, objectShader->program);
 
-	setUpLightEffect(objectShader);
+	glUniform4f(glGetUniformLocation(objectShader->program, "lightDirection"), -0.2f, -1.0f, -0.3f, 0.0f);
+	glUniform1f(glGetUniformLocation(objectShader->program, "shininess"), 32.0f);
 }
 
 void draw() {
@@ -74,6 +68,12 @@ void draw() {
 	mat4 vm = camera->getViewMatrix();
 	mat4 pm = camera->getProjectionMatrix();
 	vec3 cp = camera->getPosition();
+
+	GLuint objectProgram = objectShader->program;
+	GLuint object_view = glGetUniformLocation(objectProgram, "view");
+	GLuint object_projection = glGetUniformLocation(objectProgram, "projection");
+	GLuint camera_pos = glGetUniformLocation(objectProgram, "viewPos");
+
 	glUniform3fv(camera_pos, 1, &cp[0]);
 	glUniformMatrix4fv(object_view, 1, GL_FALSE, &vm[0][0]);
 	glUniformMatrix4fv(object_projection, 1, GL_FALSE, &pm[0][0]);
@@ -156,9 +156,4 @@ void groundTimer(int time) {
 
 void mushTimer(int time) {
 	gameManager->mushmaker(mushTimer);
-}
-
-void setUpLightEffect(Shader* shader) {
-	shader->setVec4("lightDirection", vec4(-0.2f, -1.0f, -0.3f, 0.0f));
-	shader->setFloat("shininess", 32.0f);
 }
